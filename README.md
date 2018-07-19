@@ -19,10 +19,3 @@ gulp init
 ```shell
 gulp
 ```
-
-## Example:
-
-#### Create scene:
-````typescript
-let scene = new AVE.Scene({ width: 800, height: 600});
-````
