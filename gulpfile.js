@@ -12,13 +12,23 @@ gulp.task('clear', function () {
 	.pipe(clean());
 });
 
+gulp.task('clear-assets', function () {
+	return gulp.src('build/assets/*', {read: false})
+	.pipe(clean());
+});
+
+gulp.task('copy-assets', ['clear-assets'], function() {
+	return gulp.src('./resources/assets/*')
+	.pipe(gulp.dest('./build/assets'));
+});
+
 gulp.task('clear-fonts', function () {
 	return gulp.src('build/css/fonts/*', {read: false})
 	.pipe(clean());
 });
 
 gulp.task('copy-fonts', ['clear-fonts'], function() {
-	return gulp.src('./styles/fonts/*')
+	return gulp.src('./resources/styles/fonts/*')
 	.pipe(gulp.dest('./build/css/fonts'));
 });
 
@@ -28,18 +38,18 @@ gulp.task('clear-css', function () {
 });
 
 gulp.task('copy-css', ['clear-css'], function() {
-	return gulp.src('./styles/*.css')
+	return gulp.src('./resources/styles/*.css')
 	.pipe(gulp.dest('./build/css/'));
 });
 
 gulp.task("copy-html", function () {
-	return gulp.src('./*.html')
+	return gulp.src('./resources/*.html')
 	.pipe(gulp.dest("./build/"));
 });
 
 gulp.task('copy-lib', function() {
-  return gulp.src('./lib/*.js')
-	.pipe(concat('all.js'))
+  return gulp.src('./resources/lib/*.js')
+	.pipe(concat('libs.js'))
 	.pipe(gulp.dest('./build/'));
 });
 
@@ -47,7 +57,7 @@ gulp.task('browserify', function () {
 	return browserify({
 		basedir: '.',
 		debug: true,
-		entries: ['src/main.ts'],
+		entries: ['resources/src/main.ts'],
 		cache: {},
 		packageCache: {}
 	})
@@ -57,7 +67,7 @@ gulp.task('browserify', function () {
 	.pipe(gulp.dest("build"));
 });
 
-gulp.task('init', ['copy-css', 'copy-fonts', 'copy-lib', 'browserify', 'copy-html']);
+gulp.task('init', ['copy-assets', 'copy-css', 'copy-fonts', 'copy-lib', 'browserify', 'copy-html']);
 
 
 if (isWATCH) {
@@ -68,7 +78,7 @@ if (isWATCH) {
 	var watchedBrowserify = watchify(browserify({
 		basedir: '.',
 		debug: true,
-		entries: ['src/main.ts'],
+		entries: ['resources/src/main.ts'],
 		cache: {},
 		packageCache: {}
 	}).plugin(tsify));

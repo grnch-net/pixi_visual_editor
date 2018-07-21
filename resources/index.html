@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Pixi Editor</title>
+
+		<link rel="stylesheet" href="css/main.css">
+
+		<script defer src="libs.js"></script>
+		<script defer src="bundle.js"></script>
+    </head>
+    <body>
+		<div id="scene"></div>
+
+		<div class="user-interface top-block">
+			<div class="options">
+				<div class="button">New scene</div>
+				<div class="button">Import scene</div>
+				<div class="button">Export scene</div>
+				<div class="button">Scene settings</div>
+				<div class="button">Upload atlas</div>
+			</div>
+		</div>
+
+
+
+		<div class="user-interface right-block">
+			<div id="object-info">
+				<div class="category-title">Object</div>
+				<div class="content">
+					<input id="object-attr-name" class="name" type="text" />
+
+					<label id="object-attr-visible" class="one-line checkbox">
+						<input type="checkbox">
+						<span class="checkmark"></span>
+						<span class="attr-label">Visible</span>
+					</label>
+
+					<div id="object-attr-alpha" class="one-line">
+						<div class="attr-label">Alpha:</div>
+						<input type="number" min="0" max="1" step="0.1" />
+					</div>
+
+					<div id="object-attr-blend" class="one-line">
+						<div class="attr-label">Blend:</div>
+						<select>
+							<option value="NORMAL" selected>Normal</option>
+							<option value="ADD">Add</option>
+							<option value="MULTIPLY">Multiply</option>
+							<option value="SCREEN">Screen</option>
+							<option value="OVERLAY">Overlay</option>
+							<option value="DARKEN">Darken</option>
+							<option value="LIGHTEN">Lighten</option>
+							<option value="COLOR_DODGE">Color dodge</option>
+							<option value="COLOR_BURN">Color burn</option>
+							<option value="HARD_LIGHT">Hard light</option>
+							<option value="SOFT_LIGHT">Soft light</option>
+							<option value="DIFFERENCE">Difference</option>
+							<option value="EXCLUSION">Exclusion</option>
+							<option value="HUE">Hue</option>
+							<option value="SATURATION">Saturation</option>
+							<option value="COLOR">Color</option>
+							<option value="LUMINOSITY">Luminosity</option>
+						</select>
+					</div>
+
+					<div class="attr-label">Position</div>
+					<div id="object-attr-position" class="two-axis-area">
+						<div class="axis">x:</div><input class="two-axis-value x-value" type="number" />
+						<div class="axis">y:</div><input class="two-axis-value y-value" type="number" />
+					</div>
+
+					<div class="attr-label">Scale</div>
+					<div id="object-attr-scale" class="two-axis-area">
+						<div class="axis">x:</div><input class="two-axis-value x-value" type="number" />
+						<div class="axis">y:</div><input class="two-axis-value y-value" type="number" />
+					</div>
+
+					<div class="attr-label">Pivot</div>
+					<div id="object-attr-pivot" class="two-axis-area">
+						<div class="axis">x:</div><input class="two-axis-value x-value" type="number" />
+						<div class="axis">y:</div><input class="two-axis-value y-value" type="number" />
+					</div>
+
+					<div id="object-attr-rotate" class="one-line">
+						<div class="attr-label">Rotate:</div>
+						<input class="" type="number" />
+					</div>
+
+
+					<div class="content-blocker"></div>
+				</div>
+			</div>
+
+
+			<div id="hierarchy">
+				<div class="category-title">Hierarchy</div>
+				<div class="content">
+					<div class="item">
+						<div class="visible active"></div>
+						<div class="name">Sprite</div>
+					</div>
+					<div class="item">
+						<div class="visible active"></div>
+						<div class="name">Sprite</div>
+					</div>
+					<div class="item selected">
+						<div class="visible active"></div>
+						<div class="name">Sprite</div>
+					</div>
+					<div class="item selected">
+						<div class="visible"></div>
+						<div class="name">Sprite</div>
+					</div>
+					<div class="item">
+						<div class="visible"></div>
+						<div class="name">Sprite</div>
+					</div>
+					<div class="item">
+						<div class="visible active"></div>
+						<div class="name">Sprite</div>
+					</div>
+					<div class="item">
+						<div class="visible active"></div>
+						<div class="name">Sprite</div>
+					</div><div class="item">
+						<div class="visible active"></div>
+						<div class="name">Sprite</div>
+					</div>
+					<div class="item">
+						<div class="visible active"></div>
+						<div class="name">Sprite</div>
+					</div><div class="item">
+						<div class="visible active"></div>
+						<div class="name">Sprite</div>
+					</div>
+					<div class="item">
+						<div class="visible active"></div>
+						<div class="name">Sprite</div>
+					</div><div class="item">
+						<div class="visible active"></div>
+						<div class="name">Sprite</div>
+					</div>
+					<div class="item">
+						<div class="visible active"></div>
+						<div class="name">Sprite</div>
+					</div><div class="item">
+						<div class="visible active"></div>
+						<div class="name">Sprite</div>
+					</div><div class="item">
+						<div class="visible active"></div>
+						<div class="name">Sprite</div>
+					</div><div class="item">
+						<div class="visible active"></div>
+						<div class="name">Sprite</div>
+					</div><div class="item">
+						<div class="visible active"></div>
+						<div class="name">Sprite</div>
+					</div><div class="item">
+						<div class="visible active"></div>
+						<div class="name">Sprite</div>
+					</div>
+				</div>
+
+				<div class="bottom-bar">
+					<div class="button"><img src="assets/folderOpenIco.png"></div>
+					<div class="button"><img src="assets/deleteIco.png"></div>
+				</div>
+			</div>
+		</div>
+
+
+
+		<div class="user-interface bottom-block">
+			<div class="labels-area">
+				<div class="button visible-button">Hide</div>
+				<div data-category="assets" class="button label show">Assets</div>
+				<div data-category="sprite-sheet" class="button label">Sprite sheet</div>
+				<div data-category="animator" class="button label">Animator</div>
+
+			</div>
+
+			<div class="main-area">
+				<div id="assets" class="container show">
+					<div class="content">
+
+
+
+						<div class="item">
+							<div class="add-button">
+								<div>+</div>
+								<input type="file" id="images_upload" accept=".jpg, .jpeg, .png" multiple />
+							</div>
+							<div class="name">Upload</div>
+						</div>
+
+						<!-- <div class="item" title="img.png">
+							<div class="image"></div>
+							<img src="img.png" />
+							<div class="name">img.png</div>
+							<div class="touch"></div>
+						</div> -->
+
+					</div>
+				</div>
+
+				<div id="sprite-sheet" class="container">
+					<div class="content">
+
+					</div>
+				</div>
+
+				<div id="animator" class="container">
+					<div class="content">
+
+					</div>
+				</div>
+			</div>
+
+
+
+		</div>
+    </body>
+</html>
