@@ -1,11 +1,12 @@
 let isWATCH = false;
 
 var gulp = require("gulp");
-var browserify = require("browserify");
-var source = require('vinyl-source-stream');
-var tsify = require("tsify");
 var concat = require('gulp-concat');
 var clean = require('gulp-clean');
+var typescript = require('gulp-typescript');
+var sourcemaps = require('gulp-sourcemaps');
+var merge = require('merge2');
+var gutil = require('gulp-util');
 
 gulp.task('clear', function () {
 	return gulp.src('build/*', {read: false})
@@ -50,50 +51,35 @@ gulp.task("copy-html", function () {
 gulp.task('copy-lib', function() {
   return gulp.src('./resources/lib/*.js')
 	.pipe(concat('libs.js'))
-	.pipe(gulp.dest('./build/'));
+	.pipe(gulp.dest('./build/js/'));
 });
 
-gulp.task('browserify', function () {
-	return browserify({
-		basedir: '.',
-		debug: true,
-		entries: ['resources/src/main.ts'],
-		cache: {},
-		packageCache: {}
-	})
-	.plugin(tsify)
-	.bundle()
-	.pipe(source('bundle.js'))
-	.pipe(gulp.dest("build"));
+gulp.task('generate-js', function() {
+	return gulp.src(['./resources/src/*.*'])
+		.pipe(sourcemaps.init())
+		.pipe(typescript({
+			target: "es5",
+			noImplicitAny: true,
+			out: 'bundle.js'
+		}))
+		.pipe(sourcemaps.write())
+		.pipe(gulp.dest("./build/js/"))
+		.on('error', gutil.log);
 });
 
-gulp.task('init', ['copy-assets', 'copy-css', 'copy-fonts', 'copy-lib', 'browserify', 'copy-html']);
+gulp.task('init', ['clear'], function() {
+	return gulp.start('copy-assets')
+		.start('copy-css')
+		.start('copy-fonts')
+		.start('copy-lib')
+		.start('copy-html')
+		.start('generate-js')
+});
+
 
 
 if (isWATCH) {
-	// ------- WATCHIFY
-	var watchify = require("watchify");
-	var gutil = require("gulp-util");
 
-	var watchedBrowserify = watchify(browserify({
-		basedir: '.',
-		debug: true,
-		entries: ['resources/src/main.ts'],
-		cache: {},
-		packageCache: {}
-	}).plugin(tsify));
-
-
-	function bundle() {
-		return watchedBrowserify
-		.bundle()
-		.pipe(source('bundle.js'))
-		.pipe(gulp.dest("build"));
-	}
-
-	gulp.task("default", bundle);
-	watchedBrowserify.on("update", bundle);
-	watchedBrowserify.on("log", gutil.log);
 } else {
-	gulp.task('default', [ 'browserify' ]);
+	gulp.task('default', ['generate-js']);
 }

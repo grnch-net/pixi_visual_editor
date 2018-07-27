@@ -1,72 +1,75 @@
-import { IEasyHTML, IHTMLElementConfig } from "./i-easy-html";
+/// <reference path="./i-easy-html.ts" />
 
-export let easyHTML: IEasyHTML = {
-	svgns: 'http://www.w3.org/2000/svg',
-	xlink: 'http://www.w3.org/1999/xlink',
-	svgTags: [
-		'svg',
-		'use',
-		'defs',
-		'g',
-		'path',
-		'circle',
-		'rect',
-		'text',
-		'filter',
-		'image',
-		'lineargradient',
-		'radialgradient',
-		'stop',
-		'filter',
-		'fegaussianblur',
-		'foreignobject'
-	],
+module Utils {
 
-    createElement: function (parameters: IHTMLElementConfig = {}): HTMLElement {
-        let htmlElement: HTMLElement;
+	export let easyHTML: Utils.IEasyHTML = {
+		svgns: 'http://www.w3.org/2000/svg',
+		xlink: 'http://www.w3.org/1999/xlink',
+		svgTags: [
+			'svg',
+			'use',
+			'defs',
+			'g',
+			'path',
+			'circle',
+			'rect',
+			'text',
+			'filter',
+			'image',
+			'lineargradient',
+			'radialgradient',
+			'stop',
+			'filter',
+			'fegaussianblur',
+			'foreignobject'
+		],
 
-        if (!parameters.type) {
-            htmlElement = document.createElement('div');
-        } else {
-			let _type: string = parameters.type.toLowerCase();
+	    createElement: function (parameters: Utils.IHTMLElementConfig = {}): HTMLElement {
+	        let htmlElement: HTMLElement;
 
-			if (this.svgTags.includes(_type))
-				htmlElement = document.createElementNS(this.svgns, parameters.type);
-			else
-				htmlElement = document.createElement(parameters.type);
-        }
+	        if (!parameters.type) {
+	            htmlElement = document.createElement('div');
+	        } else {
+				let _type: string = parameters.type.toLowerCase();
 
-		if (parameters.parent) {
-			parameters.parent.appendChild(htmlElement);
-		}
+				if (this.svgTags.includes(_type))
+					htmlElement = document.createElementNS(this.svgns, parameters.type);
+				else
+					htmlElement = document.createElement(parameters.type);
+	        }
 
-		if (parameters.innerHTML) {
-			htmlElement.innerHTML = parameters.innerHTML;
-		}
-
-		let attr = parameters.attr;
-		if (attr) {
-			for(let key in attr) {
-				if (attr[key] === undefined) continue;
-
-				switch (key) {
-					case 'href':
-						htmlElement.setAttributeNS( this.xlink, 'href', <string>attr['href'] );
-						break;
-					default:
-						htmlElement.setAttribute( key, <string>attr[key] );
-				}
-
+			if (parameters.parent) {
+				parameters.parent.appendChild(htmlElement);
 			}
 
-        }
+			if (parameters.innerHTML) {
+				htmlElement.innerHTML = parameters.innerHTML;
+			}
 
-        return htmlElement;
-    },
+			let attr = parameters.attr;
+			if (attr) {
+				for(let key in attr) {
+					if (attr[key] === undefined) continue;
 
-	setAttribute: function (element: HTMLElement, attr: any): void {
-		for(let key in attr) {
-			element.setAttributeNS( null, key, <string>attr[key] );
+					switch (key) {
+						case 'href':
+							htmlElement.setAttributeNS( this.xlink, 'href', <string>attr['href'] );
+							break;
+						default:
+							htmlElement.setAttribute( key, <string>attr[key] );
+					}
+
+				}
+
+	        }
+
+	        return htmlElement;
+	    },
+
+		setAttribute: function (element: HTMLElement, attr: any): void {
+			for(let key in attr) {
+				element.setAttributeNS( null, key, <string>attr[key] );
+			}
 		}
-	}
-};
+	};
+}

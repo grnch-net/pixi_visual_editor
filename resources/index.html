@@ -6,15 +6,15 @@
 
 		<link rel="stylesheet" href="css/main.css">
 
-		<script defer src="libs.js"></script>
-		<script defer src="bundle.js"></script>
+		<script defer src="js/libs.js"></script>
+		<script defer src="js/bundle.js"></script>
     </head>
     <body>
 		<div id="scene"></div>
 
-		<div class="user-interface top-block">
+		<div class="editor-block top-block">
 			<div class="options">
-				<div class="button">New scene</div>
+				<div class="button" id="option_new_scene">New scene</div>
 				<div class="button">Import scene</div>
 				<div class="button">Export scene</div>
 				<div class="button">Scene settings</div>
@@ -24,10 +24,10 @@
 
 
 
-		<div class="user-interface right-block">
-			<div id="object-info">
-				<div class="category-title">Object</div>
-				<div class="content">
+		<div class="editor-block right-block">
+			<div id="inspector">
+				<div class="window-title">Inspector</div>
+				<div class="content"><!-- enable -->
 					<input id="object-attr-name" class="name" type="text" />
 
 					<label id="object-attr-visible" class="one-line checkbox">
@@ -43,25 +43,29 @@
 
 					<div id="object-attr-blend" class="one-line">
 						<div class="attr-label">Blend:</div>
-						<select>
-							<option value="NORMAL" selected>Normal</option>
-							<option value="ADD">Add</option>
-							<option value="MULTIPLY">Multiply</option>
-							<option value="SCREEN">Screen</option>
-							<option value="OVERLAY">Overlay</option>
-							<option value="DARKEN">Darken</option>
-							<option value="LIGHTEN">Lighten</option>
-							<option value="COLOR_DODGE">Color dodge</option>
-							<option value="COLOR_BURN">Color burn</option>
-							<option value="HARD_LIGHT">Hard light</option>
-							<option value="SOFT_LIGHT">Soft light</option>
-							<option value="DIFFERENCE">Difference</option>
-							<option value="EXCLUSION">Exclusion</option>
-							<option value="HUE">Hue</option>
-							<option value="SATURATION">Saturation</option>
-							<option value="COLOR">Color</option>
-							<option value="LUMINOSITY">Luminosity</option>
-						</select>
+
+						<div class="select">
+							<select>
+								<option value="NORMAL">Normal</option>
+								<option value="ADD">Add</option>
+								<option value="MULTIPLY">Multiply</option>
+								<option value="SCREEN">Screen</option>
+								<option value="OVERLAY">Overlay</option>
+								<option value="DARKEN">Darken</option>
+								<option value="LIGHTEN">Lighten</option>
+								<option value="COLOR_DODGE">Color dodge</option>
+								<option value="COLOR_BURN">Color burn</option>
+								<option value="HARD_LIGHT">Hard light</option>
+								<option value="SOFT_LIGHT">Soft light</option>
+								<option value="DIFFERENCE">Difference</option>
+								<option value="EXCLUSION">Exclusion</option>
+								<option value="HUE">Hue</option>
+								<option value="SATURATION">Saturation</option>
+								<option value="COLOR">Color</option>
+								<option value="LUMINOSITY">Luminosity</option>
+							</select>
+							<div class="disable"></div>
+						</div>
 					</div>
 
 					<div class="attr-label">Position</div>
@@ -83,7 +87,7 @@
 					</div>
 
 					<div id="object-attr-rotate" class="one-line">
-						<div class="attr-label">Rotate:</div>
+						<div class="attr-label">Rotation:</div>
 						<input class="" type="number" />
 					</div>
 
@@ -94,72 +98,12 @@
 
 
 			<div id="hierarchy">
-				<div class="category-title">Hierarchy</div>
+				<div class="window-title">Hierarchy</div>
 				<div class="content">
-					<div class="item">
+					<!-- <div class="object selected">
 						<div class="visible active"></div>
 						<div class="name">Sprite</div>
-					</div>
-					<div class="item">
-						<div class="visible active"></div>
-						<div class="name">Sprite</div>
-					</div>
-					<div class="item selected">
-						<div class="visible active"></div>
-						<div class="name">Sprite</div>
-					</div>
-					<div class="item selected">
-						<div class="visible"></div>
-						<div class="name">Sprite</div>
-					</div>
-					<div class="item">
-						<div class="visible"></div>
-						<div class="name">Sprite</div>
-					</div>
-					<div class="item">
-						<div class="visible active"></div>
-						<div class="name">Sprite</div>
-					</div>
-					<div class="item">
-						<div class="visible active"></div>
-						<div class="name">Sprite</div>
-					</div><div class="item">
-						<div class="visible active"></div>
-						<div class="name">Sprite</div>
-					</div>
-					<div class="item">
-						<div class="visible active"></div>
-						<div class="name">Sprite</div>
-					</div><div class="item">
-						<div class="visible active"></div>
-						<div class="name">Sprite</div>
-					</div>
-					<div class="item">
-						<div class="visible active"></div>
-						<div class="name">Sprite</div>
-					</div><div class="item">
-						<div class="visible active"></div>
-						<div class="name">Sprite</div>
-					</div>
-					<div class="item">
-						<div class="visible active"></div>
-						<div class="name">Sprite</div>
-					</div><div class="item">
-						<div class="visible active"></div>
-						<div class="name">Sprite</div>
-					</div><div class="item">
-						<div class="visible active"></div>
-						<div class="name">Sprite</div>
-					</div><div class="item">
-						<div class="visible active"></div>
-						<div class="name">Sprite</div>
-					</div><div class="item">
-						<div class="visible active"></div>
-						<div class="name">Sprite</div>
-					</div><div class="item">
-						<div class="visible active"></div>
-						<div class="name">Sprite</div>
-					</div>
+					</div> -->
 				</div>
 
 				<div class="bottom-bar">
@@ -171,12 +115,12 @@
 
 
 
-		<div class="user-interface bottom-block">
+		<div class="editor-block bottom-block">
 			<div class="labels-area">
 				<div class="button visible-button">Hide</div>
-				<div data-category="assets" class="button label show">Assets</div>
-				<div data-category="sprite-sheet" class="button label">Sprite sheet</div>
-				<div data-category="animator" class="button label">Animator</div>
+				<div data-window="assets" class="button label show">Assets</div>
+				<div data-window="sprite-sheets" class="button label">Sprite sheets</div>
+				<div data-window="animator" class="button label">Animator</div>
 
 			</div>
 
@@ -204,7 +148,7 @@
 					</div>
 				</div>
 
-				<div id="sprite-sheet" class="container">
+				<div id="sprite-sheets" class="container">
 					<div class="content">
 
 					</div>

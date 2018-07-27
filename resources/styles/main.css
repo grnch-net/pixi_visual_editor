@@ -30,12 +30,26 @@
 	user-select: none;
 }
 
-select {
+.select {
+	position: relative;
+    float: left;
+}
+.select select {
 	height: 16px;
 	padding-bottom: 1px;
 	border: none;
     background: #0f0f0f;
     color: #9ca1a2;
+}
+.select .disable {
+	display: block;
+	position: absolute;
+    margin: 6px 0px;
+    width: calc(100% - 17px);
+    height: calc(100% - 12px);
+    top: 0;
+    left: 0;
+    background: #0f0f0f;
 }
 
 input[type=number]::-webkit-inner-spin-button,
@@ -130,19 +144,19 @@ canvas {
 
 
 
-.user-interface {
+.editor-block {
 	position: absolute;
 	background: #1f2425;
 	border: 1px #101010 solid;
 }
 
-.user-interface.top-block {
+.editor-block.top-block {
 	width: 100%;
 	left: 0;
 	top: 0;
 }
 
-.user-interface.top-block .options {
+.editor-block.top-block .options {
 	position: relative;
 	width: 100%;
 	height: 19px;
@@ -150,14 +164,14 @@ canvas {
 	left: 0;
 }
 
-.user-interface.top-block .options .button {
+.editor-block.top-block .options .button {
 	position: relative;
     float: left;
     height: calc(100% - 3px);
     border-right: 1px #101010 solid;
 }
 
-.user-interface.top-block .options .button input {
+.editor-block.top-block .options .button input {
 	position: absolute;
 	width: 100%;
 	height: 100%;
@@ -170,14 +184,14 @@ canvas {
 
 
 
-.user-interface.right-block {
+.editor-block.right-block {
 	width: 199px;
 	height: calc(100% - 25px);
 	top: 22px;
 	right: 0;
 }
 
-.user-interface.right-block .category-title {
+.editor-block.right-block .window-title {
 	position: relative;
 	width: calc(100% - 32px);
 	height: 10px;
@@ -187,7 +201,7 @@ canvas {
 	font-size: 10px;
 }
 
-#object-info {
+#inspector {
 	position: absolute;
 	width: 100%;
 	height: 50%;
@@ -195,14 +209,18 @@ canvas {
 	left: 0px;
 }
 
-#object-info .content {
+#inspector .content {
 	position: relative;
 	width: 100%;
 	height: calc(100% - 22px);
 	overflow-y: auto;
 }
 
-#object-info input {
+#inspector .content.enable .select .disable {
+	display: none;
+}
+
+#inspector input {
 	padding: 0px 2px 0px 1px;
 	border: none;
 	background: #0f0f0f;
@@ -210,7 +228,7 @@ canvas {
 	text-align: right;
 }
 
-#object-info .attr-label {
+#inspector .attr-label {
 	width: calc(100% - 20px);
 	padding: 5px 10px 0px 10px;
 	font-size: 11px;
@@ -218,66 +236,74 @@ canvas {
 	border-top: 1px #0f0f0f solid;
 }
 
-#object-info input.name {
+#inspector input.name {
 	margin: 5px;
     padding: 5px;
     width: calc(100% - 20px);
 	text-align: left;
 }
 
-#object-info .two-axis-area {
+#inspector .two-axis-area {
 	height: 24px;
 	margin-bottom: 3px;
 }
-#object-info .axis {
+#inspector .axis {
 	float: left;
     padding: 5px;
     margin-left: 6px;
     font-size: 12px;
 }
 
-#object-info .two-axis-value {
+#inspector .two-axis-value {
 	float: left;
 	margin: 5px 0px;
 	width: calc(50% - 33px);
 }
 
-#object-info .one-line {
+#inspector .one-line {
 	height: 28px;
 	border-top: 1px #0f0f0f solid;
 }
 
-#object-info .one-line .attr-label {
+#inspector .one-line .attr-label {
 	float: left;
-	width: 40px;
+	width: 35px;
 	padding: 8.2px 0px 8px 10px;
 	border: none;
 }
 
-#object-info .one-line input[type=number] {
+#inspector .one-line input[type=number] {
 	float: left;
 	width: calc(50% - 33px);
 	margin: 7px 0;
 }
 
-#object-info .one-line select {
+#inspector .one-line select {
     margin: 6px 0px;
 }
 
-#object-info #object-attr-alpha {
+#inspector #object-attr-alpha {
 	min-width: 90px;
 }
-#object-info #object-attr-alpha input {
+#inspector #object-attr-alpha input {
 	width: 35px;
 }
 
-#object-info #object-info .content-blocker {
-	display: none;
+#inspector #object-attr-rotate .attr-label {
+    width: 48px;
+}
+
+#inspector .content .content-blocker {
+	display: block;
 	position: absolute;
 	width: 100%;
 	height: 100%;
 	top: 0;
 	left: 0;
+}
+
+#inspector .content.enable .content-blocker {
+	display: none;
 }
 
 
@@ -311,36 +337,37 @@ canvas {
 	overflow-y: auto;
 }
 
-#hierarchy .content .item {
+#hierarchy .content .object {
 	position: relative;
 	width: 100%;
 	border-bottom: 1px #0f0f0f solid;
 	background: #1b1c1d;
 }
 
-#hierarchy .content .item .visible {
+#hierarchy .content .object .visible {
 	position: absolute;
 	width: 8px;
 	height: 8px;
-	top: 8px;
-	left: 8px;
+	top: 4px;
+	left: 4px;
+	margin: 4px;
 	border-radius: 100%;
 	background: #445558;
 }
 
-#hierarchy .content .item .visible.active {
+#hierarchy .content .object .visible.active {
 	background: #20b4d0;
 }
 
-#hierarchy .content .item .name {
+#hierarchy .content .object .name {
     padding: 5px 5px 5px 25px;
 }
 
-#hierarchy .content .item.selected {
+#hierarchy .content .object.selected {
 	background: #0f3238;
 }
 
-#hierarchy .content .item.selected .name {
+#hierarchy .content .object.selected .name {
 	color: #bebfbf;
 }
 
@@ -368,18 +395,18 @@ canvas {
 
 
 
-.user-interface.bottom-block {
+.editor-block.bottom-block {
 	width: calc(100% - 202px);
 	height: 150px;
 	left: 0;
 	bottom: 2px;
 	background: #0f0f0f;
 }
-.user-interface.bottom-block.hide {
+.editor-block.bottom-block.hide {
 	top: calc(100% - 21px);
 }
 
-.user-interface.bottom-block .labels-area {
+.editor-block.bottom-block .labels-area {
 	position: absolute;
 	width: 100%;
 	height: 19px;
@@ -387,26 +414,26 @@ canvas {
 	left: 0;
 }
 
-.user-interface.bottom-block .labels-area .button {
+.editor-block.bottom-block .labels-area .button {
 	float: left;
 	height: calc(100% - 5px);
     margin-right: 1px;
 }
 
-.user-interface.bottom-block .labels-area .visible-button {
+.editor-block.bottom-block .labels-area .visible-button {
 	margin: 0 5px;
 }
 
-.user-interface.bottom-block.hide .labels-area .visible-button,
-.user-interface.bottom-block .labels-area .button.show {
+.editor-block.bottom-block.hide .labels-area .visible-button,
+.editor-block.bottom-block .labels-area .button.show {
 	background: #1f2425;
 }
-.user-interface.bottom-block.hide .labels-area .visible-button:hover,
-.user-interface.bottom-block .labels-area .button.show:hover {
+.editor-block.bottom-block.hide .labels-area .visible-button:hover,
+.editor-block.bottom-block .labels-area .button.show:hover {
 	background: #1f2425;
 }
 
-.user-interface.bottom-block .main-area {
+.editor-block.bottom-block .main-area {
 	position: absolute;
 	width: 100%;
 	height: calc(100% - 19px);
@@ -415,13 +442,13 @@ canvas {
 	background: #1f2425;
 }
 
-.user-interface.bottom-block .main-area .container {
+.editor-block.bottom-block .main-area .container {
 	display: none;
 	position: relative;
 	width: 100%;
 	height: 100%;
 }
-.user-interface.bottom-block .main-area .container.show {
+.editor-block.bottom-block .main-area .container.show {
 	display: block;
 }
 
@@ -520,7 +547,7 @@ canvas {
 
 
 
-#sprite-sheet {
+#sprite-sheets {
 
 }
 
