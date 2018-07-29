@@ -3,12 +3,12 @@
 
 module GameObject {
 
-	class Point {
-		public _x: number = 0;
-		public _y: number = 0;
+	export class Point {
 
 		constructor(
-			protected update: Function
+			public _x: number = 0,
+			public _y: number = 0,
+			public update: Function
 		) {}
 
 		get x(): number { return this._x; }
@@ -30,16 +30,16 @@ module GameObject {
 		hierarchyElementAttr?: any[];
 	}
 
-	export abstract class Abstract {
+	export abstract class AbstractObject {
 		protected _name: string;
 		protected _visible: boolean = true;
 		protected _alpha: number = 1;
 		protected _rotation: number = 0;
 
 		public parent: PIXI.Container;
-		public position: Point = new Point(this.updatePosition);
-		public scale: Point = new Point(this.updateScale);
-		public pivot: Point = new Point(this.updatePivot);
+		public position: Point = new Point(0, 0, this.updatePosition);
+		public scale: Point = new Point(1, 1, this.updateScale);
+		public pivot: Point = new Point(0, 0, this.updatePivot);
 
 		public sceneElement: PIXI.DisplayObject;
 		public hierarchyElement: HTMLElement;

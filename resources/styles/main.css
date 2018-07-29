@@ -30,26 +30,21 @@
 	user-select: none;
 }
 
-.select {
-	position: relative;
-    float: left;
-}
-.select select {
+
+select {
 	height: 16px;
 	padding-bottom: 1px;
 	border: none;
     background: #0f0f0f;
     color: #9ca1a2;
 }
-.select .disable {
-	display: block;
-	position: absolute;
-    margin: 6px 0px;
-    width: calc(100% - 17px);
-    height: calc(100% - 12px);
-    top: 0;
-    left: 0;
-    background: #0f0f0f;
+
+input {
+	padding: 0px 2px 0px 1px;
+	border: none;
+	background: #0f0f0f;
+    color: #9ca1a2;
+	text-align: right;
 }
 
 input[type=number]::-webkit-inner-spin-button,
@@ -186,7 +181,7 @@ canvas {
 
 .editor-block.right-block {
 	width: 199px;
-	height: calc(100% - 25px);
+	height: calc(100% - 24px);
 	top: 22px;
 	right: 0;
 }
@@ -216,16 +211,8 @@ canvas {
 	overflow-y: auto;
 }
 
-#inspector .content.enable .select .disable {
+#inspector .content .attr.disable {
 	display: none;
-}
-
-#inspector input {
-	padding: 0px 2px 0px 1px;
-	border: none;
-	background: #0f0f0f;
-    color: #9ca1a2;
-	text-align: right;
 }
 
 #inspector .attr-label {
@@ -289,7 +276,7 @@ canvas {
 	width: 35px;
 }
 
-#inspector #object-attr-rotate .attr-label {
+#inspector #object-attr-rotation .attr-label {
     width: 48px;
 }
 
@@ -399,7 +386,8 @@ canvas {
 	width: calc(100% - 202px);
 	height: 150px;
 	left: 0;
-	bottom: 2px;
+	bottom: 0;
+	border-bottom: 2px #0f0f0f solid;
 	background: #0f0f0f;
 }
 .editor-block.bottom-block.hide {
@@ -557,4 +545,58 @@ canvas {
 
 #animator {
 
+}
+
+
+
+.window {
+	display: none;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	border: 1px #101010 solid;
+	background: #1f2425;
+}
+.window.show {
+	display: block
+}
+
+.window .title {
+	padding: 5px 10px;
+}
+
+.window .close-button {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	padding: 2px 6px 2px 9px;
+	border: none;
+}
+
+.window .close-button p {
+	transform: rotate(45deg);
+	font-size: 17px;
+}
+
+.window .field {
+	padding: 5px 10px;
+	border-top: 1px #101010 solid;
+}
+
+.window .field .field-label {
+	float: left;
+	width: 45px;
+    color: #adadad;
+}
+
+.window .field input {
+    width: 50px;
+}
+
+.window .done-button {
+	color: #adadad;
+	padding: 5px 10px;
+	border-top: 1px #101010 solid;
+	text-align: center;
 }

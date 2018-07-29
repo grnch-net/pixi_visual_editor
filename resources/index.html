@@ -18,7 +18,6 @@
 				<div class="button">Import scene</div>
 				<div class="button">Export scene</div>
 				<div class="button">Scene settings</div>
-				<div class="button">Upload atlas</div>
 			</div>
 		</div>
 
@@ -28,65 +27,67 @@
 			<div id="inspector">
 				<div class="window-title">Inspector</div>
 				<div class="content"><!-- enable -->
-					<input id="object-attr-name" class="name" type="text" />
+					<input id="object-attr-name" class="attr name" type="text" />
 
-					<label id="object-attr-visible" class="one-line checkbox">
+					<label id="object-attr-visible" class="attr one-line checkbox">
 						<input type="checkbox">
 						<span class="checkmark"></span>
 						<span class="attr-label">Visible</span>
 					</label>
 
-					<div id="object-attr-alpha" class="one-line">
+					<div id="object-attr-alpha" class="attr one-line">
 						<div class="attr-label">Alpha:</div>
 						<input type="number" min="0" max="1" step="0.1" />
 					</div>
 
-					<div id="object-attr-blend" class="one-line">
+					<div id="object-attr-blend" class="attr one-line disable">
 						<div class="attr-label">Blend:</div>
-
-						<div class="select">
-							<select>
-								<option value="NORMAL">Normal</option>
-								<option value="ADD">Add</option>
-								<option value="MULTIPLY">Multiply</option>
-								<option value="SCREEN">Screen</option>
-								<option value="OVERLAY">Overlay</option>
-								<option value="DARKEN">Darken</option>
-								<option value="LIGHTEN">Lighten</option>
-								<option value="COLOR_DODGE">Color dodge</option>
-								<option value="COLOR_BURN">Color burn</option>
-								<option value="HARD_LIGHT">Hard light</option>
-								<option value="SOFT_LIGHT">Soft light</option>
-								<option value="DIFFERENCE">Difference</option>
-								<option value="EXCLUSION">Exclusion</option>
-								<option value="HUE">Hue</option>
-								<option value="SATURATION">Saturation</option>
-								<option value="COLOR">Color</option>
-								<option value="LUMINOSITY">Luminosity</option>
-							</select>
-							<div class="disable"></div>
-						</div>
+						<select>
+							<option value="NORMAL">Normal</option>
+							<option value="ADD">Add</option>
+							<option value="MULTIPLY">Multiply</option>
+							<option value="SCREEN">Screen</option>
+							<option value="OVERLAY">Overlay</option>
+							<option value="DARKEN">Darken</option>
+							<option value="LIGHTEN">Lighten</option>
+							<option value="COLOR_DODGE">Color dodge</option>
+							<option value="COLOR_BURN">Color burn</option>
+							<option value="HARD_LIGHT">Hard light</option>
+							<option value="SOFT_LIGHT">Soft light</option>
+							<option value="DIFFERENCE">Difference</option>
+							<option value="EXCLUSION">Exclusion</option>
+							<option value="HUE">Hue</option>
+							<option value="SATURATION">Saturation</option>
+							<option value="COLOR">Color</option>
+							<option value="LUMINOSITY">Luminosity</option>
+						</select>
 					</div>
 
 					<div class="attr-label">Position</div>
-					<div id="object-attr-position" class="two-axis-area">
+					<div id="object-attr-position" class="attr two-axis-area">
 						<div class="axis">x:</div><input class="two-axis-value x-value" type="number" />
 						<div class="axis">y:</div><input class="two-axis-value y-value" type="number" />
 					</div>
 
 					<div class="attr-label">Scale</div>
-					<div id="object-attr-scale" class="two-axis-area">
+					<div id="object-attr-scale" class="attr two-axis-area">
 						<div class="axis">x:</div><input class="two-axis-value x-value" type="number" />
 						<div class="axis">y:</div><input class="two-axis-value y-value" type="number" />
 					</div>
 
 					<div class="attr-label">Pivot</div>
-					<div id="object-attr-pivot" class="two-axis-area">
+					<div id="object-attr-pivot" class="attr two-axis-area">
 						<div class="axis">x:</div><input class="two-axis-value x-value" type="number" />
 						<div class="axis">y:</div><input class="two-axis-value y-value" type="number" />
 					</div>
 
-					<div id="object-attr-rotate" class="one-line">
+					<div class="attr-label">Anchor</div>
+					<div id="object-attr-anchor" class="attr two-axis-area">
+						<div class="axis">x:</div><input class="two-axis-value x-value" type="number" step="0.1" />
+						<div class="axis">y:</div><input class="two-axis-value y-value" type="number" step="0.1" />
+					</div>
+
+					<div id="object-attr-rotation" class="attr one-line">
 						<div class="attr-label">Rotation:</div>
 						<input class="" type="number" />
 					</div>
@@ -128,12 +129,10 @@
 				<div id="assets" class="container show">
 					<div class="content">
 
-
-
 						<div class="item">
 							<div class="add-button">
 								<div>+</div>
-								<input type="file" id="images_upload" accept=".jpg, .jpeg, .png" multiple />
+								<input type="file" id="images_upload" accept=".jpg, .jpeg, .png, .json" multiple />
 							</div>
 							<div class="name">Upload</div>
 						</div>
@@ -163,6 +162,25 @@
 
 
 
+		</div>
+
+		<div class="window" id="window-new-scene">
+			<div class="title">New scene</div>
+			<div class="button close-button"><p>+</p></div>
+
+			<div class="field">
+				<div class="field-label">Width:</div>
+				<input id="new-scene-width" type="number" min="1" value="1536" />
+			</div>
+			<div class="field">
+				<div class="field-label">Height:</div>
+				<input id="new-scene-height" type="number" min="1" value="760" />
+			</div>
+			<div class="field">
+				<div class="field-label">Color:</div>
+				<input id="new-scene-color" type="color" value="#ffffff" />
+			</div>
+			<div class="button done-button">OK</div>
 		</div>
     </body>
 </html>

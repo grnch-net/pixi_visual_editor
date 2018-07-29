@@ -1,10 +1,8 @@
-/// <reference path="./Abstract.ts" />
+/// <reference path="./AbstractObject.ts" />
 
 module GameObject {
-	import AbstractObject = GameObject.Abstract;
 
 	let BM = PIXI.BLEND_MODES;
-
 	enum EBlendMode {
 		NORMAL		= BM.NORMAL,
 		ADD			= BM.ADD,
@@ -27,8 +25,9 @@ module GameObject {
 
 	export class Sprite extends AbstractObject {
 		public sceneElement: PIXI.Sprite;
-		public _blend: EBlendMode;
+		public anchor: GameObject.Point = new GameObject.Point(0, 0, this.updateScale);
 
+		protected _blend: EBlendMode;
 		protected texture: PIXI.Texture;
 
 		constructor(texture: PIXI.Texture, name?: string) {
@@ -46,12 +45,15 @@ module GameObject {
 		}
 
 		get blend(): EBlendMode { return this._blend; }
-
 		set blend(value: EBlendMode) {
 			if (this._blend == value) return;
 
 			this._blend = value;
 			this.sceneElement.blendMode = value;
+		}
+
+		protected updateAnchor(x: number, y: number): void {
+			this.sceneElement.anchor.set(x, y)
 		}
 	}
 }

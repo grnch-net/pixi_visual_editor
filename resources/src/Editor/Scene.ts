@@ -10,7 +10,7 @@ module Editor {
 		public width: number = 1536;
 		public height: number = 760;
 
-		protected application: PIXI.Application;
+		public application: PIXI.Application;
 
 		protected area: PIXI.Container;
 		protected content: PIXI.Container;
@@ -74,16 +74,23 @@ module Editor {
 			this.background.beginFill(this.bg_color);
 			this.background.drawRect(0, 0, this.width, this.height);
 			this.background.endFill();
-			this.background.pivot.set(this.width*0.5, this.height*0.5);
+			this.background.position.set(
+				-this.width*0.5,
+				-this.height*0.5
+			);
 			this.area.addChild(this.background);
 		}
 
 		protected createContent(): void {
 			this.content = new PIXI.Container();
+			this.content.position.set(
+				-this.width*0.5,
+				-this.height*0.5
+			);
 			this.area.addChild(this.content);
 		}
 
-		public add(game_object: GameObject.Abstract): void {
+		public add(game_object: GameObject.AbstractObject): void {
 			this.content.addChild(game_object.sceneElement);
 		}
 	}

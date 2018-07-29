@@ -1,7 +1,6 @@
-/// <reference path="./Abstract.ts" />
+/// <reference path="./AbstractObject.ts" />
 
 module GameObject {
-	import AbstractObject = GameObject.Abstract;
 
 	export class Container extends AbstractObject {
 		public sceneElement: PIXI.Container;
