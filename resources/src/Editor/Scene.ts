@@ -13,7 +13,7 @@ module Editor {
 		public application: PIXI.Application;
 
 		protected area: PIXI.Container;
-		protected content: PIXI.Container;
+		public content: PIXI.Container;
 
 		protected background: PIXI.Graphics;
 		protected bg_color: number;

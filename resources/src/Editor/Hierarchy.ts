@@ -10,8 +10,8 @@ module Editor {
 		protected view_element: HTMLElement;
 		protected view_list: HTMLElement;
 
-		protected scene: Scene;
-		protected inspector: Inspector
+		public scene: Scene;
+		public inspector: Inspector
 
 		constructor({
 			scene,
@@ -25,7 +25,14 @@ module Editor {
 		}
 
 		public add(game_object: GameObject.AbstractObject) {
+			if (!this.scene.content) {
+				console.warn('Hierarchy.Add: First need to initialize the scene.');
+				return;
+			}
+
 			this.view_list.appendChild(game_object.hierarchyElement);
+			// this.view_list.insertBefore(game_object.hierarchyElement, this.view_list.firstChild);
+
 			this.scene.add(game_object);
 			this.inspector.select(game_object);
 
