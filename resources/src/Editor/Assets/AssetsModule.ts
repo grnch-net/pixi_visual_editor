@@ -1,6 +1,7 @@
 /// <reference path="../../lib.d.ts/pixi.d.ts" />
 /// <reference path="../../Utils/easy-html.ts" />
 /// <reference path="../../GameObject/Sprite.ts" />
+/// <reference path="../Hierarchy.ts" />
 /// <reference path="Asset.ts" />
 
 module Editor.Assets {

@@ -1,6 +1,22 @@
-/// <reference path="./i-easy-html.ts" />
-
 module Utils {
+
+	export interface IEasyHTML {
+		readonly svgns: string;
+		readonly xlink: string;
+		readonly svgTags: string[];
+
+		createElement(parameters?: IHTMLElementConfig): HTMLElement;
+		setAttribute(element: HTMLElement, attr?: { [key: string]: string | number }): void;
+	}
+
+	export interface IHTMLElementConfig {
+		type?: string,
+		parent?: HTMLElement,
+		innerHTML?: string,
+		attr?: {
+			[key: string]: string | number;
+		},
+	}
 
 	export let easyHTML: Utils.IEasyHTML = {
 		svgns: 'http://www.w3.org/2000/svg',
@@ -51,12 +67,10 @@ module Utils {
 				for(let key in attr) {
 					if (attr[key] === undefined) continue;
 
-					switch (key) {
-						case 'href':
-							htmlElement.setAttributeNS( this.xlink, 'href', <string>attr['href'] );
-							break;
-						default:
-							htmlElement.setAttribute( key, <string>attr[key] );
+					if (key == 'href') {
+						htmlElement.setAttributeNS( this.xlink, 'href', <string>attr['href'] );
+					} else {
+						htmlElement.setAttribute( key, <string>attr[key] );
 					}
 
 				}

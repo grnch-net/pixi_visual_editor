@@ -32,14 +32,25 @@ module Editor {
 		}
 
 		protected init_newScene_window(): void {
-			let newSceneWindow = new EditorWindow(document.querySelector('#window-new-scene'), () => {
+			let callback = () => {
 				let view_element = newSceneWindow.view_element;
-				let width = +(view_element.querySelector('#new-scene-width') as HTMLInputElement).value;
-				let height = +(view_element.querySelector('#new-scene-height') as HTMLInputElement).value;
-				// let color = +(view_element.querySelector('#new-scene-color') as HTMLInputElement).value;
-				this.scene.newScene({ width, height, color: 0xffffff });
-			});
+
+				let width: number = Number(this.getInputValue(view_element, '#new-scene-width'));
+				let height: number = Number(this.getInputValue(view_element, '#new-scene-height'));
+
+				let _color: string = this.getInputValue(view_element, '#new-scene-color');
+				let color: number = Number(_color.replace('#','0x'));;
+
+				this.scene.newScene({ width, height, color });
+			};
+
+			let newSceneWindow = new EditorWindow(document.querySelector('#window-new-scene'), callback);
 			document.querySelector('#option_new_scene').addEventListener('click', () => newSceneWindow.show());
+		}
+
+		protected getInputValue(searchIn: HTMLElement, path: string): any {
+			let input = searchIn.querySelector(path) as HTMLInputElement;
+			return input.value;
 		}
 
 		protected init_right_block(): void {

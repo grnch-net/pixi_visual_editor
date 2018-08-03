@@ -17,14 +17,14 @@ module GameObject {
 		protected _rotation: number = 0;
 
 		public parent: PIXI.Container;
-		public position: Point = new Point(0, 0, this.updatePosition);
-		public scale: Point = new Point(1, 1, this.updateScale);
-		public pivot: Point = new Point(0, 0, this.updatePivot);
+		public position: Point = new Point(0, 0, this.updatePosition.bind(this));
+		public scale: Point = new Point(1, 1, this.updateScale.bind(this));
+		public pivot: Point = new Point(0, 0, this.updatePivot.bind(this));
 
 		public sceneElement: PIXI.DisplayObject;
 		public hierarchyElement: HTMLElement;
 
-		protected _nameElement: HTMLElement;
+		protected nameElement: HTMLElement;
 		protected _visibleElement: HTMLElement;
 
 		constructor({
@@ -53,7 +53,7 @@ module GameObject {
 				attr: { class: 'visible active' }
 			});
 
-			this._nameElement = Utils.easyHTML.createElement({
+			this.nameElement = Utils.easyHTML.createElement({
 				type: 'div', parent: this.hierarchyElement,
 				attr: { class: 'name' }
 			});
@@ -62,7 +62,7 @@ module GameObject {
 		get name(): string { return this._name; }
 		set name(value: string) {
 			this._name = value;
-			this._nameElement.innerHTML = value;
+			this.nameElement.innerHTML = value;
 			this.sceneElement.name = value;
 		}
 
