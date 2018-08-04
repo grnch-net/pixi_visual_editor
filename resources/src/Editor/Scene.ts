@@ -1,3 +1,5 @@
+/// <reference path="../lib.d.ts/pixi.d.ts" />
+/// <reference path="../GameObject/AbstractObject.ts" />
 module Editor {
 
 	interface INewSceneParameters {
@@ -36,7 +38,7 @@ module Editor {
 
 		protected createArea(): void {
 			this.area = new PIXI.Container();
-			this.area.name = 'area';
+			this.area.name = 'Area';
 			this.area.scale.set(this._zoom);
 			this.resizeScreen();
 			this.application.stage.addChild(this.area);
@@ -64,21 +66,22 @@ module Editor {
 			this.height = height;
 			this.bg_color = color;
 
-			this.createBackground();
+			this.background = this.createBackground();
 			this.createContent();
 		}
 
-		protected createBackground(): void {
-			this.background = new PIXI.Graphics();
-			this.background.name = 'background';
-			this.background.beginFill(this.bg_color);
-			this.background.drawRect(0, 0, this.width, this.height);
-			this.background.endFill();
-			this.background.position.set(
+		protected createBackground(name: string = 'Background'): PIXI.Graphics {
+			let graphic = new PIXI.Graphics();
+			graphic.name = name;
+			graphic.beginFill(this.bg_color);
+			graphic.drawRect(0, 0, this.width, this.height);
+			graphic.endFill();
+			graphic.position.set(
 				-this.width*0.5,
 				-this.height*0.5
 			);
-			this.area.addChild(this.background);
+			this.area.addChild(graphic);
+			return graphic;
 		}
 
 		protected createContent(): void {
@@ -87,6 +90,10 @@ module Editor {
 				-this.width*0.5,
 				-this.height*0.5
 			);
+
+			let mask = this.createBackground('ContentMask');
+			this.content.mask = mask;
+
 			this.area.addChild(this.content);
 		}
 
