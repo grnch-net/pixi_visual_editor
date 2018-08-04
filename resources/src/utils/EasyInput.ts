@@ -7,6 +7,7 @@ module Utils {
 			protected view_element: HTMLInputElement,
 			protected change_callback: Function
 		) {
+			this.type = view_element.type;
 			this.add_change_event();
 		}
 
@@ -29,7 +30,7 @@ module Utils {
 		}
 
 		protected add_change_event(): void {
-			this.view_element.addEventListener('change', this.update.bind(this));
+			this.view_element.addEventListener('input', this.update.bind(this));
 		}
 
 		public update(): void {
