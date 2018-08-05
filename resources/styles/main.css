@@ -346,11 +346,20 @@ canvas {
 	position: absolute;
 	width: 8px;
 	height: 8px;
-	top: 4px;
-	left: 4px;
-	margin: 4px;
+	top: 8px;
+	left: 8px;
 	border-radius: 100%;
 	background: #445558;
+	cursor: pointer;
+}
+
+#hierarchy .content .object .visible::after {
+	content: "";
+	position: absolute;
+	width: 16px;
+	height: 18px;
+	top: -5px;
+	left: -4px;
 }
 
 #hierarchy .content .object .visible.active {

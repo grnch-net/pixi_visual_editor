@@ -25,7 +25,7 @@ module GameObject {
 		public hierarchyElement: HTMLElement;
 
 		protected nameElement: HTMLElement;
-		protected _visibleElement: HTMLElement;
+		protected visibleElement: HTMLElement;
 
 		constructor({
 			name = 'Object',
@@ -48,7 +48,7 @@ module GameObject {
 				attr: { class: 'object' }
 			});
 
-			this._visibleElement = Utils.easyHTML.createElement({
+			this.visibleElement = Utils.easyHTML.createElement({
 				type: 'div', parent: this.hierarchyElement,
 				attr: { class: 'visible active' }
 			});
@@ -57,34 +57,40 @@ module GameObject {
 				type: 'div', parent: this.hierarchyElement,
 				attr: { class: 'name' }
 			});
+
+			this.visibleElement.addEventListener('click', this.changeVisible.bind(this));
 		}
 
-		get name(): string { return this._name; }
-		set name(value: string) {
+		protected changeVisible(): void {
+			this.visible = !this.visible;
+		}
+
+		public get name(): string { return this._name; }
+		public set name(value: string) {
 			this._name = value;
 			this.nameElement.innerHTML = value;
 			this.sceneElement.name = value;
 		}
 
-		get visible(): boolean { return this._visible; }
-		set visible(value: boolean) {
+		public get visible(): boolean { return this._visible; }
+		public set visible(value: boolean) {
 			if (value == this._visible) return;
 			this._visible = value;
 
-			if (value) this._visibleElement.classList.add('active');
-			else this._visibleElement.classList.remove('active');
+			if (value) this.visibleElement.classList.add('active');
+			else this.visibleElement.classList.remove('active');
 
 			this.sceneElement.visible = value;
 		}
 
-		get alpha(): number { return this._alpha; }
-		set alpha(value: number) {
+		public get alpha(): number { return this._alpha; }
+		public set alpha(value: number) {
 			this._alpha = value;
 			this.sceneElement.alpha = value;
 		}
 
-		get rotation(): number { return this._rotation; }
-		set rotation(value: number) {
+		public get rotation(): number { return this._rotation; }
+		public set rotation(value: number) {
 			this._rotation = value;
 			this.sceneElement.rotation = value;
 		}

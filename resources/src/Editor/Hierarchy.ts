@@ -1,3 +1,6 @@
+/// <reference path="./Inspector.ts" />
+/// <reference path="./Scene.ts" />
+
 module Editor {
 	interface IHierarchyInitParameters {
 		scene: Scene;
