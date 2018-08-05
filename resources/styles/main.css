@@ -20,7 +20,7 @@
 
 	font-size: 12px;
 	font-weight: bold;
-	color: #6c7577;
+	color: #b2b6b8;
     font-family: helveticaneuecyr-light;
     cursor: default;
 
@@ -153,6 +153,8 @@ canvas {
 	background: #1f2425;
 	border: 1px #101010 solid;
 }
+
+
 
 .editor-block.top-block {
 	width: 100%;
@@ -386,6 +388,45 @@ canvas {
 #hierarchy .bottom-bar .button img {
 	max-height: 12px;
     padding: 4px 0;
+}
+
+
+
+
+.editor-block.left-block {
+	width: 30px;
+	height: calc(100% - 24px);
+	top: 22px;
+	background: none;
+    border: none;
+}
+
+.editor-block.left-block .tools{
+	position: absolute;
+	top: 10%;
+	left: 0;
+	width: 100%;
+	background: #1f2425;
+	border-top: 1px #0e0e0e solid;
+	border-right: 1px #0e0e0e solid;
+}
+
+.editor-block.left-block .button {
+	position: relative;
+	height: 30px;
+	padding: 0;
+    border-bottom: 1px #0e0e0e solid;
+}
+
+.editor-block.left-block .button.active {
+	background: #2d3435;
+}
+
+.editor-block.left-block .button img {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
 }
 
 
