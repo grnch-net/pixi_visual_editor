@@ -39,7 +39,7 @@ module Editor {
 				let height: number = Number(this.getInputValue(view_element, '#new-scene-height'));
 
 				let _color: string = this.getInputValue(view_element, '#new-scene-color');
-				let color: number = Number(_color.replace('#','0x'));;
+				let color: number = Number('0x' + _color);
 
 				this.scene.newScene({ width, height, color });
 			};
