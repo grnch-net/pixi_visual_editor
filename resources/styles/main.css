@@ -430,6 +430,35 @@ canvas {
 	background: #1f2425;
 }
 
+#scene-zoom {
+	position: absolute;
+	top: 0;
+	right: 0;
+	height: 100%;
+}
+
+#scene-zoom .button {
+	margin: 0;
+	margin-left: 1px;
+}
+
+#scene-zoom .button.plus {
+    padding: 2px 5px 3px 6px;
+}
+
+#scene-zoom .button.minus {
+    padding: 2px 7px 3px 8px;
+}
+
+#scene-zoom input {
+	float: left;
+	margin-left: 1px;
+	background: #1f2425;
+	height: 100%;
+	width: 40px;
+	text-align: center;
+}
+
 .editor-block.bottom-block .main-area {
 	position: absolute;
 	width: 100%;
@@ -555,7 +584,6 @@ canvas {
 #animator {
 
 }
-
 
 
 .window {

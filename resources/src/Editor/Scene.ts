@@ -1,5 +1,6 @@
 /// <reference path="../lib.d.ts/pixi.d.ts" />
 /// <reference path="../GameObject/AbstractObject.ts" />
+/// <reference path="../Utils/EasyInput.ts" />
 module Editor {
 
 	interface INewSceneParameters {
@@ -20,12 +21,21 @@ module Editor {
 		protected background: PIXI.Graphics;
 		protected bg_color: number;
 
-		protected _zoom: number = 0.5;
+		protected _zoom: number = 50;
+		protected input_zoom: Utils.EasyInput;
 
 		constructor() {
 			this.createApplication();
 			this.addLogo();
 			this.createArea();
+			this.initZoomPanel();
+		}
+
+		 public get zoom(): number { return this._zoom; }
+		 public set zoom(value: number) {
+			if (!this.content) return;
+			this._zoom = value;
+			this.area.scale.set(value/100);
 		}
 
 		protected createApplication(): void {
@@ -53,7 +63,7 @@ module Editor {
 		protected createArea(): void {
 			this.area = new PIXI.Container();
 			this.area.name = 'Area';
-			this.area.scale.set(this._zoom);
+			this.area.scale.set(this._zoom/100);
 			this.resizeScreen();
 			this.application.stage.addChild(this.area);
 		}
@@ -66,9 +76,27 @@ module Editor {
 			let area_height: number = window.innerHeight - margin_bottom - margin_top;
 
 			this.area.position.set(
-				area_width * this._zoom,
-				area_height * this._zoom + margin_top
+				area_width * (this._zoom/100),
+				area_height * (this._zoom/100) + margin_top
 			);
+		}
+
+		protected initZoomPanel(): void {
+			let view_zoom = document.querySelector('#scene-zoom');
+			this.input_zoom = new Utils.EasyInput(
+				view_zoom.querySelector('input'),
+				(value: number) => { this.zoom = value; }
+			);
+			view_zoom.querySelector('.plus').addEventListener('click', () => {
+				if (!this.content) return;
+				this.zoom += 10;
+				this.input_zoom.value = this._zoom;
+			});
+			view_zoom.querySelector('.minus').addEventListener('click', () => {
+				if (!this.content) return;
+				this.zoom -= 10;
+				this.input_zoom.value = this._zoom;
+			});
 		}
 
 		public newScene({
@@ -82,6 +110,9 @@ module Editor {
 
 			this.background = this.createBackground();
 			this.createContent();
+
+			this.input_zoom.value = this._zoom;
+			this.input_zoom.readonly = false;
 		}
 
 		protected createBackground(name: string = 'Background'): PIXI.Graphics {
