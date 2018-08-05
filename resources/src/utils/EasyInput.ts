@@ -2,13 +2,21 @@ module Utils {
 
 	export class EasyInput {
 		protected type: string;
+		protected _readonly: boolean;
 
 		constructor(
 			protected view_element: HTMLInputElement,
 			protected change_callback: Function
 		) {
 			this.type = view_element.type;
+			this._readonly = this.view_element.readOnly;
 			this.add_change_event();
+		}
+
+		public get readonly(): boolean { return this._readonly; }
+		public set readonly(value: boolean) {
+			this._readonly = value;
+			this.view_element.readOnly = value;
 		}
 
 		public get value(): any {
