@@ -24,6 +24,7 @@ module Editor {
 
 		constructor() {
 			this.createApplication();
+			this.addLogo();
 			this.createArea();
 		}
 
@@ -35,6 +36,19 @@ module Editor {
 			});
 			document.getElementById('scene').appendChild(this.application.view);
 		}
+
+		 protected addLogo(): void {
+			 let logo = document.querySelector('#logo') as HTMLImageElement;
+ 			logo.src = 'assets/logo.png';
+ 			logo.onload = () => {
+ 				let base = new PIXI.BaseTexture(logo);
+ 				let texture = new PIXI.Texture(base);
+ 				let sprite = new PIXI.Sprite(texture);
+ 				sprite.alpha = 0.2;
+ 				sprite.position.set(10, 35);
+ 				this.application.stage.addChildAt(sprite, 0);
+ 			}
+		 }
 
 		protected createArea(): void {
 			this.area = new PIXI.Container();
