@@ -137,6 +137,10 @@ module Editor {
 			}
 		}
 
+		public getSelected(): GameObject.AbstractObject[] {
+			return this.selected_gameobjects;
+		}
+
 		protected clearInput(): void {
 			this.input_name.value = '';
 			this.input_visible.value = false;

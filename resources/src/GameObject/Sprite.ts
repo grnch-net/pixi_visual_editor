@@ -2,6 +2,8 @@
 
 module GameObject {
 
+	let SPRITE_TYPE_IMAGE = 'assets/imageTypeIco.png';
+
 	let BM = PIXI.BLEND_MODES;
 	export enum EBlendMode {
 		"NORMAL"		= BM.NORMAL,
@@ -24,7 +26,7 @@ module GameObject {
 	}
 
 	export class Sprite extends AbstractObject {
-		public sceneElement: PIXI.Sprite;
+		public scene_view_element: PIXI.Sprite;
 		public anchor: GameObject.Point = new GameObject.Point(0, 0, this.updateAnchor.bind(this));
 
 		protected _blend: number;
@@ -41,7 +43,12 @@ module GameObject {
 		}
 
 		protected createSceneElement(texture: PIXI.Texture) {
-			this.sceneElement = new PIXI.Sprite(texture);
+			this.scene_view_element = new PIXI.Sprite(texture);
+		}
+
+		protected createHierarchyElement(attr?: any) {
+			super.createHierarchyElement(attr);
+			(this.typeElement as HTMLImageElement).src = SPRITE_TYPE_IMAGE;
 		}
 
 		get blend(): number { return this._blend; }
@@ -49,11 +56,11 @@ module GameObject {
 			if (this._blend == value) return;
 
 			this._blend = value;
-			this.sceneElement.blendMode = value;
+			this.scene_view_element.blendMode = value;
 		}
 
 		protected updateAnchor(x: number, y: number): void {
-			this.sceneElement.anchor.set(x, y)
+			this.scene_view_element.anchor.set(x, y)
 		}
 	}
 }

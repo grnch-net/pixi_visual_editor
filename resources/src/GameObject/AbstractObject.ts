@@ -16,16 +16,18 @@ module GameObject {
 		protected _alpha: number = 1;
 		protected _rotation: number = 0;
 
-		public parent: PIXI.Container;
+		public parent: AbstractObject;
 		public position: Point = new Point(0, 0, this.updatePosition.bind(this));
 		public scale: Point = new Point(1, 1, this.updateScale.bind(this));
 		public pivot: Point = new Point(0, 0, this.updatePivot.bind(this));
 
-		public sceneElement: PIXI.DisplayObject;
-		public hierarchyElement: HTMLElement;
+		public scene_view_element: PIXI.DisplayObject;
+		public hierarchy_view_element: HTMLElement;
 
-		protected nameElement: HTMLElement;
+		protected childIconElement: HTMLElement;
 		protected visibleElement: HTMLElement;
+		protected typeElement: HTMLElement;
+		protected nameElement: HTMLElement;
 
 		constructor({
 			name = 'Object',
@@ -39,22 +41,37 @@ module GameObject {
 		}
 
 		protected createSceneElement(attr?: any) {
-			this.sceneElement = new PIXI.DisplayObject();
+			this.scene_view_element = new PIXI.DisplayObject();
 		}
 
 		protected createHierarchyElement(attr?: any) {
-			this.hierarchyElement = Utils.easyHTML.createElement({
+			this.hierarchy_view_element = Utils.easyHTML.createElement({
 				type: 'div',
 				attr: { class: 'object' }
 			});
 
+			let view_area = Utils.easyHTML.createElement({
+				type: 'div', parent: this.hierarchy_view_element,
+				attr: { class: 'view-area' }
+			});
+
+			this.childIconElement = Utils.easyHTML.createElement({
+				type: 'div', parent: view_area,
+				attr: { class: 'child-icon' }
+			});
+
 			this.visibleElement = Utils.easyHTML.createElement({
-				type: 'div', parent: this.hierarchyElement,
+				type: 'div', parent: view_area,
 				attr: { class: 'visible active' }
 			});
 
+			this.typeElement = Utils.easyHTML.createElement({
+				type: 'img', parent: view_area,
+				attr: { class: 'type' }
+			});
+
 			this.nameElement = Utils.easyHTML.createElement({
-				type: 'div', parent: this.hierarchyElement,
+				type: 'div', parent: view_area,
 				attr: { class: 'name' }
 			});
 
@@ -69,7 +86,7 @@ module GameObject {
 		public set name(value: string) {
 			this._name = value;
 			this.nameElement.innerHTML = value;
-			this.sceneElement.name = value;
+			this.scene_view_element.name = value;
 		}
 
 		public get visible(): boolean { return this._visible; }
@@ -80,43 +97,43 @@ module GameObject {
 			if (value) this.visibleElement.classList.add('active');
 			else this.visibleElement.classList.remove('active');
 
-			this.sceneElement.visible = value;
+			this.scene_view_element.visible = value;
 		}
 
 		public get alpha(): number { return this._alpha; }
 		public set alpha(value: number) {
 			this._alpha = value;
-			this.sceneElement.alpha = value;
+			this.scene_view_element.alpha = value;
 		}
 
 		public get rotation(): number { return this._rotation; }
 		public set rotation(value: number) {
 			this._rotation = value;
-			this.sceneElement.rotation = value;
+			this.scene_view_element.rotation = value;
 		}
 
 		protected updatePosition(x: number, y: number): void {
-			this.sceneElement.position.set(x, y)
+			this.scene_view_element.position.set(x, y)
 		}
 
 		protected updateScale(x: number, y: number): void {
-			this.sceneElement.scale.set(x, y)
+			this.scene_view_element.scale.set(x, y)
 		}
 
 		protected updatePivot(x: number, y: number): void {
-			this.sceneElement.pivot.set(x, y)
+			this.scene_view_element.pivot.set(x, y)
 		}
 
 		public select(): void {
-			this.hierarchyElement.classList.add('selected');
+			this.hierarchy_view_element.classList.add('selected');
 		}
 
 		public unselect(): void {
-			this.hierarchyElement.classList.remove('selected');
+			this.hierarchy_view_element.classList.remove('selected');
 		}
 
 		public touchEvent(callback: any): void {
-			this.hierarchyElement.addEventListener('mouseup', callback);
+			this.hierarchy_view_element.addEventListener('mouseup', callback);
 		}
 	}
 }

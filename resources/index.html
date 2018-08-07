@@ -21,6 +21,7 @@
 				<div class="button">Export scene</div>
 				<div class="button">Scene settings</div>
 				<div class="button">Import .psd</div>
+				<div class="button">Documentation</div>
 			</div>
 		</div>
 
@@ -103,16 +104,63 @@
 
 			<div id="hierarchy">
 				<div class="window-title">Hierarchy</div>
-				<div class="content">
-					<!-- <div class="object selected">
-						<div class="visible active"></div>
-						<div class="name">Sprite</div>
-					</div> -->
+				<div class="area">
+					<div class="content">
+
+						<!-- <div class="object selected">
+							<div class="view-area">
+								<div class="child-icon"></div>
+								<div class="visible active"></div>
+								<img class="type" src="assets/imageTypeIco.png" />
+								<div class="name">Sprite</div>
+							</div>
+						</div>
+
+						<div class="object">
+							<div class="view-area">
+								<div class="child-icon"></div>
+								<div class="visible active"></div>
+								<img class="type container" src="assets/folderOpenIco.png" />
+								<div class="name">Container</div>
+							</div>
+							<div class="group">
+
+								<div class="object">
+									<div class="view-area">
+										<div class="child-icon active"></div>
+										<div class="visible active"></div>
+										<img class="type" src="assets/figureTypeIco.png" />
+										<div class="name">Figure</div>
+									</div>
+								</div>
+
+								<div class="object">
+									<div class="view-area">
+										<div class="child-icon active"></div>
+										<div class="visible active"></div>
+										<img class="type" src="assets/textTypeIco.png" />
+										<div class="name">Text</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+
+						<div class="object selected">
+							<div class="view-area">
+								<div class="child-icon"></div>
+								<div class="visible active"></div>
+								<img class="type" src="assets/imageTypeIco.png" />
+								<div class="name">Sprite</div>
+							</div>
+						</div> -->
+
+					</div>
 				</div>
 
 				<div class="bottom-bar">
-					<div class="button"><img src="assets/folderOpenIco.png" /></div>
-					<div class="button"><img src="assets/deleteIco.png" /></div>
+					<div id="new-container" class="button"><img src="assets/folderOpenIco.png" /></div>
+					<div id="delete-hierarchy-element" class="button"><img src="assets/deleteIco.png" /></div>
 				</div>
 			</div>
 		</div>
@@ -122,11 +170,17 @@
 
 
 		<div class="editor-block left-block">
-			<div class="tools">
-				<div class="button active" id="select-tool"><img src="assets/selectToolIco.png" /></div>
-				<div class="button" id="move-tool"><img src="assets/moveToolIco.png" /></div>
-				<div class="button" id="hand-tool"><img src="assets/handToolIco.png" /></div>
-				<div class="button" id="zoom-tool"><img src="assets/zoomToolIco.png" /></div>
+			<div class="tools control-tools">
+				<div class="button active" title="Select" id="select-tool"><img src="assets/selectToolIco.png" /></div>
+				<div class="button" title="Move" id="move-tool"><img src="assets/moveToolIco.png" /></div>
+				<div class="button" title="Hand" id="hand-tool"><img src="assets/handToolIco.png" /></div>
+				<div class="button" title="Zoom" id="zoom-tool"><img src="assets/zoomToolIco.png" /></div>
+			</div>
+
+			<div class="tools elements-tools">
+				<div class="button" title="Text" id="text-tool"><img src="assets/textToolIco.png" /></div>
+				<div class="button" title="Pen" id="pen-tool"><img src="assets/penToolIco.png" /></div>
+				<div class="button" title="Figures" id="figures-tool"><img src="assets/figuresToolIco.png" /></div>
 			</div>
 		</div>
 

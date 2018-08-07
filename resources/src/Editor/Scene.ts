@@ -143,7 +143,7 @@ module Editor {
 		}
 
 		public add(game_object: GameObject.AbstractObject): void {
-			this.content.addChild(game_object.sceneElement);
+			this.content.addChild(game_object.scene_view_element);
 		}
 	}
 }
