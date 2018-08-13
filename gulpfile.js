@@ -60,7 +60,11 @@ gulp.task('generate-js', function() {
 		.pipe(typescript({
 			target: "es5",
 			noImplicitAny: true,
-			out: 'bundle.js'
+			out: 'bundle.js',
+			lib: [
+			  "dom",
+			  "es7"
+			],
 		}))
 		.pipe(sourcemaps.write())
 		.pipe(gulp.dest("./build/js/"))
