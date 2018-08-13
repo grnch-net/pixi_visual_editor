@@ -12,26 +12,34 @@ module Editor {
 		EBlendMode[index] = key;
 	}
 
-	export class Inspector {
+	interface IInspector {
+
+	}
+
+	export class Inspector implements IInspector {
 		protected view_element: HTMLElement;
 		protected selected_gameobjects: GameObject.AbstractObject[] = [];
-		protected input_elements: Object;
 		protected content_view: HTMLElement;
 
-		protected input_name: Utils.EasyInput;
-		protected input_visible: Utils.EasyInput;
-		protected input_alpha: Utils.EasyInput;
-		protected input_rotation: Utils.EasyInput;
-		protected input_blend: HTMLElement;
-		protected input_position_x: Utils.EasyInput;
-		protected input_position_y: Utils.EasyInput;
-		protected input_scale_x: Utils.EasyInput;
-		protected input_scale_y: Utils.EasyInput;
-		protected input_pivot_x: Utils.EasyInput;
-		protected input_pivot_y: Utils.EasyInput;
-		protected input_anchor: HTMLElement;
-		protected input_anchor_x: Utils.EasyInput;
-		protected input_anchor_y: Utils.EasyInput;
+		protected inputs: any = {};
+		protected defaultInputs = [
+			{ key: 'name', label: false },
+			// { key: 'visible', type: 'checkbox' },
+			// { key: 'alpha', type: 'number', step: 0.1 },
+			// { key: 'rotation', type: 'number' },
+			// { key: 'position', type: 'point' },
+			// { key: 'pivot', type: 'point' },
+		];
+
+		protected spriteInputs = [
+			{ key: 'blendMode', type: 'select', label: 'Blend', values: PIXI.BLEND_MODES},
+			{ key: 'anchor', type: 'point', step: 0.1 },
+		];
+
+		protected textInputs = [
+			{ key: 'text' },
+			{ key: 'fontSize', type: 'number', label: 'Font size' },
+		];
 
 		constructor() {
 			this.view_element = document.getElementById('inspector');
@@ -45,72 +53,52 @@ module Editor {
 		}
 
 		protected initInputs(): void {
-			this.input_anchor = this.findViewElement('#object-attr-anchor');
-			this.input_blend = this.findViewElement('#object-attr-blend');
+			// this.inputs.anchor = this.findViewElement('#object-attr-anchor');
+			// this.inputs.blend = this.findViewElement('#object-attr-blend');
 
-			this.input_blend.querySelector('select').addEventListener('change', (event: Event) => {
-				this.selected_gameobjects.forEach((game_object) => {
-					let value: string = (event.target as HTMLSelectElement).value;
-					(game_object as GameObject.Sprite).blend = (PIXI.BLEND_MODES as any)[value];
-				})
+			// this.inputs.blend.querySelector('select').addEventListener('change', (event: Event) => {
+			// 	this.selected_gameobjects.forEach((game_object) => {
+			// 		let value: string = (event.target as HTMLSelectElement).value;
+			// 		(game_object as GameObject.Sprite).blend = (PIXI.BLEND_MODES as any)[value];
+			// 	})
+			// });
+			let content_blocker = this.content_view.firstChild;
+
+			this.defaultInputs.forEach((parameters: any) => {
+				let easyInput: Utils.EasyInput = this.createEasyInput(parameters);
+				this.inputs[parameters.key] = easyInput;
+				this.content_view.insertBefore(easyInput.view_element, content_blocker)
+
+				// if (typeof parameters.key == 'string') {
+				// 	this.inputs[parameters.key] = easyInput;
+				// } else {
+				// 	if (!this.inputs[parameters.key[0]]) this.inputs[parameters.key[0]] = {};
+				// 	this.inputs[parameters.key[0]][parameters.key[1]] = easyInput;
+				// }
 			});
-
-			this.input_name = new Utils.EasyInput(
-				this.findViewElement('#object-attr-name') as HTMLInputElement,
-				(value: string) => { this.selected_gameobjects.forEach((game_object)=>{ game_object.name = value; })}
-			);
-			this.input_visible = new Utils.EasyInput(
-				this.findViewElement('#object-attr-visible input') as HTMLInputElement,
-				(value: boolean) => { this.selected_gameobjects.forEach((game_object)=>{ game_object.visible = value; })}
-			);
-			this.input_alpha = new Utils.EasyInput(
-				this.findViewElement('#object-attr-alpha input') as HTMLInputElement,
-				(value: number) => { this.selected_gameobjects.forEach((game_object)=>{ game_object.alpha = value; })}
-			);
-			this.input_rotation = new Utils.EasyInput(
-				this.findViewElement('#object-attr-rotation input') as HTMLInputElement,
-				(value: number) => { this.selected_gameobjects.forEach((game_object)=>{ game_object.rotation = value; })}
-			);
-			this.input_position_x = new Utils.EasyInput(
-				this.findViewElement('#object-attr-position .x-value') as HTMLInputElement,
-				(value: number) => { this.selected_gameobjects.forEach((game_object)=>{ game_object.position.x = value; })}
-			);
-			this.input_position_y = new Utils.EasyInput(
-				this.findViewElement('#object-attr-position .y-value') as HTMLInputElement,
-				(value: number) => { this.selected_gameobjects.forEach((game_object)=>{ game_object.position.y = value; })}
-			);
-			this.input_scale_x = new Utils.EasyInput(
-				this.findViewElement('#object-attr-scale .x-value') as HTMLInputElement,
-				(value: number) => { this.selected_gameobjects.forEach((game_object)=>{ game_object.scale.x = value; })}
-			);
-			this.input_scale_y = new Utils.EasyInput(
-				this.findViewElement('#object-attr-scale .y-value') as HTMLInputElement,
-				(value: number) => { this.selected_gameobjects.forEach((game_object)=>{ game_object.scale.y = value; })}
-			);
-			this.input_pivot_x = new Utils.EasyInput(
-				this.findViewElement('#object-attr-pivot .x-value') as HTMLInputElement,
-				(value: number) => { this.selected_gameobjects.forEach((game_object)=>{ game_object.pivot.x = value; })}
-			);
-			this.input_pivot_y = new Utils.EasyInput(
-				this.findViewElement('#object-attr-pivot .y-value') as HTMLInputElement,
-				(value: number) => { this.selected_gameobjects.forEach((game_object)=>{ game_object.pivot.y = value; })}
-			);
-			this.input_anchor_x = new Utils.EasyInput(
-				this.findViewElement('#object-attr-anchor .x-value') as HTMLInputElement,
-				(value: number) => { this.selected_gameobjects.forEach((game_object)=>{
-					if (game_object instanceof GameObject.Sprite) game_object.anchor.x = value;
-				})}
-			);
-			this.input_anchor_y = new Utils.EasyInput(
-				this.findViewElement('#object-attr-anchor .y-value') as HTMLInputElement,
-				(value: number) => { this.selected_gameobjects.forEach((game_object)=>{
-					if (game_object instanceof GameObject.Sprite) game_object.anchor.y = value;
-				})}
-			);
 
 			this.clearInput();
 		}
 
+		protected createEasyInput(parameters: any): Utils.EasyInput {
+			let updateObject: Function;
+			if (parameters.type == 'point') {
+				updateObject = (game_object: any, values: any) => {
+					// game_object[attr[0]][attr[1]] = value;
+					game_object[parameters.key].set(values[0], values[1]);
+				}
+			} else {
+				updateObject = (game_object: any, value: any) => {
+					game_object[parameters.key] = value;
+				}
+			}
+
+			return new Utils.EasyInput(
+				{ class: ['attr'], ...parameters },
+				(value: any) => { this.selected_gameobjects.forEach((game_object) => updateObject(game_object, value) )},
+				// this.findViewElement(path) as HTMLInputElement,
+			);
+		}
 
 		public select(scene_object: GameObject.AbstractObject): void {
 			while(this.selected_gameobjects.length > 0) {
@@ -142,46 +130,55 @@ module Editor {
 		}
 
 		protected clearInput(): void {
-			this.input_name.value = '';
-			this.input_visible.value = false;
-			this.input_alpha.value = '';
-			this.input_rotation.value = '';
-			this.input_blend.querySelector('select').selectedIndex = -1;
+			this.inputs.name.value = '';
+			this.inputs.visible.value = false;
+			this.inputs.alpha.value = '';
+			this.inputs.rotation.value = '';
+			this.inputs.blend.querySelector('select').selectedIndex = -1;
 
-			this.input_position_x.value = '';
-			this.input_position_y.value = '';
-			this.input_scale_x.value = '';
-			this.input_scale_y.value = '';
-			this.input_pivot_x.value = '';
-			this.input_pivot_y.value = '';
-			this.input_anchor_x.value = '';
-			this.input_anchor_y.value = '';
+			this.inputs.position.x.value = '';
+			this.inputs.position.y.value = '';
+			this.inputs.scale.x.value = '';
+			this.inputs.scale.y.value = '';
+			this.inputs.pivot.x.value = '';
+			this.inputs.pivot.y.value = '';
+			this.inputs.anchor.x.value = '';
+			this.inputs.anchor.y.value = '';
 		}
 
 		protected writeInput(game_object: GameObject.AbstractObject): void {
 			if (game_object instanceof GameObject.Sprite) {
-				this.input_blend.classList.remove('disable');
-				this.input_blend.querySelector('select').value = EBlendMode[game_object.blend];
+				this.inputs.blend.classList.remove('disable');
+				this.inputs.blend.querySelector('select').value = EBlendMode[game_object.blend];
 
-				this.input_anchor.classList.remove('disable');
-				this.input_anchor_x.value = (game_object as GameObject.Sprite).anchor.x.toString();
-				this.input_anchor_y.value = (game_object as GameObject.Sprite).anchor.y.toString();
+				this.inputs.anchor.classList.remove('disable');
+				this.inputs.anchor.x.value = (game_object as GameObject.Sprite).anchor.x.toString();
+				this.inputs.anchor.y.value = (game_object as GameObject.Sprite).anchor.y.toString();
 			} else
 			if (game_object instanceof GameObject.Container) {
-				this.input_blend.classList.add('disable');
-				this.input_anchor.classList.add('disable');
+				this.inputs.blend.classList.add('disable');
+				this.inputs.anchor.classList.add('disable');
 			}
 
-			this.input_name.value = game_object.name;
-			this.input_visible.value = game_object.visible;
-			this.input_alpha.value = game_object.alpha.toString();
-			this.input_rotation.value = game_object.rotation.toString();
-			this.input_position_x.value = game_object.position.x.toString();
-			this.input_position_y.value = game_object.position.y.toString();
-			this.input_scale_x.value = game_object.scale.x.toString();
-			this.input_scale_y.value = game_object.scale.y.toString();
-			this.input_pivot_x.value = game_object.pivot.x.toString();
-			this.input_pivot_y.value = game_object.pivot.y.toString();
+			this.inputs.name.value = game_object.name;
+			this.inputs.visible.value = game_object.visible;
+			this.inputs.alpha.value = game_object.alpha.toString();
+			this.inputs.rotation.value = game_object.rotation.toString();
+			this.inputs.position.x.value = game_object.position.x.toString();
+			this.inputs.position.y.value = game_object.position.y.toString();
+			this.inputs.scale.x.value = game_object.scale.x.toString();
+			this.inputs.scale.y.value = game_object.scale.y.toString();
+			this.inputs.pivot.x.value = game_object.pivot.x.toString();
+			this.inputs.pivot.y.value = game_object.pivot.y.toString();
+		}
+
+		public update(game_object: GameObject.AbstractObject, attr: string|string[]): void {
+			console.warn('upadte', attr);
+			if (typeof attr == 'string') {
+				(this as any)[attr] = (game_object as any)[attr];
+			} else {
+				(this as any)[attr[0]][attr[1]] = (game_object as any)[attr[0]][attr[1]];
+			}
 		}
 	}
 }

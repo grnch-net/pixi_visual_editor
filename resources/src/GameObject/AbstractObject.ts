@@ -24,10 +24,14 @@ module GameObject {
 		public scene_view_element: PIXI.DisplayObject;
 		public hierarchy_view_element: HTMLElement;
 
+		protected view_area_element: HTMLElement;
 		protected childIconElement: HTMLElement;
 		protected visibleElement: HTMLElement;
 		protected typeElement: HTMLElement;
 		protected nameElement: HTMLElement;
+
+		protected _isSelected: boolean = false;
+		public get isSelected(): boolean { return this._isSelected };
 
 		constructor({
 			name = 'Object',
@@ -50,35 +54,34 @@ module GameObject {
 				attr: { class: 'object' }
 			});
 
-			let view_area = Utils.easyHTML.createElement({
+			this.view_area_element = Utils.easyHTML.createElement({
 				type: 'div', parent: this.hierarchy_view_element,
 				attr: { class: 'view-area' }
 			});
 
 			this.childIconElement = Utils.easyHTML.createElement({
-				type: 'div', parent: view_area,
+				type: 'div', parent: this.view_area_element,
 				attr: { class: 'child-icon' }
 			});
 
 			this.visibleElement = Utils.easyHTML.createElement({
-				type: 'div', parent: view_area,
+				type: 'div', parent: this.view_area_element,
 				attr: { class: 'visible active' }
 			});
 
 			this.typeElement = Utils.easyHTML.createElement({
-				type: 'img', parent: view_area,
+				type: 'img', parent: this.view_area_element,
 				attr: { class: 'type' }
 			});
 
 			this.nameElement = Utils.easyHTML.createElement({
-				type: 'div', parent: view_area,
+				type: 'div', parent: this.view_area_element,
 				attr: { class: 'name' }
 			});
-
-			this.visibleElement.addEventListener('click', this.changeVisible.bind(this));
 		}
 
 		protected changeVisible(): void {
+			console.warn('changeVisible');
 			this.visible = !this.visible;
 		}
 
@@ -126,14 +129,27 @@ module GameObject {
 
 		public select(): void {
 			this.hierarchy_view_element.classList.add('selected');
+			this._isSelected = true;
 		}
 
 		public unselect(): void {
 			this.hierarchy_view_element.classList.remove('selected');
+			this._isSelected = false;
 		}
 
-		public touchEvent(callback: any): void {
-			this.hierarchy_view_element.addEventListener('mouseup', callback);
+		public selectEvent(callback: any): void {
+			this.view_area_element.addEventListener('mouseup', (event: Event) => {
+				callback(event);
+				event.stopPropagation();
+			});
+		}
+
+		public visibleEvent(callback: any): void {
+			this.visibleElement.addEventListener('mouseup', (event: Event) => {
+				this.changeVisible();
+				callback(event);
+				event.stopPropagation();
+			});
 		}
 	}
 }

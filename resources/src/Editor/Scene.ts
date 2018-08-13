@@ -84,8 +84,9 @@ module Editor {
 		protected initZoomPanel(): void {
 			let view_zoom = document.querySelector('#scene-zoom');
 			this.input_zoom = new Utils.EasyInput(
+				{},
+				(value: number) => { this.zoom = value; },
 				view_zoom.querySelector('input'),
-				(value: number) => { this.zoom = value; }
 			);
 			view_zoom.querySelector('.plus').addEventListener('click', () => {
 				if (!this.content) return;

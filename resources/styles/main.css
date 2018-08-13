@@ -229,7 +229,7 @@ canvas {
 	display: none;
 }
 
-#inspector .attr-label {
+#inspector .input-label {
 	width: calc(100% - 20px);
 	padding: 5px 10px 0px 10px;
 	font-size: 11px;
@@ -237,15 +237,15 @@ canvas {
 	border-top: 1px #0f0f0f solid;
 }
 
-#inspector input.name {
+#inspector input.no-label {
 	margin: 5px;
     padding: 5px;
     width: calc(100% - 20px);
 	text-align: left;
 }
 
-#inspector .two-axis-area {
-	height: 24px;
+#inspector .point-area {
+	height: 40px;
 	margin-bottom: 3px;
 }
 #inspector .axis {
@@ -255,31 +255,31 @@ canvas {
     font-size: 12px;
 }
 
-#inspector .two-axis-value {
+#inspector .axis-value {
 	float: left;
 	margin: 5px 0px;
 	width: calc(50% - 33px);
 }
 
-#inspector .one-line {
+#inspector .input-area {
 	height: 28px;
 	border-top: 1px #0f0f0f solid;
 }
 
-#inspector .one-line .attr-label {
+#inspector .input-area .attr-label {
 	float: left;
 	width: 35px;
 	padding: 8.2px 0px 8px 10px;
 	border: none;
 }
 
-#inspector .one-line input[type=number] {
+#inspector .input-area input[type=number] {
 	float: left;
 	width: calc(50% - 33px);
 	margin: 7px 0;
 }
 
-#inspector .one-line select {
+#inspector .input-area select {
     margin: 6px 0px;
 }
 

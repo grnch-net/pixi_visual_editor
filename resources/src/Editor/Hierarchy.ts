@@ -51,8 +51,13 @@ module Editor {
 			this.view_list.insertBefore(game_object.hierarchy_view_element, this.view_list.firstChild);
 			this.scene.add(game_object);
 
-			game_object.touchEvent(() => {
+			game_object.selectEvent(() => {
 				this.inspector.select(game_object);
+			});
+
+			game_object.visibleEvent(() => {
+				if (!game_object.isSelected) return;
+				this.inspector.update(game_object, 'visible');
 			});
 
 			if (game_object instanceof GameObject.Container) {
