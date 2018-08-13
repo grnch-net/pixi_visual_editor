@@ -81,7 +81,6 @@ module GameObject {
 		}
 
 		protected changeVisible(): void {
-			console.warn('changeVisible');
 			this.visible = !this.visible;
 		}
 

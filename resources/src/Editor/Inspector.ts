@@ -6,12 +6,6 @@
 
 module Editor {
 
-	let EBlendMode: string[] = [];
-	for(let key in PIXI.BLEND_MODES) {
-		let index = (PIXI.BLEND_MODES as any)[key];
-		EBlendMode[index] = key;
-	}
-
 	interface IInspector {
 
 	}
@@ -21,22 +15,29 @@ module Editor {
 		protected selected_gameobjects: GameObject.AbstractObject[] = [];
 		protected content_view: HTMLElement;
 
-		protected inputs: any = {};
-		protected defaultInputs = [
+		protected common_view_group: HTMLElement;
+		protected sprite_view_group: HTMLElement;
+		protected text_view_group: HTMLElement;
+
+		protected common_inputs: any = {};
+		protected sprite_inputs: any = {};
+		protected text_inputs: any = {};
+
+		protected commonInputsParameter = [
 			{ key: 'name', label: false },
-			// { key: 'visible', type: 'checkbox' },
-			// { key: 'alpha', type: 'number', step: 0.1 },
-			// { key: 'rotation', type: 'number' },
-			// { key: 'position', type: 'point' },
-			// { key: 'pivot', type: 'point' },
+			{ key: 'visible', type: 'checkbox' },
+			{ key: 'alpha', type: 'number', step: 0.1 },
+			{ key: 'rotation', type: 'number' },
+			{ key: 'position', type: 'point' },
+			{ key: 'pivot', type: 'point' },
 		];
 
-		protected spriteInputs = [
-			{ key: 'blendMode', type: 'select', label: 'Blend', values: PIXI.BLEND_MODES},
+		protected spriteInputsParameter = [
+			{ key: 'blend', type: 'select', label: 'Blend', values: PIXI.BLEND_MODES},
 			{ key: 'anchor', type: 'point', step: 0.1 },
 		];
 
-		protected textInputs = [
+		protected textInputsParameter = [
 			{ key: 'text' },
 			{ key: 'fontSize', type: 'number', label: 'Font size' },
 		];
@@ -53,38 +54,37 @@ module Editor {
 		}
 
 		protected initInputs(): void {
-			// this.inputs.anchor = this.findViewElement('#object-attr-anchor');
-			// this.inputs.blend = this.findViewElement('#object-attr-blend');
+			this.common_view_group = this.create_group('common');
+			this.sprite_view_group = this.create_group('sprite');
+			this.text_view_group = this.create_group('text');
 
-			// this.inputs.blend.querySelector('select').addEventListener('change', (event: Event) => {
-			// 	this.selected_gameobjects.forEach((game_object) => {
-			// 		let value: string = (event.target as HTMLSelectElement).value;
-			// 		(game_object as GameObject.Sprite).blend = (PIXI.BLEND_MODES as any)[value];
-			// 	})
-			// });
-			let content_blocker = this.content_view.firstChild;
-
-			this.defaultInputs.forEach((parameters: any) => {
-				let easyInput: Utils.EasyInput = this.createEasyInput(parameters);
-				this.inputs[parameters.key] = easyInput;
-				this.content_view.insertBefore(easyInput.view_element, content_blocker)
-
-				// if (typeof parameters.key == 'string') {
-				// 	this.inputs[parameters.key] = easyInput;
-				// } else {
-				// 	if (!this.inputs[parameters.key[0]]) this.inputs[parameters.key[0]] = {};
-				// 	this.inputs[parameters.key[0]][parameters.key[1]] = easyInput;
-				// }
-			});
+			this.init_input_group(this.common_view_group, this.commonInputsParameter, this.common_inputs);
+			this.init_input_group(this.sprite_view_group, this.spriteInputsParameter, this.sprite_inputs);
+			this.init_input_group(this.text_view_group, this.textInputsParameter, this.text_inputs);
 
 			this.clearInput();
+		}
+
+		protected create_group(name: string): HTMLElement {
+			return Utils.easyHTML.createElement({
+				attr: { class: name+'-group' }
+			});
+		}
+
+		protected init_input_group(group: HTMLElement, inputs_parameter: any[], list: any): void {
+			this.content_view.insertBefore(group, this.content_view.lastChild)
+
+			inputs_parameter.forEach((parameters: any) => {
+				let easyInput: Utils.EasyInput = this.createEasyInput(parameters);
+				list[parameters.key] = easyInput;
+				group.appendChild(easyInput.view_element);
+			});
 		}
 
 		protected createEasyInput(parameters: any): Utils.EasyInput {
 			let updateObject: Function;
 			if (parameters.type == 'point') {
 				updateObject = (game_object: any, values: any) => {
-					// game_object[attr[0]][attr[1]] = value;
 					game_object[parameters.key].set(values[0], values[1]);
 				}
 			} else {
@@ -95,8 +95,10 @@ module Editor {
 
 			return new Utils.EasyInput(
 				{ class: ['attr'], ...parameters },
-				(value: any) => { this.selected_gameobjects.forEach((game_object) => updateObject(game_object, value) )},
-				// this.findViewElement(path) as HTMLInputElement,
+				(value: any) => {
+					this.selected_gameobjects
+						.forEach((game_object) => updateObject(game_object, value) )
+				},
 			);
 		}
 
@@ -130,54 +132,53 @@ module Editor {
 		}
 
 		protected clearInput(): void {
-			this.inputs.name.value = '';
-			this.inputs.visible.value = false;
-			this.inputs.alpha.value = '';
-			this.inputs.rotation.value = '';
-			this.inputs.blend.querySelector('select').selectedIndex = -1;
-
-			this.inputs.position.x.value = '';
-			this.inputs.position.y.value = '';
-			this.inputs.scale.x.value = '';
-			this.inputs.scale.y.value = '';
-			this.inputs.pivot.x.value = '';
-			this.inputs.pivot.y.value = '';
-			this.inputs.anchor.x.value = '';
-			this.inputs.anchor.y.value = '';
+			for(let key in this.common_inputs) {
+				this.common_inputs[key].clear();
+			}
+			for(let key in this.sprite_inputs) {
+				this.sprite_inputs[key].clear();
+			}
+			for(let key in this.text_inputs) {
+				this.text_inputs[key].clear();
+			}
 		}
 
 		protected writeInput(game_object: GameObject.AbstractObject): void {
 			if (game_object instanceof GameObject.Sprite) {
-				this.inputs.blend.classList.remove('disable');
-				this.inputs.blend.querySelector('select').value = EBlendMode[game_object.blend];
+				this.sprite_view_group.classList.remove('disable');
+				this.text_view_group.classList.add('disable');
 
-				this.inputs.anchor.classList.remove('disable');
-				this.inputs.anchor.x.value = (game_object as GameObject.Sprite).anchor.x.toString();
-				this.inputs.anchor.y.value = (game_object as GameObject.Sprite).anchor.y.toString();
+				this.write_inputs_list(this.sprite_inputs, game_object);
 			} else
 			if (game_object instanceof GameObject.Container) {
-				this.inputs.blend.classList.add('disable');
-				this.inputs.anchor.classList.add('disable');
+				this.sprite_view_group.classList.add('disable');
+				this.text_view_group.classList.add('disable');
 			}
 
-			this.inputs.name.value = game_object.name;
-			this.inputs.visible.value = game_object.visible;
-			this.inputs.alpha.value = game_object.alpha.toString();
-			this.inputs.rotation.value = game_object.rotation.toString();
-			this.inputs.position.x.value = game_object.position.x.toString();
-			this.inputs.position.y.value = game_object.position.y.toString();
-			this.inputs.scale.x.value = game_object.scale.x.toString();
-			this.inputs.scale.y.value = game_object.scale.y.toString();
-			this.inputs.pivot.x.value = game_object.pivot.x.toString();
-			this.inputs.pivot.y.value = game_object.pivot.y.toString();
+			this.write_inputs_list(this.common_inputs, game_object);
+		}
+
+		protected write_inputs_list(list: any, game_object: any): void {
+			for (let key in list) {
+				let input = list[key];
+				if (input.type == 'point') {
+					input.x = game_object[key].x;
+					input.y = game_object[key].y;
+				} else {
+					input.value = game_object[key];
+				}
+			}
 		}
 
 		public update(game_object: GameObject.AbstractObject, attr: string|string[]): void {
-			console.warn('upadte', attr);
 			if (typeof attr == 'string') {
-				(this as any)[attr] = (game_object as any)[attr];
+				if (this.common_inputs[attr]) {
+					(this.common_inputs as any)[attr].value = (game_object as any)[attr];
+				}
 			} else {
-				(this as any)[attr[0]][attr[1]] = (game_object as any)[attr[0]][attr[1]];
+				if (this.common_inputs[attr[0]]) {
+					(this.common_inputs as any)[attr[0]][attr[1]].value = (game_object as any)[attr[0]][attr[1]];
+				}
 			}
 		}
 	}

@@ -68,8 +68,10 @@ input[type=number]
 }
 .checkbox input {
 	position: absolute;
+	top: 8px;
+	left: 9px;
 	opacity: 0;
-	/* cursor: pointer; */
+	z-index: 2;
 }
 .checkmark {
 	position: absolute;
@@ -110,6 +112,9 @@ input[type=number]
 	width: 8px;
 	height: 8px;
     background: #adadad;
+}
+.checkbox .attr-label {
+    margin-left: 22px;
 }
 
 html, body {
@@ -225,16 +230,23 @@ canvas {
 	overflow-y: auto;
 }
 
-#inspector .content .attr.disable {
+#inspector .content .disable {
 	display: none;
 }
 
-#inspector .input-label {
-	width: calc(100% - 20px);
-	padding: 5px 10px 0px 10px;
-	font-size: 11px;
-	color: #9ca1a2;
+
+#inspector .point-area,
+#inspector .input-area {
 	border-top: 1px #0f0f0f solid;
+	padding: 7px 10px;
+}
+
+#inspector .input-area .attr-label {
+	padding-right: 6px;
+}
+
+#inspector .point-area .attr-label {
+	margin-bottom: 5px;
 }
 
 #inspector input.no-label {
@@ -244,57 +256,37 @@ canvas {
 	text-align: left;
 }
 
-#inspector .point-area {
-	height: 40px;
-	margin-bottom: 3px;
-}
 #inspector .axis {
-	float: left;
-    padding: 5px;
-    margin-left: 6px;
+    padding-right: 5px;
     font-size: 12px;
 }
 
-#inspector .axis-value {
-	float: left;
-	margin: 5px 0px;
-	width: calc(50% - 33px);
-}
-
-#inspector .input-area {
-	height: 28px;
-	border-top: 1px #0f0f0f solid;
-}
-
-#inspector .input-area .attr-label {
-	float: left;
-	width: 35px;
-	padding: 8.2px 0px 8px 10px;
-	border: none;
+#inspector .point-area input {
+	margin-right: 8px;
+	width: calc(50% - 25px);
 }
 
 #inspector .input-area input[type=number] {
-	float: left;
 	width: calc(50% - 33px);
-	margin: 7px 0;
 }
 
 #inspector .input-area select {
-    margin: 6px 0px;
+    /* margin: 6px 0px; */
 }
 
-#inspector #object-attr-alpha {
+#inspector .attr[data-key='alpha'] {
 	min-width: 90px;
 }
-#inspector #object-attr-alpha input {
+#inspector .attr[data-key='alpha'] input {
 	width: 35px;
 }
 
-#inspector #object-attr-rotation .attr-label {
+#inspector .attr[data-key='rotation'] .attr-label {
     width: 48px;
 }
 
 #inspector .content .content-blocker {
+	z-index: 10;
 	display: block;
 	position: absolute;
 	width: 100%;
@@ -358,17 +350,6 @@ canvas {
 #hierarchy .content .object.selected > .view-area {
 	background: #0f3238;
 }
-
-/* #hierarchy .content .object::before {
-	content: "";
-	position: absolute;
-	width: 100%;
-	height: 24px;
-	top: 0;
-	left: 0;
-	border-bottom: 1px #0f0f0f solid;
-	background: #1b1c1d;
-} */
 
 #hierarchy .content .object .child-icon {
 	display: none;
