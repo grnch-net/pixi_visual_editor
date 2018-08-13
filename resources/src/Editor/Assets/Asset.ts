@@ -11,12 +11,16 @@ module Editor.Assets {
 
 	export class Asset {
 		public name: string = 'Image';
+		public base: PIXI.BaseTexture;
 		public texture: PIXI.Texture;
 
 		public view_element: HTMLElement;
 		protected view_name: HTMLElement;
 		protected view_image: HTMLImageElement;
 		protected view_touch: HTMLElement;
+
+		protected isLoad: boolean = false;
+		protected onLoadCallback: Function;
 
 		constructor({
 			name,
@@ -50,10 +54,14 @@ module Editor.Assets {
 		protected initTexture(texture: PIXI.Texture): void {
 			if (this.texture) {
 				this.texture = texture;
+				this.isLoad = true;
+				if (this.onLoadCallback) this.onLoadCallback();
 			} else {
 				this.view_image.onload = () => {
-					let base = new PIXI.BaseTexture(this.view_image);
-					this.texture = new PIXI.Texture(base);
+					this.base = new PIXI.BaseTexture(this.view_image);
+					this.texture = new PIXI.Texture(this.base);
+					this.isLoad = true;
+					if (this.onLoadCallback) this.onLoadCallback();
 				}
 			}
 		}
@@ -68,6 +76,11 @@ module Editor.Assets {
 
 			this.view_touch.addEventListener(event, callback);
 
+		}
+
+		public onLoad(callback: Function): void {
+			this.onLoadCallback = callback;
+			if (this.isLoad) this.onLoadCallback();
 		}
 	}
 }
