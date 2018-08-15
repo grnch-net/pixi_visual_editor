@@ -1,5 +1,6 @@
 /// <reference path="../lib.d.ts/pixi.d.ts" />
 /// <reference path="../Utils/easy-html.ts" />
+/// <reference path="../GameObject/Text.ts" />
 /// <reference path="../GameObject/Sprite.ts" />
 /// <reference path="../GameObject/Container.ts" />
 /// <reference path="./Assets/AssetsModule.ts" />
@@ -25,6 +26,7 @@ module Editor {
 			this.init_options();
 			this.init_right_block();
 			this.init_bottom_block();
+			this.init_left_block();
 		}
 
 		protected init_options(): void {
@@ -104,6 +106,14 @@ module Editor {
 
 		}
 
+		protected init_left_block(): void {
+			let block_element: HTMLElement = document.querySelector('.editor-block.left-block');
+			let text_tool_element: HTMLElement = block_element.querySelector('#text-tool');
+			text_tool_element.addEventListener('click', (event: Event) => {
+				let scene_text = new GameObject.Text();
+				this.hierarchy.add(scene_text);
+			})
+		}
 
 
 	}

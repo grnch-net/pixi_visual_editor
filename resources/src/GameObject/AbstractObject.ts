@@ -4,7 +4,7 @@
 
 module GameObject {
 
-	interface IAbstractInitParameters {
+	export interface IAbstractInitParameters {
 		name?: string;
 		sceneElementAttr?: any[];
 		hierarchyElementAttr?: any[];

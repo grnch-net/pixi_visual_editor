@@ -9,6 +9,8 @@ module Utils {
 		values?: any;
 		parent?: HTMLElement;
 		class?: string[];
+		placeholder?: string;
+		rows?: string;
 	}
 
 	export class EasyInput {
@@ -45,15 +47,27 @@ module Utils {
 
 		protected init_view_element(parameters: IInitParameters): void {
 			let element_type: string = 'input';
-			let input_type: string = 'text';
+			let input_type: string;
+			let input_class: string;
 
+			if (this.type == 'textarea') { element_type = 'textarea'; } else
 			if (this.type == 'select') { element_type = 'select'; } else
-			if (this.type == 'point') { input_type = 'number'; }
-			else { input_type = this.type; }
+			if (this.type == 'point') { input_type = 'number'; } else
+			if (this.type == 'color') {
+				input_type = '';
+				input_class = 'jscolor';
+			} else {
+				input_type = this.type;
+			}
 
 			let view_input = Utils.easyHTML.createElement({
 				type: element_type,
-				attr: { class: '', type: input_type }
+				attr: {
+					class: input_class,
+					type: input_type,
+					placeholder: parameters.placeholder,
+					rows: parameters.rows
+				}
 			}) as HTMLElement;
 
 			if (parameters.step) {
@@ -103,13 +117,13 @@ module Utils {
 		protected create_point_elements(view_input: HTMLInputElement): HTMLElement[] {
 			let x_label = Utils.easyHTML.createElement({
 				type: 'span',
-				innerHTML: 'x:', attr: { class: 'axis' }
+				innerHTML: 'x:', attr: { class: 'axis x' }
 			});
 			let x_value = view_input;
 
 			let y_label = Utils.easyHTML.createElement({
 				type: 'span',
-				innerHTML: 'y:', attr: { class: 'axis' }
+				innerHTML: 'y:', attr: { class: 'axis y' }
 			});
 			let y_value = view_input.cloneNode() as HTMLInputElement;
 
@@ -200,6 +214,9 @@ module Utils {
 					+(this.view_inputs[0] as HTMLInputElement).value,
 					+(this.view_inputs[1] as HTMLInputElement).value
 				];
+			} else
+			if (this.type == 'color') {
+				return '#' + (this.view_inputs[0] as HTMLInputElement).value;
 			} else {
 				let value = (this.view_inputs[0] as HTMLInputElement).value;
 				if (this.type == 'number') return +value;
@@ -208,6 +225,9 @@ module Utils {
 		}
 
 		public set value(value: any) {
+			if (this.type == 'color') {
+				(this.view_inputs[0] as any).jscolor.fromString(value.substr(1));
+			} else
 			if (this.type == 'checkbox') {
 				(this.view_inputs[0] as HTMLInputElement).checked = value;
 			} else {
@@ -219,12 +239,16 @@ module Utils {
 		}
 
 		protected add_change_event(): void {
-			let event: string = 'string';
+			let event: string = 'input';
 			if (this.type == 'select') event = 'change';
-			this.view_inputs[0].addEventListener('change', this.update.bind(this));
+			this.view_inputs[0].addEventListener(event, this.update.bind(this));
 
-			if (this.type == 'point')
-				this.view_inputs[1].addEventListener('input', this.update.bind(this));
+			if (this.type == 'color') {
+				this.view_inputs[0].addEventListener('change', this.update.bind(this));
+			} else
+			if (this.type == 'point') {
+				this.view_inputs[1].addEventListener(event, this.update.bind(this));
+			}
 		}
 
 		public update(): void {
@@ -232,6 +256,12 @@ module Utils {
 		}
 
 		public clear(): void {
+			if (this.type == 'color') {
+				requestAnimationFrame(() => {
+					(this.view_inputs[0] as HTMLInputElement).value = '';
+					this.view_inputs[0].style.backgroundColor = '';
+				});
+			} else
 			if (this.type == 'checkbox') {
 				this.value = false;
 			} else

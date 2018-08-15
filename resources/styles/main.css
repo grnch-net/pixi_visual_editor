@@ -42,6 +42,12 @@ select {
     color: #9ca1a2;
 }
 
+textarea {
+	min-height: 14px;
+    resize: vertical;
+}
+
+textarea,
 input {
 	padding: 0px 2px 0px 1px;
 	border: none;
@@ -234,6 +240,9 @@ canvas {
 	display: none;
 }
 
+#inspector .content .text-group {
+	border-top: 1px #0f0f0f solid;
+}
 
 #inspector .point-area,
 #inspector .input-area {
@@ -249,6 +258,7 @@ canvas {
 	margin-bottom: 5px;
 }
 
+#inspector textarea.no-label,
 #inspector input.no-label {
 	margin: 5px;
     padding: 5px;
@@ -256,14 +266,21 @@ canvas {
 	text-align: left;
 }
 
+#inspector textarea.no-label {
+    margin-bottom: 2px;
+}
+
 #inspector .axis {
     padding-right: 5px;
     font-size: 12px;
 }
 
+#inspector .point-area .axis.y {
+	padding-left: 8px;
+}
+
 #inspector .point-area input {
-	margin-right: 8px;
-	width: calc(50% - 25px);
+	width: calc(50% - 21px);
 }
 
 #inspector .input-area input[type=number] {
@@ -271,7 +288,12 @@ canvas {
 }
 
 #inspector .input-area select {
-    /* margin: 6px 0px; */
+
+}
+
+#inspector .input-area input.jscolor {
+    float: right;
+	width: calc(100% - 50px);
 }
 
 #inspector .attr[data-key='alpha'] {

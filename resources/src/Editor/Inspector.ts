@@ -38,8 +38,11 @@ module Editor {
 		];
 
 		protected textInputsParameter = [
-			{ key: 'text' },
-			{ key: 'fontSize', type: 'number', label: 'Font size' },
+			{ key: 'text', type: 'textarea', label: false, placeholder: 'Text', rows: 1 },
+			{ key: 'fontSize', type: 'number', label: 'Font size:' },
+			{ key: 'fill', type: 'color' },
+			{ key: 'stroke', type: 'color' },
+			{ key: 'strokeThickness', type: 'number', label: 'Stroke width:' },
 		];
 
 		constructor() {
@@ -62,7 +65,7 @@ module Editor {
 			this.init_input_group(this.sprite_view_group, this.spriteInputsParameter, this.sprite_inputs);
 			this.init_input_group(this.text_view_group, this.textInputsParameter, this.text_inputs);
 
-			this.clearInput();
+			this.updateAttributes();
 		}
 
 		protected create_group(name: string): HTMLElement {
@@ -119,10 +122,14 @@ module Editor {
 
 		protected updateAttributes(): void {
 			if (this.selected_gameobjects.length == 0) {
+				this.common_view_group.classList.add('disable');
+				this.sprite_view_group.classList.add('disable');
+				this.text_view_group.classList.add('disable');
 				this.content_view.classList.remove('enable');
 				this.clearInput();
 			} else {
 				this.content_view.classList.add('enable');
+				this.common_view_group.classList.remove('disable');
 				this.writeInput(this.selected_gameobjects[0]);
 			}
 		}
@@ -153,6 +160,13 @@ module Editor {
 			if (game_object instanceof GameObject.Container) {
 				this.sprite_view_group.classList.add('disable');
 				this.text_view_group.classList.add('disable');
+			} else
+			if (game_object instanceof GameObject.Text) {
+				this.sprite_view_group.classList.remove('disable');
+				this.text_view_group.classList.remove('disable');
+
+				this.write_inputs_list(this.sprite_inputs, game_object);
+				this.write_inputs_list(this.text_inputs, game_object);
 			}
 
 			this.write_inputs_list(this.common_inputs, game_object);
