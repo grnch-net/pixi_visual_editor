@@ -9,7 +9,7 @@ module Editor.Assets {
 		texture?: PIXI.Texture;
 	}
 
-	export class Asset {
+	export class AssetObject {
 		public name: string = 'Image';
 		public base: PIXI.BaseTexture;
 		public texture: PIXI.Texture;

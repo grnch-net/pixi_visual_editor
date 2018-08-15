@@ -2,15 +2,15 @@
 /// <reference path="../../Utils/easy-html.ts" />
 /// <reference path="../../GameObject/Sprite.ts" />
 /// <reference path="../Hierarchy.ts" />
-/// <reference path="Asset.ts" />
+/// <reference path="AssetObject.ts" />
 
 module Editor.Assets {
 
 	interface IJSONList {
-		[propName: string]: Asset;
+		[propName: string]: AssetObject;
 	}
 	interface IImageList {
-		[propName: string]: Asset;
+		[propName: string]: AssetObject;
 	}
 
 	export class AssetsModule {
@@ -86,7 +86,7 @@ module Editor.Assets {
 						delete sort.img[image_name];
 
 						let imageLink = URL.createObjectURL(atlasIMG);
-						let atlasAsset = new Asset({name, imageLink});
+						let atlasAsset = new AssetObject({name, imageLink});
 						atlasAsset.onLoad(() => {
 							this.atlas_parse(atlasAsset.base, json_key, data);
 						});
@@ -155,7 +155,7 @@ module Editor.Assets {
 				return;
 			}
 
-			let asset = new Asset({name, imageLink, texture});
+			let asset = new AssetObject({name, imageLink, texture});
 			asset.addEvent('dblclick', (event: Event) => this.new_sprite(asset.texture, asset.name));
 
 			this.image_list[asset.name] = asset;
@@ -167,7 +167,7 @@ module Editor.Assets {
 			this.hierarchy.add(sprite);
 		}
 
-		public remove(asset: Asset): void {
+		public remove(asset: AssetObject): void {
 			delete this.image_list[asset.name];
 			this.view_list.removeChild(asset.view_element);
 		}
