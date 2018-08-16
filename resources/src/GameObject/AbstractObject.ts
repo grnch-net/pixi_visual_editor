@@ -27,7 +27,7 @@ module GameObject {
 		protected view_area_element: HTMLElement;
 		protected childIconElement: HTMLElement;
 		protected visibleElement: HTMLElement;
-		protected typeElement: HTMLElement;
+		protected typeElement: HTMLImageElement;
 		protected nameElement: HTMLElement;
 
 		protected _isSelected: boolean = false;
@@ -72,7 +72,7 @@ module GameObject {
 			this.typeElement = Utils.easyHTML.createElement({
 				type: 'img', parent: this.view_area_element,
 				attr: { class: 'type' }
-			});
+			}) as HTMLImageElement;
 
 			this.nameElement = Utils.easyHTML.createElement({
 				type: 'div', parent: this.view_area_element,

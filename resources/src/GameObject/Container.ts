@@ -8,6 +8,7 @@ module GameObject {
 	export class Container extends AbstractObject {
 		public scene_view_element: PIXI.Container;
 
+		protected isShow: boolean = true;
 		protected hierarchy_view_group_element: HTMLElement;
 
 		constructor(name?: string) {
@@ -28,6 +29,23 @@ module GameObject {
 			this.hierarchy_view_group_element = Utils.easyHTML.createElement({
 				type: 'div', parent: this.hierarchy_view_element,
 				attr: { class: 'group' }
+			});
+
+			this.add_group_visable_event();
+		}
+		protected add_group_visable_event(): void {
+			this.typeElement.addEventListener('mouseup', () => {
+				if (this.isShow) {
+					this.hierarchy_view_group_element.classList.add('hide');
+					this.typeElement.src = FOLDER_CLOSE_IMAGE;
+				} else {
+					this.typeElement.src = FOLDER_OPEN_IMAGE;
+					this.hierarchy_view_group_element.classList.remove('hide');
+
+				}
+
+				this.isShow = !this.isShow;
+				event.stopPropagation();
 			});
 		}
 
