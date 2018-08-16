@@ -23,12 +23,12 @@ module GameObject {
 		protected _padding: number = 0;
 		protected _stroke_fill: string = '#000000';
 		protected _stroke_thickness: number = 0;
-		protected _word_wrap: boolean = false;
-		protected _word_wrap_width: number = 100;
+		// protected _word_wrap: boolean = false;
+		// protected _word_wrap_width: number = 100;
 
 		protected _drop_shadow: boolean = false;
 		protected _drop_shadow_alpha: number = 1;
-		protected _drop_shadow_angle: number = Math.PI/6;
+		protected _drop_shadow_angle: number = 30;
 		protected _drop_shadow_blur: number = 0;
 		protected _drop_shadow_color: string = '#000000';
 		protected _drop_shadow_distance: number = 5;
@@ -79,6 +79,65 @@ module GameObject {
 			this.scene_view_element.style.strokeThickness = value;
 		}
 
+		public get align(): string { return this._align; }
+		public set align(value: string) {
+			this._align = value;
+			this.scene_view_element.style.align = value;
+		}
+
+		public get fontWeight(): string { return this._font_weight; }
+		public set fontWeight(value: string) {
+			this._font_weight = value;
+			this.scene_view_element.style.fontWeight = value;
+		}
+
+		public get letterSpacing(): number { return this._letter_spacing; }
+		public set letterSpacing(value: number) {
+			this._letter_spacing = value;
+			this.scene_view_element.style.letterSpacing = value;
+		}
+
+		public get padding(): number { return this._padding; }
+		public set padding(value: number) {
+			this._padding = value;
+			this.scene_view_element.style.padding = value;
+		}
+
+		public get dropShadow(): boolean { return this._drop_shadow; }
+		public set dropShadow(value: boolean) {
+			this._drop_shadow = value;
+			this.scene_view_element.style.dropShadow = value;
+		}
+
+		public get dropShadowAlpha(): number { return this._drop_shadow_alpha; }
+		public set dropShadowAlpha(value: number) {
+			this._drop_shadow_alpha = value;
+			this.scene_view_element.style.dropShadowAlpha = value;
+		}
+
+		public get dropShadowAngle(): number { return this._drop_shadow_angle; }
+		public set dropShadowAngle(value: number) {
+			this._drop_shadow_angle = value;
+			this.scene_view_element.style.dropShadowAngle = value * Math.PI / 180;
+		}
+
+		public get dropShadowBlur(): number { return this._drop_shadow_blur; }
+		public set dropShadowBlur(value: number) {
+			this._drop_shadow_blur = value;
+			this.scene_view_element.style.dropShadowBlur = value;
+		}
+
+		public get dropShadowColor(): string { return this._drop_shadow_color; }
+		public set dropShadowColor(value: string) {
+			this._drop_shadow_color = value;
+			this.scene_view_element.style.dropShadowColor = value;
+		}
+
+		public get dropShadowDistance(): number { return this._drop_shadow_distance; }
+		public set dropShadowDistance(value: number) {
+			this._drop_shadow_distance = value;
+			this.scene_view_element.style.dropShadowDistance = value;
+		}
 
 
 	}

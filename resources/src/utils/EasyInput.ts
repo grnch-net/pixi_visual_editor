@@ -145,16 +145,27 @@ module Utils {
 		}
 
 		protected create_select_elements(view_input: HTMLSelectElement, values: any): HTMLElement[] {
-			for(let key in values) {
-				let index = (values as any)[key];
-				let option = document.createElement("option");
-				option.text = key;
-				option.value = values[key];
-				view_input.add(option);
+			if (Array.isArray(values)) {
+				values.forEach((value: string) => {
+					let option = this.create_select_option(value.toUpperCase(), value);
+					view_input.add(option);
+				})
+			} else {
+				for(let key in values) {
+					let option = this.create_select_option(key, values[key]);
+					view_input.add(option);
+				}
 			}
 
 			this.view_inputs.push(view_input);
 			return [view_input];
+		}
+
+		protected create_select_option(label: string, value: string): HTMLOptionElement {
+			let option = document.createElement("option");
+			option.text = label;
+			option.value = value;
+			return option;
 		}
 
 		protected create_label(parameters: IInitParameters): HTMLElement {

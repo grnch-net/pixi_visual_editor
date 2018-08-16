@@ -48,12 +48,13 @@ textarea {
 }
 
 textarea,
-input {
+input:not([type="file"]) {
 	padding: 0px 2px 0px 1px;
 	border: none;
 	background: #0f0f0f;
     color: #9ca1a2;
 	text-align: right;
+	cursor: text;
 }
 
 input[type=number]::-webkit-inner-spin-button,
@@ -78,6 +79,7 @@ input[type=number]
 	left: 9px;
 	opacity: 0;
 	z-index: 2;
+	cursor: pointer;
 }
 .checkmark {
 	position: absolute;
@@ -283,28 +285,44 @@ canvas {
 	width: calc(50% - 21px);
 }
 
-#inspector .input-area input[type=number] {
+/* #inspector .input-area input[type=number] {
 	width: calc(50% - 33px);
-}
+} */
 
-#inspector .input-area select {
-
-}
-
-#inspector .input-area input.jscolor {
+/* #inspector .input-area input.jscolor {
     float: right;
 	width: calc(100% - 50px);
+} */
+
+#inspector .input-area select,
+#inspector .input-area input:not([type="checkbox"]) {
+    float: right;
+    text-align: left;
+    padding-left: 5px;
+    padding-right: 0;
+    width: calc(50% - 5px);
+}
+
+
+#inspector .input-area select {
+    min-width: max-content;
+	width: 50%;
+	padding: 0;
 }
 
 #inspector .attr[data-key='alpha'] {
 	min-width: 90px;
 }
-#inspector .attr[data-key='alpha'] input {
+/* #inspector .attr[data-key='alpha'] input {
 	width: 35px;
-}
+} */
 
 #inspector .attr[data-key='rotation'] .attr-label {
     width: 48px;
+}
+
+#inspector .shadow-group .attr-label {
+	padding-left: 22px;
 }
 
 #inspector .content .content-blocker {
@@ -382,6 +400,7 @@ canvas {
     border-left: 1px #adadad solid;
     border-bottom: 1px #adadad solid;
 }
+
 #hierarchy .content .group .object .child-icon {
 	display: block;
 }
@@ -419,6 +438,10 @@ canvas {
 	margin-left: calc(12px + 16px * 11);
 }
 
+#hierarchy .content .group.hide {
+	display: none;
+}
+
 #hierarchy .content .object .type {
 	float: left;
 	position: relative;
@@ -433,6 +456,8 @@ canvas {
     margin-right: 9px;
     max-width: 13px;
     max-height: 13px;
+	cursor: pointer;
+	pointer-events: auto;
 }
 
 #hierarchy .content .object .visible {
@@ -713,6 +738,10 @@ canvas {
 	-moz-user-select: all;
 	-ms-user-select: all;
 	user-select: all;
+}
+
+#assets .content .add-button + .name {
+	user-select: none;
 }
 
 #assets .content .item .touch {
