@@ -111,7 +111,7 @@ module GameObject {
 		public get rotation(): number { return this._rotation; }
 		public set rotation(value: number) {
 			this._rotation = value;
-			this.scene_view_element.rotation = value;
+			this.scene_view_element.rotation = value * Math.PI / 180;
 		}
 
 		protected updatePosition(x: number, y: number): void {
