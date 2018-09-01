@@ -324,8 +324,8 @@ canvas {
     width: 48px;
 }
 
-#inspector .shadow-group .attr-label {
-	padding-left: 22px;
+#inspector .sub-group .attr-label {
+	margin-left: 22px;
 }
 
 #inspector .content .content-blocker {

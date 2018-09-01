@@ -23,8 +23,9 @@ module GameObject {
 		protected _padding: number = 0;
 		protected _stroke_fill: string = '#000000';
 		protected _stroke_thickness: number = 0;
-		// protected _word_wrap: boolean = false;
-		// protected _word_wrap_width: number = 100;
+		protected _word_wrap: boolean = false;
+		protected _break_words: boolean = false;
+		protected _word_wrap_width: number = 100;
 
 		protected _drop_shadow: boolean = false;
 		protected _drop_shadow_alpha: number = 1;
@@ -101,6 +102,24 @@ module GameObject {
 		public set padding(value: number) {
 			this._padding = value;
 			this.scene_view_element.style.padding = value;
+		}
+
+		public get wordWrap(): boolean { return this._word_wrap; }
+		public set wordWrap(value: boolean) {
+			this._word_wrap = value;
+			this.scene_view_element.style.wordWrap = value;
+		}
+
+		public get breakWords(): boolean { return this._break_words; }
+		public set breakWords(value: boolean) {
+			this._break_words = value;
+			this.scene_view_element.style.breakWords = value;
+		}
+
+		public get wordWrapWidth(): number { return this._word_wrap_width; }
+		public set wordWrapWidth(value: number) {
+			this._word_wrap_width = value;
+			this.scene_view_element.style.wordWrapWidth = value;
 		}
 
 		public get dropShadow(): boolean { return this._drop_shadow; }

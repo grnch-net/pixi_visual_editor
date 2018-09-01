@@ -2,6 +2,7 @@
 /// <reference path="../GameObject/AbstractObject.ts" />
 /// <reference path="../GameObject/Sprite.ts" />
 /// <reference path="../GameObject/Container.ts" />
+/// <reference path="../Utils/easy-html.ts" />
 /// <reference path="../Utils/EasyInput.ts" />
 
 module Editor {
@@ -18,6 +19,7 @@ module Editor {
 		protected common_view_group: HTMLElement;
 		protected sprite_view_group: HTMLElement;
 		protected text_view_group: HTMLElement;
+		protected text_word_wrap_view_group: HTMLElement;
 		protected text_shadow_view_group: HTMLElement;
 
 		protected common_inputs: any = {};
@@ -49,7 +51,13 @@ module Editor {
 			{ key: 'fontWeight', type: 'select', values: GameObject.textStyle.fontWeight},
 			{ key: 'letterSpacing', type: 'number', label: 'Letter spacing:' },
 			{ key: 'padding', type: 'number' },
+			{ key: 'wordWrap', type: 'checkbox', label: 'Word wrap' },
 			{ key: 'dropShadow', type: 'checkbox', label: 'Shadow' },
+		];
+
+		protected textWordWrapParameters = [
+			{ key: 'wordWrapWidth', type: 'number', label: 'Width:' },
+			{ key: 'breakWords', type: 'checkbox', label: 'Break words' },
 		];
 
 		protected textShadowParameters = [
@@ -58,7 +66,7 @@ module Editor {
 			{ key: 'dropShadowBlur', type: 'number', label: 'Blur:' },
 			{ key: 'dropShadowColor', type: 'color', label: 'Color:' },
 			{ key: 'dropShadowDistance', type: 'number', label: 'Distance:' },
-		]
+		];
 
 		constructor() {
 			this.view_element = document.getElementById('inspector');
@@ -80,9 +88,19 @@ module Editor {
 			this.init_input_group(this.sprite_view_group, this.spriteInputsParameter, this.sprite_inputs);
 			this.init_input_group(this.text_view_group, this.textInputsParameter, this.text_inputs);
 
-			this.text_shadow_view_group = this.create_group_element('shadow-group');
+			this.text_word_wrap_view_group = this.create_group_element('sub-group');
+			this.text_word_wrap_view_group.classList.add('disable');
+			Utils.easyHTML.insertAfter(this.text_word_wrap_view_group, this.text_inputs['wordWrap'].view_element);
+
+			this.text_shadow_view_group = this.create_group_element('sub-group');
 			this.text_shadow_view_group.classList.add('disable');
-			this.text_view_group.appendChild(this.text_shadow_view_group);
+			Utils.easyHTML.insertAfter(this.text_shadow_view_group, this.text_inputs['dropShadow'].view_element);
+
+			this.textWordWrapParameters.forEach((parameters: any) => {
+				let easyInput: Utils.EasyInput = this.createEasyInput(parameters);
+				this.text_inputs[parameters.key] = easyInput;
+				this.text_word_wrap_view_group.appendChild(easyInput.view_element);
+			});
 
 			this.textShadowParameters.forEach((parameters: any) => {
 				let easyInput: Utils.EasyInput = this.createEasyInput(parameters);
@@ -112,6 +130,12 @@ module Editor {
 		protected createEasyInput(parameters: any): Utils.EasyInput {
 			let updateObject: Function;
 
+			if (parameters.key == 'wordWrap') {
+				updateObject = (game_object: any, value: any) => {
+					game_object[parameters.key] = value;
+					this.change_visible_text_word_wrap_group(value);
+				};
+			} else
 			if (parameters.key == 'dropShadow') {
 				updateObject = (game_object: any, value: any) => {
 					game_object[parameters.key] = value;
@@ -135,6 +159,11 @@ module Editor {
 						.forEach((game_object) => updateObject(game_object, value) )
 				},
 			);
+		}
+
+		protected change_visible_text_word_wrap_group(value: boolean): void {
+			if (value) this.text_word_wrap_view_group.classList.remove('disable');
+			else this.text_word_wrap_view_group.classList.add('disable');
 		}
 
 		protected change_visible_text_shadow_group(value: boolean): void {
@@ -201,6 +230,7 @@ module Editor {
 			if (game_object instanceof GameObject.Text) {
 				this.sprite_view_group.classList.remove('disable');
 				this.text_view_group.classList.remove('disable');
+				this.change_visible_text_word_wrap_group(game_object.wordWrap);
 				this.change_visible_text_shadow_group(game_object.dropShadow);
 
 				this.write_inputs_list(this.sprite_inputs, game_object);
