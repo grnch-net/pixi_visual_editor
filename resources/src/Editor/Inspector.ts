@@ -30,6 +30,7 @@ module Editor {
 			{ key: 'alpha', type: 'number', step: 0.1 },
 			{ key: 'rotation', type: 'number' },
 			{ key: 'position', type: 'point' },
+			{ key: 'scale', type: 'point', step: 0.1 },
 			{ key: 'pivot', type: 'point' },
 		];
 
