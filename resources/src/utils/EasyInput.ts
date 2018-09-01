@@ -102,9 +102,15 @@ module Utils {
 				let label_element = this.create_label(parameters);
 				this.view_element.appendChild(label_element);
 
-				children.forEach(child => {
-					this.view_element.appendChild(child);
-				});
+				if (this.type == 'checkbox') {
+					children.forEach(child => {
+						label_element.appendChild(child);
+					});
+				} else {
+					children.forEach(child => {
+						this.view_element.appendChild(child);
+					});
+				}
 			}
 
 			parameters.class.forEach((_class: string) => {
