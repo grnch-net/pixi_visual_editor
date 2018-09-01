@@ -5,14 +5,14 @@
     width: 10px;
 }
 ::-webkit-scrollbar-track {
-    background: #f1f1f1;
+	background: #0f0f0f;
 }
 ::-webkit-scrollbar-thumb {
-    background: #888;
+	background: #b2b6b8;
 }
-::-webkit-scrollbar-thumb:hover {
+/* ::-webkit-scrollbar-thumb:hover {
     background: #555;
-}
+} */
 
 * {
 	margin: 0;
@@ -58,13 +58,11 @@ input:not([type="file"]) {
 }
 
 input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button
-{
+input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-input[type=number]
-{
+input[type=number] {
   -moz-appearance: textfield;
 }
 
@@ -683,6 +681,7 @@ canvas {
 	margin: 10px 15px 11px 15px;
 	border: 5px #adadad dashed;
 	border-radius: 4px;
+    overflow: hidden;
 }
 
 #assets .content .add-button div {
