@@ -5,6 +5,7 @@ module GameObject {
 
 	export let textStyle = {
 		align: ['left', 'center', 'right'],
+		fontStyle: ['normal', 'italic', 'oblique'],
 		fontWeight: [
 			'normal', 'bold', 'bolder', 'lighter', '100', '200',
 			'300', '400', '500', '600', '700', '800', '900'
@@ -16,9 +17,12 @@ module GameObject {
 
 		protected _text: string = '';
 		protected _font_size: number = 26;
+		protected _font_family: string = 'Arial';
 		protected _fill: string = '#000000';
 		protected _align: string = textStyle.align[0];
+		protected _font_style: string = textStyle.fontStyle[0];
 		protected _font_weight: string = textStyle.fontWeight[0];
+		protected _leading: number = 0;
 		protected _letter_spacing: number = 0;
 		protected _padding: number = 0;
 		protected _stroke_fill: string = '#000000';
@@ -62,6 +66,12 @@ module GameObject {
 			this.scene_view_element.style.fontSize = value;
 		}
 
+		public get fontFamily(): string { return this._font_family; }
+		public set fontFamily(value: string) {
+			this._font_family = value;
+			this.scene_view_element.style.fontFamily = value;
+		}
+
 		public get fill(): string { return this._fill; }
 		public set fill(value: string) {
 			this._fill = value;
@@ -86,6 +96,12 @@ module GameObject {
 			this.scene_view_element.style.align = value;
 		}
 
+		public get fontStyle(): string { return this._font_style; }
+		public set fontStyle(value: string) {
+			this._font_style = value;
+			this.scene_view_element.style.fontStyle = value;
+		}
+
 		public get fontWeight(): string { return this._font_weight; }
 		public set fontWeight(value: string) {
 			this._font_weight = value;
@@ -96,6 +112,12 @@ module GameObject {
 		public set letterSpacing(value: number) {
 			this._letter_spacing = value;
 			this.scene_view_element.style.letterSpacing = value;
+		}
+
+		public get leading(): number { return this._leading; }
+		public set leading(value: number) {
+			this._leading = value;
+			this.scene_view_element.style.leading = value;
 		}
 
 		public get padding(): number { return this._padding; }

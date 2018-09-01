@@ -26,10 +26,12 @@ module Editor {
 		protected sprite_inputs: any = {};
 		protected text_inputs: any = {};
 
+		public fontFamilyList: string[] = ['Arial'];
+
 		protected commonInputsParameter = [
 			{ key: 'name', label: false },
 			{ key: 'visible', type: 'checkbox' },
-			{ key: 'alpha', type: 'number', step: 0.1 },
+			{ key: 'alpha', type: 'number', step: 0.1, min: 0, max: 1 },
 			{ key: 'rotation', type: 'number' },
 			{ key: 'position', type: 'point' },
 			{ key: 'scale', type: 'point', step: 0.1 },
@@ -44,11 +46,14 @@ module Editor {
 		protected textInputsParameter = [
 			{ key: 'text', type: 'textarea', label: false, placeholder: 'Text', rows: 1 },
 			{ key: 'fontSize', type: 'number', label: 'Font size:' },
+			{ key: 'fontFamily', type: 'select', values: this.fontFamilyList},
 			{ key: 'fill', type: 'color' },
 			{ key: 'stroke', type: 'color' },
 			{ key: 'strokeThickness', type: 'number', label: 'Stroke width:' },
 			{ key: 'align', type: 'select', values: GameObject.textStyle.align},
-			{ key: 'fontWeight', type: 'select', values: GameObject.textStyle.fontWeight},
+			{ key: 'fontStyle', type: 'select', label: 'Font style:', values: GameObject.textStyle.fontStyle},
+			{ key: 'fontWeight', type: 'select', label: 'Font weight:', values: GameObject.textStyle.fontWeight},
+			{ key: 'leading', type: 'number' },
 			{ key: 'letterSpacing', type: 'number', label: 'Letter spacing:' },
 			{ key: 'padding', type: 'number' },
 			{ key: 'wordWrap', type: 'checkbox', label: 'Word wrap' },
@@ -61,7 +66,7 @@ module Editor {
 		];
 
 		protected textShadowParameters = [
-			{ key: 'dropShadowAlpha', type: 'number', label: 'Alpha:', step: 0.1 },
+			{ key: 'dropShadowAlpha', type: 'number', label: 'Alpha:', step: 0.1, min: 0, max: 1 },
 			{ key: 'dropShadowAngle', type: 'number', label: 'Angle:' },
 			{ key: 'dropShadowBlur', type: 'number', label: 'Blur:' },
 			{ key: 'dropShadowColor', type: 'color', label: 'Color:' },

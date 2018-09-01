@@ -6,6 +6,8 @@ module Utils {
 		label?: boolean|string;
 		type?: string;
 		step?: number;
+		min?: number;
+		max?: number;
 		values?: any;
 		parent?: HTMLElement;
 		class?: string[];
@@ -70,8 +72,16 @@ module Utils {
 				}
 			}) as HTMLElement;
 
-			if (parameters.step) {
+			if (typeof parameters.step == 'number') {
 				(view_input as HTMLInputElement).step = parameters.step.toString();
+			}
+
+			if (typeof parameters.min == 'number') {
+				(view_input as HTMLInputElement).min = parameters.min.toString();
+			}
+
+			if (typeof parameters.max == 'number') {
+				(view_input as HTMLInputElement).max = parameters.max.toString();
 			}
 
 			let children: HTMLElement[] = [];
