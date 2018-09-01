@@ -7,6 +7,7 @@ module Utils {
 
 		createElement(parameters?: IHTMLElementConfig): HTMLElement;
 		setAttribute(element: HTMLElement, attr?: { [key: string]: string | number }): void;
+		insertAfter(elem: HTMLElement, refElem: HTMLElement): HTMLElement;
 	}
 
 	export interface IHTMLElementConfig {
@@ -84,6 +85,10 @@ module Utils {
 			for(let key in attr) {
 				element.setAttributeNS( null, key, <string>attr[key] );
 			}
+		},
+
+		insertAfter: function (elem: HTMLElement, refElem: HTMLElement): HTMLElement {
+		    return refElem.parentNode.insertBefore(elem, refElem.nextSibling);
 		}
 	};
 }
