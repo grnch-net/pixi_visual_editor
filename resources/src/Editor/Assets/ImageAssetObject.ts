@@ -3,13 +3,13 @@
 
 module Editor.Assets {
 
-	interface IAssetsInitParameters {
+	interface IConstructorInitParameters {
 		name: string;
 		imageLink: string;
 		texture?: PIXI.Texture;
 	}
 
-	export class AssetObject {
+	export class ImageAssetObject {
 		public name: string = 'Image';
 		public base: PIXI.BaseTexture;
 		public texture: PIXI.Texture;
@@ -26,7 +26,7 @@ module Editor.Assets {
 			name,
 			imageLink,
 			texture = null
-		}: IAssetsInitParameters) {
+		}: IConstructorInitParameters) {
 			if (this.name) this.name = name;
 
 			this.create_view_elements(imageLink);
