@@ -26,7 +26,7 @@ module Editor {
 		protected sprite_inputs: any = {};
 		protected text_inputs: any = {};
 
-		public fontFamilyList: string[] = ['Arial'];
+		protected fontFamilyList: string[] = ['Arial'];
 
 		protected commonInputsParameter = [
 			{ key: 'name', label: false },
@@ -267,6 +267,11 @@ module Editor {
 					(this.common_inputs as any)[attr[0]][attr[1]].value = (game_object as any)[attr[0]][attr[1]];
 				}
 			}
+		}
+
+		public addNewFontFamily(font: string): void {
+			this.fontFamilyList.push(font);
+			this.text_inputs['fontFamily'].updateSelect(this.fontFamilyList);
 		}
 	}
 }

@@ -304,5 +304,24 @@ module Utils {
 
 		public set x(value: number) { (this.view_inputs[0] as HTMLInputElement).value = value.toString(); }
 		public set y(value: number) { (this.view_inputs[1] as HTMLInputElement).value = value.toString(); }
+
+		public updateSelect(values: any): void {
+			let view_input = this.view_inputs[0] as HTMLSelectElement;
+			while(view_input.lastChild) {
+				view_input.removeChild(this.view_inputs[0].lastChild);
+			}
+
+			if (Array.isArray(values)) {
+				values.forEach((value: string) => {
+					let option = this.create_select_option(value.toUpperCase(), value);
+					view_input.add(option);
+				})
+			} else {
+				for(let key in values) {
+					let option = this.create_select_option(key, values[key]);
+					view_input.add(option);
+				}
+			}
+		}
 	}
 }

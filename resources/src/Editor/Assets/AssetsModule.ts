@@ -170,6 +170,7 @@ module Editor.Assets {
 			var fontAsset = new (window as any).FontFace(name, `url(${link})`, {});
 			fontAsset.load().then((loadedFace: any) => {
 			    (document as any).fonts.add(loadedFace);
+				this.hierarchy.inspector.addNewFontFamily(name);
 			});
 		}
 
