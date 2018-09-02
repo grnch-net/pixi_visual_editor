@@ -306,7 +306,7 @@ canvas {
 
 
 #inspector .input-area select {
-    min-width: max-content;
+    /* min-width: max-content; */
 	width: 50%;
 	padding: 0;
 }
@@ -673,7 +673,7 @@ canvas {
 	overflow-y: auto;
 }
 
-#assets .content .add-button {
+#assets .content .asset-button {
 	float: left;
 	position: relative;
 	width: 70px;
@@ -684,7 +684,15 @@ canvas {
     overflow: hidden;
 }
 
-#assets .content .add-button div {
+#assets .content .asset-button.font-type {
+    border: 5px #ffd98e solid;
+}
+
+#assets .content .asset-button.font-type:hover {
+	background: none;
+}
+
+#assets .content .asset-button div {
 	position: absolute;
 	top: 50%;
 	left: 50%;
@@ -694,11 +702,17 @@ canvas {
 	color: #adadad;
 }
 
+#assets .content .asset-button.font-type div {
+	overflow: hidden;
+    padding-bottom: 0;
+	color: #ffffff;
+}
+
 #assets .content .item .name {
 	color: #adadad;
 }
 
-#assets .content .add-button input {
+#assets .content .asset-button input {
 	position: absolute;
 	width: 100%;
 	height: 100%;
@@ -707,7 +721,7 @@ canvas {
 	opacity: 0;
 }
 
-#assets .content .add-button:hover {
+#assets .content .asset-button:hover {
 	background: rgba(255, 255, 255, 0.1);
 }
 
@@ -730,11 +744,13 @@ canvas {
 
 #assets .content .item .name {
 	width: calc(100% - 4px);
+    margin-top: -2px;
 	padding: 0 2px;
 	text-align: center;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
+    font-size: 14px;
 
 	-webkit-user-select: all;
 	-moz-user-select: all;
@@ -742,7 +758,7 @@ canvas {
 	user-select: all;
 }
 
-#assets .content .add-button + .name {
+#assets .content .asset-button + .name {
 	user-select: none;
 }
 

@@ -163,7 +163,7 @@ module Utils {
 		protected create_select_elements(view_input: HTMLSelectElement, values: any): HTMLElement[] {
 			if (Array.isArray(values)) {
 				values.forEach((value: string) => {
-					let option = this.create_select_option(value.toUpperCase(), value);
+					let option = this.create_select_option(value, value);
 					view_input.add(option);
 				})
 			} else {
@@ -313,7 +313,7 @@ module Utils {
 
 			if (Array.isArray(values)) {
 				values.forEach((value: string) => {
-					let option = this.create_select_option(value.toUpperCase(), value);
+					let option = this.create_select_option(value, value);
 					view_input.add(option);
 				})
 			} else {

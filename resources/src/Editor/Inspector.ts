@@ -272,6 +272,10 @@ module Editor {
 		public addNewFontFamily(font: string): void {
 			this.fontFamilyList.push(font);
 			this.text_inputs['fontFamily'].updateSelect(this.fontFamilyList);
+
+			if (this.selected_gameobjects.length > 0) {
+				this.text_inputs['fontFamily'].value = (this.selected_gameobjects[0] as any)['fontFamily'];
+			}
 		}
 	}
 }

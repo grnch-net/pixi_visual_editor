@@ -4,6 +4,7 @@
 /// <reference path="../Inspector.ts" />
 /// <reference path="../Hierarchy.ts" />
 /// <reference path="ImageAssetObject.ts" />
+/// <reference path="FontAssetObject.ts" />
 
 module Editor.Assets {
 
@@ -13,6 +14,9 @@ module Editor.Assets {
 	interface IImageList {
 		[propName: string]: ImageAssetObject;
 	}
+	interface IFontList {
+		[propName: string]: FontAssetObject;
+	}
 
 	export class AssetsModule {
 		protected view_element: HTMLElement;
@@ -20,6 +24,7 @@ module Editor.Assets {
 
 		protected json_list: IJSONList = {};
 		protected image_list: IImageList = {};
+		protected font_list: IFontList = {};
 
 		constructor(
 			protected hierarchy: Hierarchy
@@ -61,7 +66,10 @@ module Editor.Assets {
 						sort.json[file.name] = file;
 						sort.json_total++;
 					} else
-					if (file.name.substr(-4,4) == '.ttf') {
+					if (file.name.substr(-4,4) == '.ttf'
+						|| file.name.substr(-5,5) == '.woff'
+						|| file.name.substr(-6,6) == '.woff2'
+					) {
 						sort.font[file.name] = file;
 					} else {
 						sort.img[file.name] = file;
@@ -162,16 +170,19 @@ module Editor.Assets {
 			for(let name in files) {
 				let file = files[name];
 				let img_link = URL.createObjectURL(file);
-				this.create_font_asset(name.substr(0, name.length-4), img_link);
+				this.create_font_asset(name, img_link);
 			}
 		}
 
 		protected create_font_asset(name: string, link: string): void {
-			var fontAsset = new (window as any).FontFace(name, `url(${link})`, {});
-			fontAsset.load().then((loadedFace: any) => {
-			    (document as any).fonts.add(loadedFace);
-				this.hierarchy.inspector.addNewFontFamily(name);
+			let asset = new FontAssetObject({name, link});
+			asset.onLoad(() => {
+				console.warn('addNewFontFamily');
+				this.hierarchy.inspector.addNewFontFamily(name)
 			});
+
+			this.font_list[asset.name] = asset;
+			this.view_list.appendChild(asset.view_element);
 		}
 
 		protected create_image_asset(name: string, imageLink: string, texture?: PIXI.Texture): void {
