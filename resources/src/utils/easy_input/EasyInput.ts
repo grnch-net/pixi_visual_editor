@@ -1,4 +1,4 @@
-/// <reference path="../Utils/easy-html.ts" />
+/// <reference path="../../Utils/easy-html.ts" />
 module Utils {
 
 	interface IInitParameters {
@@ -55,7 +55,7 @@ module Utils {
 			if (this.type == 'textarea') { element_type = 'textarea'; } else
 			if (this.type == 'select') { element_type = 'select'; } else
 			if (this.type == 'point') { input_type = 'number'; } else
-			if (this.type == 'color') {
+			if (this.type == 'color' || this.type == 'gradient') {
 				input_type = '';
 				input_class = 'jscolor';
 			} else {
@@ -93,6 +93,9 @@ module Utils {
 			} else
 			if (this.type == 'select') {
 				children = this.create_select_elements(view_input as HTMLSelectElement, parameters.values);
+			} else
+			if (this.type == 'gradient') {
+				children = this.create_gradient_elements(view_input as HTMLInputElement);
 			} else {
 				this.view_inputs.push(view_input as HTMLInputElement);
 				children.push(view_input);
@@ -155,7 +158,7 @@ module Utils {
 			let checkmark = Utils.easyHTML.createElement({
 				type: 'span',
 				attr: { class: 'checkmark' }
-			}) as HTMLInputElement;
+			});
 
 			return [view_input, checkmark];
 		}
@@ -182,6 +185,47 @@ module Utils {
 			option.text = label;
 			option.value = value;
 			return option;
+		}
+
+		protected create_gradient_elements(view_input: HTMLInputElement): HTMLElement[] {
+			this.view_inputs.push(view_input);
+
+			let color_group = Utils.easyHTML.createElement({
+				attr: { class: 'color-object' },
+			});
+
+			let move_area = Utils.easyHTML.createElement({
+				attr: { class: 'move-area' },
+				innerHTML: '='
+			});
+
+			let stop_color = Utils.easyHTML.createElement({
+				type: 'input',
+				attr: {
+					class: 'stop-color',
+					type: 'number',
+					min: 0,
+					max: 1,
+					step: 0.1,
+					value: 0
+				}
+			})
+
+			color_group.appendChild(move_area);
+			color_group.appendChild(view_input);
+			color_group.appendChild(stop_color);
+
+			let remove_color_button = Utils.easyHTML.createElement({
+				attr: { class: 'remove-color-area' },
+				innerHTML: 'Remove'
+			});
+
+			let add_color_button = Utils.easyHTML.createElement({
+				attr: { class: 'add-color-button' },
+				innerHTML: 'Add color'
+			});
+
+			return [color_group, remove_color_button, add_color_button];
 		}
 
 		protected create_label(parameters: IInitParameters): HTMLElement {
@@ -213,10 +257,18 @@ module Utils {
 			});
 
 			let elementClass: string = 'input-area';
-			if (this.type == 'point') elementClass = 'point-area';
+
+			if (this.type == 'point') {
+				elementClass = 'point-area';
+			}
+
 			view_element.classList.add(elementClass);
+
 			if (this.type == 'checkbox') {
 				view_element.classList.add('checkbox');
+			} else
+			if (this.type == 'gradient') {
+				view_element.classList.add('type-gradient');
 			}
 
 			return view_element;
@@ -242,7 +294,7 @@ module Utils {
 					+(this.view_inputs[1] as HTMLInputElement).value
 				];
 			} else
-			if (this.type == 'color') {
+			if (this.type == 'color' || this.type == 'gradient') {
 				return '#' + (this.view_inputs[0] as HTMLInputElement).value;
 			} else {
 				let value = (this.view_inputs[0] as HTMLInputElement).value;
@@ -252,7 +304,7 @@ module Utils {
 		}
 
 		public set value(value: any) {
-			if (this.type == 'color') {
+			if (this.type == 'color' || this.type == 'gradient') {
 				(this.view_inputs[0] as any).jscolor.fromString(value.substr(1));
 			} else
 			if (this.type == 'checkbox') {
@@ -270,7 +322,7 @@ module Utils {
 			if (this.type == 'select') event = 'change';
 			this.view_inputs[0].addEventListener(event, this.update.bind(this));
 
-			if (this.type == 'color') {
+			if (this.type == 'color' || this.type == 'gradient') {
 				this.view_inputs[0].addEventListener('change', this.update.bind(this));
 			} else
 			if (this.type == 'point') {
@@ -283,7 +335,7 @@ module Utils {
 		}
 
 		public clear(): void {
-			if (this.type == 'color') {
+			if (this.type == 'color' || this.type == 'gradient') {
 				requestAnimationFrame(() => {
 					(this.view_inputs[0] as HTMLInputElement).value = '';
 					this.view_inputs[0].style.backgroundColor = '';
@@ -323,5 +375,6 @@ module Utils {
 				}
 			}
 		}
+
 	}
 }

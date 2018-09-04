@@ -3,7 +3,7 @@
 /// <reference path="../GameObject/Sprite.ts" />
 /// <reference path="../GameObject/Container.ts" />
 /// <reference path="../Utils/easy-html.ts" />
-/// <reference path="../Utils/EasyInput.ts" />
+/// <reference path="../Utils/easy_input/EasyInput.ts" />
 
 module Editor {
 
@@ -47,7 +47,7 @@ module Editor {
 			{ key: 'text', type: 'textarea', label: false, placeholder: 'Text', rows: 1 },
 			{ key: 'fontSize', type: 'number', label: 'Font size:' },
 			{ key: 'fontFamily', type: 'select', values: this.fontFamilyList},
-			{ key: 'fill', type: 'color' },
+			{ key: 'fill', type: 'gradient' },
 			{ key: 'stroke', type: 'color' },
 			{ key: 'strokeThickness', type: 'number', label: 'Stroke width:' },
 			{ key: 'align', type: 'select', values: GameObject.textStyle.align},
