@@ -10,7 +10,6 @@ module Utils.EasyInputModule {
 	}
 
 	export class ColorEasyInput extends TextEasyInput {
-		protected type: string = 'color';
 
 		protected init_view_element(parameters: IInitParameters): void {
 			super.init_view_element(parameters, {
@@ -27,9 +26,9 @@ module Utils.EasyInputModule {
 			(this.view_inputs[0] as any).jscolor.fromString(value.substr(1));
 		}
 
-		protected add_change_event(): void {
-			super.add_change_event();
-			this.view_inputs[0].addEventListener('change', this.update.bind(this));
+		protected add_change_event(event: string, index: number = 0): void {
+			this.view_inputs[index].addEventListener('input', this.update.bind(this));
+			this.view_inputs[index].addEventListener('change', this.update.bind(this));
 		}
 
 		public clear(): void {

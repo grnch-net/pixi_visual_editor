@@ -10,28 +10,32 @@ module Utils.EasyInputModule {
 	}
 
 	export class GradientEasyInput extends ColorEasyInput {
-		protected type: string = 'gradient';
 		protected color_group: HTMLElement;
 
 		protected init_children(view_input: any, parameters: IInitParameters): void {
 			this.view_inputs.push(view_input);
 
 			this.color_group = Utils.easyHTML.createElement({
-				attr: { class: 'remove-color-area' },
-				innerHTML: 'Remove'
+				attr: { class: 'color-group' }
 			});
-			this.addColor(false);
+
+			this.addColor('000000', false, false);
 
 			let remove_color_button = Utils.easyHTML.createElement({
 				attr: { class: 'remove-color-area' },
 				innerHTML: 'Remove'
 			});
+			remove_color_button.addEventListener('click', () => this.removeColor());
 
 			let add_color_button = Utils.easyHTML.createElement({
 				attr: { class: 'add-color-button' },
 				innerHTML: 'Add color'
 			});
-			add_color_button.addEventListener('click', () => this.addColor());
+			add_color_button.addEventListener('click', () => {
+				let lastIndex = this.view_inputs.length-1;
+				let lastInput: any = this.view_inputs[lastIndex];
+				this.addColor(lastInput.value);
+			});
 
 			let children = [this.color_group, remove_color_button, add_color_button];
 			children.forEach(child => {
@@ -46,12 +50,17 @@ module Utils.EasyInputModule {
 			return view_element;
 		}
 
-		public addColor(duplicate: boolean = true): void {
-			let view_input;
-			if (duplicate) {
-				let lastIndex = this.view_inputs.length-1;
-				view_input = this.view_inputs[lastIndex].cloneNode(true) as HTMLElement;
+		public addColor(color: string = '000000', update: boolean = true, create: boolean = true): void {
+			let view_input: any;
+			if (create) {
+				view_input = Utils.easyHTML.createElement({
+					type: 'input',
+					attr: { class: 'jscolor', type: '' },
+				});
+				(window as any).jscolor(view_input, { value: color });
+
 				this.view_inputs.push(view_input);
+				this.add_change_event('', this.view_inputs.length-1);
 			} else {
 				view_input = this.view_inputs[0];
 			}
@@ -65,28 +74,68 @@ module Utils.EasyInputModule {
 				innerHTML: '='
 			});
 
-			let stop_color = Utils.easyHTML.createElement({
-				type: 'input',
-				attr: {
-					class: 'stop-color',
-					type: 'number',
-					min: 0,
-					max: 1,
-					step: 0.1,
-					value: 0
-				}
-			})
+			// let stop_color = Utils.easyHTML.createElement({
+			// 	type: 'input',
+			// 	attr: {
+			// 		class: 'stop-color',
+			// 		type: 'number',
+			// 		min: 0,
+			// 		max: 1,
+			// 		step: 0.1,
+			// 		value: 0
+			// 	}
+			// });
 
 			color_container.appendChild(move_area);
 			color_container.appendChild(view_input);
 			// color_container.appendChild(stop_color);
 
 			this.color_group.appendChild(color_container);
+
+			if (update) this.update();
 		}
 
-		removeColor(): void {
+		removeColor(update: boolean = true): void {
+			if (this.view_inputs.length == 1) return;
+
 			this.view_inputs.pop();
 			this.color_group.removeChild(this.color_group.lastChild);
+
+			if (update) this.update();
+		}
+
+		public get value(): any {
+			let colorList: string[] = [];
+
+			this.view_inputs.forEach((input: HTMLInputElement) => {
+				colorList.push('#' + input.value);
+			});
+			return colorList;
+		}
+
+		public set value(value: any) {
+			if (Array.isArray(value)) {
+				value.forEach((color: string, index: number) => {
+					if (this.view_inputs[index]) {
+						(this.view_inputs[index] as any).jscolor.fromString(color.substr(1));
+					} else {
+						this.addColor(color, false);
+					}
+				});
+				while(this.view_inputs.length > value.length) {
+					this.removeColor(false);
+				}
+			} else {
+				this.clear(false);
+				(this.view_inputs[0] as any).jscolor.fromString(value.substr(1));
+			}
+		}
+
+		public clear(firstTo: boolean = true): void {
+			if (firstTo) super.clear();
+			while(this.view_inputs.length > 1) {
+				this.removeColor(false);
+			}
 		}
 	}
 }

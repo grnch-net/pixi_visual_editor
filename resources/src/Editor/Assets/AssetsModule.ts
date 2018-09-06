@@ -177,7 +177,6 @@ module Editor.Assets {
 		protected create_font_asset(name: string, link: string): void {
 			let asset = new FontAssetObject({name, link});
 			asset.onLoad(() => {
-				console.warn('addNewFontFamily');
 				this.hierarchy.inspector.addNewFontFamily(name)
 			});
 

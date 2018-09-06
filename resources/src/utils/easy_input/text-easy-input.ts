@@ -1,4 +1,5 @@
 /// <reference path="../../Utils/easy-html.ts" />
+/// <reference path="abstract-easy-input.ts" />
 module Utils.EasyInputModule {
 
 	interface IInitParameters {
@@ -15,8 +16,8 @@ module Utils.EasyInputModule {
 		class?: string;
 	}
 
-	export class TextEasyInput {
-		protected type: string = 'text';
+	export class TextEasyInput extends EasyInput {
+		protected type: string;
 		protected _readonly: boolean;
 		protected view_inputs: HTMLElement[] = [];
 		protected label_element: HTMLElement;
@@ -26,6 +27,10 @@ module Utils.EasyInputModule {
 			protected change_callback: Function,
 			public view_element?: HTMLElement,
 		) {
+			super();
+
+			this.type = parameters.type;
+
 			if (view_element) {
 				if (this.view_element instanceof HTMLInputElement) {
 					this.view_inputs = [this.view_element];
@@ -73,6 +78,7 @@ module Utils.EasyInputModule {
 			if (parameters.label == false) {
 				view_input.classList.add('no-label');
 				this.view_element = view_input;
+				this.view_inputs.push(view_input as HTMLInputElement);
 			} else {
 				this.view_element = this.create_view_element(parameters);
 

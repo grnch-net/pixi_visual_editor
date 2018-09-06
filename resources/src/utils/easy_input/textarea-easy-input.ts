@@ -13,7 +13,6 @@ module Utils.EasyInputModule {
 	}
 
 	export class TextareaEasyInput extends TextEasyInput {
-		protected type: string = 'textarea';
 
 		protected init_view_element(parameters: IInitParameters): void {
 			super.init_view_element(parameters, {

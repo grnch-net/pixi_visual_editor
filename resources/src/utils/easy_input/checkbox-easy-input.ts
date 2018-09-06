@@ -10,8 +10,6 @@ module Utils.EasyInputModule {
 	}
 
 	export class CheckboxEasyInput extends TextEasyInput {
-		protected type: string = 'checkbox';
-
 		protected init_children(view_input: any, parameters: IInitParameters): void {
 			this.view_inputs.push(view_input as HTMLInputElement);
 

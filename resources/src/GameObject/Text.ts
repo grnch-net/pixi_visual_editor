@@ -10,6 +10,7 @@ module GameObject {
 			'normal', 'bold', 'bolder', 'lighter', '100', '200',
 			'300', '400', '500', '600', '700', '800', '900'
 		],
+		lineJoin: ['miter', 'round', 'bevel'],
 	};
 
 	export class Text extends AbstractSprite {
@@ -19,9 +20,12 @@ module GameObject {
 		protected _font_size: number = 26;
 		protected _font_family: string = 'Arial';
 		protected _fill: string = '#000000';
+		protected _fill_gradient_type: number = PIXI.TEXT_GRADIENT.LINEAR_VERTICAL;
 		protected _align: string = textStyle.align[0];
 		protected _font_style: string = textStyle.fontStyle[0];
 		protected _font_weight: string = textStyle.fontWeight[0];
+		protected _line_join: string = textStyle.lineJoin[0];
+		protected _miter_limit: number = 10;
 		protected _leading: number = 0;
 		protected _letter_spacing: number = 0;
 		protected _padding: number = 0;
@@ -78,6 +82,12 @@ module GameObject {
 			this.scene_view_element.style.fill = value;
 		}
 
+		 public get fillGradientType(): number { return this._fill_gradient_type; }
+		 public set fillGradientType(value: number) {
+			this._fill_gradient_type = +value;
+			this.scene_view_element.style.fillGradientType = +value;
+		}
+
 		public get stroke(): string { return this._stroke_fill; }
 		public set stroke(value: string) {
 			this._stroke_fill = value;
@@ -108,10 +118,22 @@ module GameObject {
 			this.scene_view_element.style.fontWeight = value;
 		}
 
+		public get lineJoin(): string { return this._line_join; }
+		public set lineJoin(value: string) {
+			this._line_join = value;
+			this.scene_view_element.style.lineJoin = value;
+		}
+
 		public get letterSpacing(): number { return this._letter_spacing; }
 		public set letterSpacing(value: number) {
 			this._letter_spacing = value;
 			this.scene_view_element.style.letterSpacing = value;
+		}
+
+		public get miterLimit(): number { return this._miter_limit; }
+		public set miterLimit(value: number) {
+			this._miter_limit = value;
+			this.scene_view_element.style.miterLimit = value;
 		}
 
 		public get leading(): number { return this._leading; }

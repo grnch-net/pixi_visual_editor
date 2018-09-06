@@ -14,7 +14,6 @@ module Utils.EasyInputModule {
 	}
 
 	export class NumberEasyInput extends TextEasyInput {
-		protected type: string = 'number';
 
 		protected init_view_element(parameters: IInitParameters, viewInputAttr: IViewInputParameters = {}): void {
 			super.init_view_element(parameters, viewInputAttr);

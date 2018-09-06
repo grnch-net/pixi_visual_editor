@@ -20,8 +20,6 @@ module Editor.Assets {
 			link,
 		}: IConstructorInitParameters) {
 			super({name});
-			console.warn('constructor', name, this.name);
-
 			this.initFontFamily(link);
 		}
 

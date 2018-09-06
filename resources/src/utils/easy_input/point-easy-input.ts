@@ -14,7 +14,6 @@ module Utils.EasyInputModule {
 	}
 
 	export class PointEasyInput extends NumberEasyInput {
-		protected type: string = 'point';
 
 		protected init_view_element(parameters: IInitParameters): void {
 			super.init_view_element(parameters, {

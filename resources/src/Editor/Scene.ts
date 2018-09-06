@@ -1,6 +1,6 @@
 /// <reference path="../lib.d.ts/pixi.d.ts" />
 /// <reference path="../GameObject/AbstractObject.ts" />
-/// <reference path="../Utils/EasyInput.ts" />
+/// <reference path="../Utils/easy_input/easy-input.ts" />
 module Editor {
 
 	interface INewSceneParameters {
@@ -83,7 +83,7 @@ module Editor {
 
 		protected initZoomPanel(): void {
 			let view_zoom = document.querySelector('#scene-zoom');
-			this.input_zoom = new Utils.EasyInput(
+			this.input_zoom = Utils.easyInput(
 				{},
 				(value: number) => { this.zoom = value; },
 				view_zoom.querySelector('input'),

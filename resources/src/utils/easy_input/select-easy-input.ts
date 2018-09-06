@@ -12,7 +12,6 @@ module Utils.EasyInputModule {
 	}
 
 	export class SelectEasyInput extends TextEasyInput {
-		protected type: string = 'select';
 
 		protected init_view_element(parameters: IInitParameters): void {
 			super.init_view_element(parameters, {

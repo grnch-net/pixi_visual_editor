@@ -3,10 +3,9 @@
 /// <reference path="../GameObject/Sprite.ts" />
 /// <reference path="../GameObject/Container.ts" />
 /// <reference path="../Utils/easy-html.ts" />
-/// <reference path="../Utils/easy_input/EasyInput.ts" />
+/// <reference path="../Utils/easy_input/easy-input.ts" />
 
 module Editor {
-
 	interface IInspector {
 
 	}
@@ -44,25 +43,28 @@ module Editor {
 		];
 
 		protected textInputsParameter = [
-			{ key: 'text', type: 'textarea', label: false, placeholder: 'Text', rows: 1 },
+			{ key: 'text', type: 'textarea', label: false, placeholder: 'Text', rows: 2 },
 			{ key: 'fontSize', type: 'number', label: 'Font size:' },
 			{ key: 'fontFamily', type: 'select', values: this.fontFamilyList},
-			{ key: 'fill', type: 'gradient' },
-			{ key: 'stroke', type: 'color' },
-			{ key: 'strokeThickness', type: 'number', label: 'Stroke width:' },
 			{ key: 'align', type: 'select', values: GameObject.textStyle.align},
 			{ key: 'fontStyle', type: 'select', label: 'Font style:', values: GameObject.textStyle.fontStyle},
 			{ key: 'fontWeight', type: 'select', label: 'Font weight:', values: GameObject.textStyle.fontWeight},
 			{ key: 'leading', type: 'number' },
 			{ key: 'letterSpacing', type: 'number', label: 'Letter spacing:' },
 			{ key: 'padding', type: 'number' },
+			// { key: 'miterLimit', label: 'Miter limit:', type: 'number' },
+			// { key: 'lineJoin', type: 'select', label: 'Line join:', values: GameObject.textStyle.lineJoin},
+			{ key: 'fill', type: 'gradient' },
+			{ key: 'fillGradientType', type: 'select', label: 'Gradient type:', values: PIXI.TEXT_GRADIENT},
+			{ key: 'stroke', type: 'color' },
+			{ key: 'strokeThickness', type: 'number', label: 'Stroke width:' },
 			{ key: 'wordWrap', type: 'checkbox', label: 'Word wrap' },
 			{ key: 'dropShadow', type: 'checkbox', label: 'Shadow' },
 		];
 
 		protected textWordWrapParameters = [
 			{ key: 'wordWrapWidth', type: 'number', label: 'Width:' },
-			{ key: 'breakWords', type: 'checkbox', label: 'Break words' },
+			// { key: 'breakWords', type: 'checkbox', label: 'Break words' },
 		];
 
 		protected textShadowParameters = [
@@ -157,7 +159,7 @@ module Editor {
 				};
 			}
 
-			return new Utils.EasyInput(
+			return Utils.easyInput(
 				{ class: ['attr'], ...parameters },
 				(value: any) => {
 					this.selected_gameobjects
