@@ -7,6 +7,7 @@ module GameObject {
 
 	export class Container extends AbstractObject {
 		public scene_view_element: PIXI.Container;
+		public children: AbstractObject[] = [];
 
 		protected isShow: boolean = true;
 		protected hierarchy_view_group_element: HTMLElement;
@@ -57,6 +58,22 @@ module GameObject {
 			);
 
 			game_object.parent = this;
+			this.children.push(game_object);
+		}
+
+		public remove(game_object: AbstractObject): void {
+			let index = this.children.indexOf(game_object);
+			if (index > -1) this.children.splice(index, 1);
+			game_object.parent = null;
+		}
+
+		public destroy(): void {
+			while(this.children.length > 0) {
+				let child = this.children.pop();
+				child.destroy();
+			}
+
+			super.destroy();
 		}
 	}
 }

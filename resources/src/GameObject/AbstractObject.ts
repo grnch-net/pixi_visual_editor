@@ -30,6 +30,9 @@ module GameObject {
 		protected typeElement: HTMLImageElement;
 		protected nameElement: HTMLElement;
 
+		protected _destroyed: boolean = false;
+		public get destroyed(): boolean { return this._destroyed };
+
 		protected _isSelected: boolean = false;
 		public get isSelected(): boolean { return this._isSelected };
 
@@ -149,6 +152,13 @@ module GameObject {
 				callback(event);
 				event.stopPropagation();
 			});
+		}
+
+		public destroy(): void {
+			if (this.parent) (this.parent as any).remove(this);
+			this.scene_view_element.destroy();
+			this.hierarchy_view_element.parentNode.removeChild(this.hierarchy_view_element);
+			this._destroyed = true;
 		}
 	}
 }
