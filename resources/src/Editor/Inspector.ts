@@ -178,22 +178,7 @@ module Editor {
 			else this.text_shadow_view_group.classList.add('disable');
 		}
 
-		public select(scene_object: GameObject.AbstractObject): void {
-			while(this.selected_gameobjects.length > 0) {
-				let currentObject = this.selected_gameobjects.pop();
-				currentObject.unselect();
-			}
-
-			this.add(scene_object);
-			this.updateAttributes();
-		}
-
-		public add(scene_object: GameObject.AbstractObject): void {
-			this.selected_gameobjects.push(scene_object);
-			scene_object.select();
-		}
-
-		protected updateAttributes(): void {
+		public updateAttributes(): void {
 			if (this.selected_gameobjects.length == 0) {
 				this.common_view_group.classList.add('disable');
 				this.sprite_view_group.classList.add('disable');
@@ -205,10 +190,6 @@ module Editor {
 				this.common_view_group.classList.remove('disable');
 				this.writeInput(this.selected_gameobjects[0]);
 			}
-		}
-
-		public getSelected(): GameObject.AbstractObject[] {
-			return this.selected_gameobjects;
 		}
 
 		protected clearInput(): void {
@@ -278,6 +259,32 @@ module Editor {
 			if (this.selected_gameobjects.length > 0) {
 				this.text_inputs['fontFamily'].value = (this.selected_gameobjects[0] as any)['fontFamily'];
 			}
+		}
+
+		public select(scene_object: GameObject.AbstractObject): void {
+			while(this.selected_gameobjects.length > 0) {
+				let currentObject = this.selected_gameobjects.pop();
+				currentObject.unselect();
+			}
+
+			this.add(scene_object);
+			this.updateAttributes();
+		}
+
+		public add(scene_object: GameObject.AbstractObject): void {
+			this.selected_gameobjects.push(scene_object);
+			scene_object.select();
+		}
+
+		public getSelected(): GameObject.AbstractObject[] {
+			return this.selected_gameobjects;
+		}
+
+		public unselect(game_object: GameObject.AbstractObject, update: boolean = true): void {
+			let index = this.selected_gameobjects.indexOf(game_object);
+			if (index > -1) this.selected_gameobjects.splice(index, 1);
+			if (!game_object.destroyed) game_object.unselect();
+			if (update) this.updateAttributes();
 		}
 	}
 }
