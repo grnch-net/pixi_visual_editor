@@ -33,7 +33,7 @@ module Editor {
 			let panel = this.view_element.querySelector('.bottom-bar');
 
 			panel.querySelector('#new-container').addEventListener('click', this.createContainer.bind(this));
-			panel.querySelector('#delete-hierarchy-element').addEventListener('click', this.delete.bind(this));
+			panel.querySelector('#delete-hierarchy-element').addEventListener('click', this.deleteSelected.bind(this));
 		}
 
 		protected createContainer(): void {
@@ -68,8 +68,14 @@ module Editor {
 			this.inspector.select(game_object);
 		}
 
-		public delete(): void {
+		public deleteSelected(): void {
+			this.inspector.getSelected().forEach((selected_object: GameObject.Container) => {
+				this.inspector.unselect(selected_object, false);
+				if (selected_object.destroyed) return;
+				selected_object.destroy();
+			});
 
+			this.inspector.updateAttributes();
 		}
 	}
 }
