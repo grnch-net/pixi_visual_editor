@@ -751,7 +751,8 @@ canvas {
 }
 
 #assets .content .asset-button.font-type {
-    border: 5px #cfcfcf solid;
+    /* border: 5px #cfcfcf solid; */
+    border: 5px #e0e471 solid;
 }
 
 #assets .content .asset-button.font-type:hover {
@@ -769,9 +770,24 @@ canvas {
 }
 
 #assets .content .asset-button.font-type div {
+	max-width: 70px;
+	max-height: 70px;
 	overflow: hidden;
     padding-bottom: 0;
-	color: #cfcfcf;
+	color: #e0e471;
+}
+
+#assets .content .asset-button.script-type {
+    /* border: 5px #cfcfcf solid; */
+    border: 5px #71a3e4 solid;
+}
+
+#assets .content .asset-button.script-type div {
+	max-width: 70px;
+	max-height: 70px;
+	overflow: hidden;
+    padding-bottom: 0;
+	color: #71a3e4;
 }
 
 #assets .content .item .name {
@@ -859,8 +875,10 @@ canvas {
 .window {
 	display: none;
 	position: absolute;
+	min-width: 150px;
 	top: 50%;
 	left: 50%;
+    /* padding-bottom: 27px; */
 	transform: translate(-50%, -50%);
 	border: 1px #101010 solid;
 	background: #1f2425;
@@ -893,17 +911,21 @@ canvas {
 
 .window .field .field-label {
 	float: left;
-	width: 45px;
+	width: 50%;
     color: #adadad;
 }
 
 .window .field input {
-    width: 50px;
+    width: calc(50% - 3px);
 }
 
 .window .done-button {
+	/* position: absolute; */
+	/* bottom: 0; */
+	width: calc(100% - 20px);
 	color: #adadad;
 	padding: 5px 10px;
-	border-top: 1px #101010 solid;
+	border-top: 2px #131416 solid;
+	border-bottom: 1px #131416 solid;
 	text-align: center;
 }
