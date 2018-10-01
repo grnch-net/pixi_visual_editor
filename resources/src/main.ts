@@ -4,4 +4,4 @@
 PIXI.utils.sayHello(PIXI.utils.isWebGLSupported()? 'WebGL' : 'canvas');
 console.info('%c DEV Version', 'background: #232627; color: #bada55');
 
-new Editor.EditorModule();
+(window as any).editor = new Editor.EditorModule();

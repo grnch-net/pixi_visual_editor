@@ -5,6 +5,7 @@
 /// <reference path="../Hierarchy.ts" />
 /// <reference path="ImageAssetObject.ts" />
 /// <reference path="FontAssetObject.ts" />
+/// <reference path="ScriptAssetObject.ts" />
 
 module Editor.Assets {
 
@@ -17,6 +18,9 @@ module Editor.Assets {
 	interface IFontList {
 		[propName: string]: FontAssetObject;
 	}
+	interface IScriptList {
+		[propName: string]: ScriptAssetObject;
+	}
 
 	export class AssetsModule {
 		protected view_element: HTMLElement;
@@ -25,6 +29,7 @@ module Editor.Assets {
 		protected json_list: IJSONList = {};
 		protected image_list: IImageList = {};
 		protected font_list: IFontList = {};
+		protected script_list: IScriptList = {};
 
 		constructor(
 			protected hierarchy: Hierarchy
@@ -32,15 +37,16 @@ module Editor.Assets {
 			this.view_element = document.querySelector('#assets');;
 			this.view_list = this.view_element.querySelector('.content');
 
-			this.view_element.querySelector('#images_upload').addEventListener('change', this.texture_upload.bind(this));
+			this.view_element.querySelector('#assets_upload').addEventListener('change', this.upload_new_assets.bind(this));
 		}
 
-		protected texture_upload(event: Event): void {
+		protected upload_new_assets(event: Event): void {
 			let input: any = event.target;
 			if (input && input.files) {
 				let sort = this.sort_files(input.files);
 
 				this.only_font(sort.font);
+				this.only_script(sort.script);
 
 				if (sort.json_total == 0) {
 					this.only_img(sort.img);
@@ -52,6 +58,7 @@ module Editor.Assets {
 
 		protected sort_files(files: any): any {
 			let sort: any = {
+				script: {},
 				font: {},
 				img: {},
 				json: {},
@@ -62,17 +69,29 @@ module Editor.Assets {
 				let file = files[key];
 
 				if (file instanceof File) {
-					if (file.type == 'application/json') {
-						sort.json[file.name] = file;
-						sort.json_total++;
-					} else
-					if (file.name.substr(-4,4) == '.ttf'
-						|| file.name.substr(-5,5) == '.woff'
-						|| file.name.substr(-6,6) == '.woff2'
-					) {
-						sort.font[file.name] = file;
-					} else {
-						sort.img[file.name] = file;
+					let file_name_arr: string[] = file.name.split('.');
+					if (file_name_arr.length == 1) {
+						console.warn(`Invalid file name (${file.name}). Skipped.`);
+						continue;
+					}
+
+					let file_type: string = file_name_arr[file_name_arr.length-1];
+
+					switch(file_type) {
+						case 'ttf':
+						case 'woff':
+						case 'woff2':
+							sort.font[file.name] = file;
+							break;
+						case 'json':
+							sort.json[file.name] = file;
+							sort.json_total++;
+							break;
+						case 'js':
+							sort.script[file.name] = file;
+							break;
+						default:
+							sort.img[file.name] = file;
 					}
 				}
 			}
@@ -200,6 +219,24 @@ module Editor.Assets {
 		protected new_sprite(texture: PIXI.Texture, name: string): void {
 			let sprite = new GameObject.Sprite(texture, name);
 			this.hierarchy.add(sprite);
+		}
+
+		protected only_script(files: any) {
+			for(let name in files) {
+				let file = files[name];
+				let img_link = URL.createObjectURL(file);
+				this.create_script_asset(name, img_link);
+			}
+		}
+
+		protected create_script_asset(name: string, link: string): void {
+			let asset = new ScriptAssetObject({name, link});
+			asset.onLoad(() => {
+				// this.hierarchy.inspector.addNewFontFamily(name)
+			});
+
+			this.script_list[asset.name] = asset;
+			this.view_list.appendChild(asset.view_element);
 		}
 
 		public remove(asset: ImageAssetObject): void {
