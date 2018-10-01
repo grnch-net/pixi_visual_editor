@@ -29,6 +29,7 @@ module Editor {
 			this.addLogo();
 			this.createArea();
 			this.initZoomPanel();
+			this.addOnResizeEvent();
 		}
 
 		 public get zoom(): number { return this._zoom; }
@@ -98,6 +99,10 @@ module Editor {
 				this.zoom -= 10;
 				this.input_zoom.value = this._zoom;
 			});
+		}
+
+		protected addOnResizeEvent(): void {
+			window.addEventListener('resize', this.resizeScreen.bind(this));
 		}
 
 		public newScene({
