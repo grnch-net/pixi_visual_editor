@@ -10,8 +10,6 @@ module Editor.Assets {
 	}
 
 	export class ScriptAssetObject extends AbstractAssetObject {
-		public name: string;
-
 		protected script: any;
 		protected image_text: HTMLElement;
 

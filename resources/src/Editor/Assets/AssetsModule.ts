@@ -231,9 +231,7 @@ module Editor.Assets {
 
 		protected create_script_asset(name: string, link: string): void {
 			let asset = new ScriptAssetObject({name, link});
-			asset.onLoad(() => {
-				// this.hierarchy.inspector.addNewFontFamily(name)
-			});
+			asset.onLoad(() => {});
 
 			this.script_list[asset.name] = asset;
 			this.view_list.appendChild(asset.view_element);

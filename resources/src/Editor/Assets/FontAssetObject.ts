@@ -10,8 +10,6 @@ module Editor.Assets {
 	}
 
 	export class FontAssetObject extends AbstractAssetObject {
-		public name: string;
-
 		protected fontFace: any;
 		protected image_text: HTMLElement;
 
