@@ -18,12 +18,12 @@ module GameObject {
 			});
 		}
 
-		protected createSceneElement() {
+		protected create_scene_elememnt() {
 			this.scene_view_element = new PIXI.Container();
 		}
 
-		protected createHierarchyElement(attr?: any) {
-			super.createHierarchyElement(attr);
+		protected create_hierarchy_element(attr?: any) {
+			super.create_hierarchy_element(attr);
 			(this.typeElement as HTMLImageElement).src = FOLDER_OPEN_IMAGE;
 			this.typeElement.classList.add('container');
 

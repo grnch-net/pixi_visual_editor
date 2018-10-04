@@ -100,6 +100,7 @@ module Utils.EasyInputModule {
 				label_text = parameters.label;
 			} else {
 				let _text = parameters.key;
+				if (Array.isArray(_text)) _text = _text[_text.length-1];
 				label_text = _text.charAt(0).toUpperCase() + _text.substr(1);
 				label_text += endText;
 			}
@@ -135,11 +136,15 @@ module Utils.EasyInputModule {
 
 		public set value(value: any) {
 			let text: string;
-			if (typeof value != 'string') {
-				if (value.toString) {
+			let value_type = typeof value;
+			if (value_type != 'string') {
+				if (value_type == 'number') {
+					text = ''+value;
+				} else
+				if (value && value.toString) {
 					text = value.toString();
 				} else {
-					console.warn('The value is not a string type and can not be converted to a string. Skipped.', value);
+					console.warn('The value is not a string type and can not be converted to a string. Skipped.', value, this);
 					return
 				}
 			} else {

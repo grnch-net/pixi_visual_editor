@@ -14,12 +14,12 @@ module GameObject {
 
 		}
 
-		protected createSceneElement() {
+		protected create_scene_elememnt() {
 			this.scene_view_element = new PIXI.Graphics();
 		}
 
-		protected createHierarchyElement(attr?: any) {
-			super.createHierarchyElement(attr);
+		protected create_hierarchy_element(attr?: any) {
+			super.create_hierarchy_element(attr);
 			(this.typeElement as HTMLImageElement).src = GRAPHIC_TYPE_IMAGE;
 		}
 

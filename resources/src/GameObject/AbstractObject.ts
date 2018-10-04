@@ -12,15 +12,8 @@ module GameObject {
 
 	export abstract class AbstractObject {
 		protected _name: string;
-		protected _visible: boolean = true;
-		protected _alpha: number = 1;
-		protected _rotation: number = 0;
 
 		public parent: AbstractObject;
-		public position: Point = new Point(0, 0, this.updatePosition.bind(this));
-		public scale: Point = new Point(1, 1, this.updateScale.bind(this));
-		public pivot: Point = new Point(0, 0, this.updatePivot.bind(this));
-
 		public scene_view_element: PIXI.DisplayObject;
 		public hierarchy_view_element: HTMLElement;
 
@@ -41,17 +34,17 @@ module GameObject {
 			sceneElementAttr = [],
 			hierarchyElementAttr = []
 		}: IAbstractInitParameters) {
-			this.createSceneElement(...sceneElementAttr);
-			this.createHierarchyElement(...hierarchyElementAttr);
+			this.create_scene_elememnt(...sceneElementAttr);
+			this.create_hierarchy_element(...hierarchyElementAttr);
 
 			this.name = name;
 		}
 
-		protected createSceneElement(attr?: any) {
+		protected create_scene_elememnt(attr?: any) {
 			this.scene_view_element = new PIXI.DisplayObject();
 		}
 
-		protected createHierarchyElement(attr?: any) {
+		protected create_hierarchy_element(attr?: any) {
 			this.hierarchy_view_element = Utils.easyHTML.createElement({
 				type: 'div',
 				attr: { class: 'object' }
@@ -83,10 +76,6 @@ module GameObject {
 			});
 		}
 
-		protected changeVisible(): void {
-			this.visible = !this.visible;
-		}
-
 		public get name(): string { return this._name; }
 		public set name(value: string) {
 			this._name = value;
@@ -94,39 +83,112 @@ module GameObject {
 			this.scene_view_element.name = value;
 		}
 
-		public get visible(): boolean { return this._visible; }
+		public get visible(): boolean {
+			return this.scene_view_element.visible;
+		}
 		public set visible(value: boolean) {
-			if (value == this._visible) return;
-			this._visible = value;
-
 			if (value) this.visibleElement.classList.add('active');
 			else this.visibleElement.classList.remove('active');
 
 			this.scene_view_element.visible = value;
 		}
 
-		public get alpha(): number { return this._alpha; }
-		public set alpha(value: number) {
-			this._alpha = value;
-			this.scene_view_element.alpha = value;
+		public get rotation(): number {
+			return this.scene_view_element.rotation * 180 / Math.PI;
 		}
-
-		public get rotation(): number { return this._rotation; }
 		public set rotation(value: number) {
-			this._rotation = value;
 			this.scene_view_element.rotation = value * Math.PI / 180;
 		}
 
-		protected updatePosition(x: number, y: number): void {
-			this.scene_view_element.position.set(x, y)
+		protected option_error(key: any): void {
+			console.warn('Оption does not exist. Skipped.', key, this);
 		}
 
-		protected updateScale(x: number, y: number): void {
-			this.scene_view_element.scale.set(x, y)
+		public getOption(key: string|string[]): any {
+			let path, option;
+			if (Array.isArray(key)) {
+				if (key.length == 1) {
+					return this.getOption(key[0]);
+				}
+
+				let keyList = [...key];
+				option = keyList.pop();
+				path = keyList.reduce((_path: any, current: string) => {
+					if (_path && _path[current] !== undefined) {
+						return _path[current];
+					} else return null;
+				}, this);
+
+				if (!path || path[option] === undefined) {
+					path = keyList.reduce((_path: any, current: string) => {
+						if (_path && _path[current] !== undefined) {
+							return _path[current];
+						} else return null;
+					}, this.scene_view_element);
+				}
+
+				if (!path || path[option] === undefined) {
+					this.option_error(key);
+					return null;
+				}
+			} else {
+				option = key;
+				if ((this as any)[key] !== undefined) {
+					path = (this as any);
+				} else
+				if ((this.scene_view_element as any)[key] !== undefined) {
+					path = (this.scene_view_element as any);
+				} else {
+					this.option_error(key);
+					return null;
+				}
+			}
+
+			return path[option];
 		}
 
-		protected updatePivot(x: number, y: number): void {
-			this.scene_view_element.pivot.set(x, y)
+		public setOption(key: string|string[], value: any, isPoint: boolean = false): void {
+			let path, option;
+			if (Array.isArray(key)) {
+				if (key.length == 1) {
+					return this.setOption(key[0], value, isPoint);
+				}
+
+				let keyList = [...key];
+				option = keyList.pop();
+				path = keyList.reduce((_path: any, current: string) => {
+					if (_path && _path[current] !== undefined) {
+						return _path[current];
+					} else return null;
+				}, this);
+
+				if (!path || path[option] === undefined) {
+					path = keyList.reduce((_path: any, current: string) => {
+						if (_path && _path[current] !== undefined) {
+							return _path[current];
+						} else return null;
+					}, this.scene_view_element);
+				}
+
+				if (!path || path[option] === undefined) {
+					this.option_error(key);
+					return null;
+				}
+			} else {
+				option = key;
+				if ((this as any)[key] !== undefined) {
+					path = (this as any);
+				} else
+				if ((this.scene_view_element as any)[key] !== undefined) {
+					path = (this.scene_view_element as any);
+				} else {
+					this.option_error(key);
+					return null;
+				}
+			}
+
+			if (isPoint) path[option].set(...value);
+			else path[option] = value;
 		}
 
 		public select(): void {
@@ -148,7 +210,7 @@ module GameObject {
 
 		public visibleEvent(callback: any): void {
 			this.visibleElement.addEventListener('mouseup', (event: Event) => {
-				this.changeVisible();
+				this.visible = !this.visible;
 				callback(event);
 				event.stopPropagation();
 			});
