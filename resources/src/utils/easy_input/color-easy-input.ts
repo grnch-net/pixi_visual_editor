@@ -23,7 +23,8 @@ module Utils.EasyInputModule {
 		}
 
 		public set value(value: any) {
-			(this.view_inputs[0] as any).jscolor.fromString(value.substr(1));
+			let colorHex = (window as any).tinycolor(value).toHex();
+			(this.view_inputs[0] as any).jscolor.fromString(colorHex);
 		}
 
 		protected add_change_event(event: string, index: number = 0): void {

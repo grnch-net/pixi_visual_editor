@@ -35,7 +35,8 @@ module GameObject {
 
 		public style: any = {
 			get dropShadowAngle(): number {
-				return this.scene_view_element.style.dropShadowAngle * 180 / Math.PI;
+				let rad = this.scene_view_element.style.dropShadowAngle * 180 / Math.PI;
+				return Math.round(rad * 1000) / 1000;
 			},
 			set dropShadowAngle(value: number) {
 				this.scene_view_element.style.dropShadowAngle = value * Math.PI / 180;
