@@ -1,11 +1,12 @@
 /// <reference path="./AbstractObject.ts" />
+/// <reference path="./DisplayObject.ts" />
 
 module GameObject {
 
 	let FOLDER_OPEN_IMAGE = 'assets/folderOpenIco.png';
 	let FOLDER_CLOSE_IMAGE = 'assets/folderIco.png';
 
-	export class Container extends AbstractObject {
+	export class Container extends DisplayObject {
 		public scene_view_element: PIXI.Container;
 		public children: AbstractObject[] = [];
 

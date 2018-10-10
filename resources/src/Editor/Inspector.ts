@@ -11,113 +11,41 @@ module Editor {
 	}
 
 	export class Inspector implements IInspector {
-		protected view_element: HTMLElement;
-		protected selected_gameobjects: GameObject.AbstractObject[] = [];
+		protected window_view: HTMLElement;
 		protected content_view: HTMLElement;
 
-		protected common_view_group: HTMLElement;
-		protected sprite_view_group: HTMLElement;
-		protected text_view_group: HTMLElement;
-		protected text_word_wrap_view_group: HTMLElement;
-		protected text_shadow_view_group: HTMLElement;
+		protected selected_gameobjects: GameObject.AbstractObject[] = [];
 
-		protected common_inputs: any = {};
+		protected display_object_view: HTMLElement;
+		protected sprite_view: HTMLElement;
+		protected text_view: HTMLElement;
+		protected custom_view: any = {};
+		protected sub_view: any = {};
+
+		protected display_object_inputs: any = {};
 		protected sprite_inputs: any = {};
 		protected text_inputs: any = {};
-
-		protected fontFamilyList: string[] = ['Arial'];
-
-		protected commonInputsParameter = [
-			{ key: 'name', label: false },
-			{ key: 'visible', type: 'checkbox' },
-			{ key: 'alpha', type: 'number', step: 0.1, min: 0, max: 1 },
-			{ key: 'rotation', type: 'number' },
-			{ key: 'position', type: 'point' },
-			{ key: 'scale', type: 'point', step: 0.1 },
-			{ key: 'pivot', type: 'point' },
-		];
-
-		protected spriteInputsParameter = [
-			{ key: 'anchor', type: 'point', step: 0.1 },
-			{ key: 'blendMode', type: 'select', label: 'Blend', values: PIXI.BLEND_MODES},
-		];
-
-		protected textInputsParameter = [
-			{ key: 'text', type: 'textarea', label: false, placeholder: 'Text', rows: 2 },
-			{ key: ['style', 'fontSize'], type: 'number', label: 'Font size:' },
-			{ key: ['style', 'fontFamily'], label: 'Font family:', type: 'select', values: this.fontFamilyList},
-			{ key: ['style', 'align'], type: 'select', values: GameObject.textStyle.align},
-			{ key: ['style', 'fontStyle'], type: 'select', label: 'Font style:', values: GameObject.textStyle.fontStyle},
-			{ key: ['style', 'fontWeight'], type: 'select', label: 'Font weight:', values: GameObject.textStyle.fontWeight},
-			{ key: ['style', 'leading'], type: 'number' },
-			{ key: ['style', 'letterSpacing'], type: 'number', label: 'Letter spacing:' },
-			{ key: ['style', 'padding'], type: 'number' },
-			{ key: ['style', 'miterLimit'], label: 'Miter limit:', type: 'number' },
-			{ key: ['style', 'lineJoin'], type: 'select', label: 'Line join:', values: GameObject.textStyle.lineJoin},
-			{ key: ['style', 'fill'], type: 'gradient' },
-			{ key: ['style', 'fillGradientType'], type: 'select', label: 'Gradient type:', values: PIXI.TEXT_GRADIENT},
-			{ key: ['style', 'stroke'], type: 'color' },
-			{ key: ['style', 'strokeThickness'], type: 'number', label: 'Stroke width:' },
-			{ key: ['style', 'wordWrap'], type: 'checkbox', label: 'Word wrap' },
-			{ key: ['style', 'dropShadow'], type: 'checkbox', label: 'Shadow' },
-		];
-
-		protected textWordWrapParameters = [
-			{ key: ['style', 'wordWrapWidth'], type: 'number', label: 'Width:' },
-			{ key: ['style', 'breakWords'], type: 'checkbox', label: 'Break words' },
-		];
-
-		protected textShadowParameters = [
-			{ key: ['style', 'dropShadowAlpha'], type: 'number', label: 'Alpha:', step: 0.1, min: 0, max: 1 },
-			{ key: ['style', 'dropShadowAngle'], type: 'number', label: 'Angle:' },
-			{ key: ['style', 'dropShadowBlur'], type: 'number', label: 'Blur:' },
-			{ key: ['style', 'dropShadowColor'], type: 'color', label: 'Color:' },
-			{ key: ['style', 'dropShadowDistance'], type: 'number', label: 'Distance:' },
-		];
+		protected custom_inputs: any = {};
 
 		constructor() {
-			this.view_element = document.getElementById('inspector');
+			this.window_view = document.getElementById('inspector');
 			this.content_view = this.findViewElement('.content');
 
 			this.initInputs();
 		}
 
 		protected findViewElement(path: string): HTMLElement {
-			return this.view_element.querySelector(path)
+			return this.window_view.querySelector(path)
 		}
 
 		protected initInputs(): void {
-			this.common_view_group = this.create_group_element('common-group');
-			this.sprite_view_group = this.create_group_element('sprite-group');
-			this.text_view_group = this.create_group_element('text-group');
+			this.display_object_view = this.create_group_element('common-group');
+			this.sprite_view = this.create_group_element('sprite-group');
+			this.text_view = this.create_group_element('text-group');
 
-			this.init_input_group(this.common_view_group, this.commonInputsParameter, this.common_inputs);
-			this.init_input_group(this.sprite_view_group, this.spriteInputsParameter, this.sprite_inputs);
-			this.init_input_group(this.text_view_group, this.textInputsParameter, this.text_inputs);
-
-			this.text_word_wrap_view_group = this.create_group_element('sub-group');
-			this.text_word_wrap_view_group.classList.add('disable');
-			Utils.easyHTML.insertAfter(this.text_word_wrap_view_group, this.text_inputs['style.wordWrap'].view_element);
-
-			this.text_shadow_view_group = this.create_group_element('sub-group');
-			this.text_shadow_view_group.classList.add('disable');
-			Utils.easyHTML.insertAfter(this.text_shadow_view_group, this.text_inputs['style.dropShadow'].view_element);
-
-			this.textWordWrapParameters.forEach((parameters: any) => {
-				let easyInput: Utils.EasyInput = this.createEasyInput(parameters);
-				let key = parameters.key;
-				if (Array.isArray(key)) key = key.join('.');
-				this.text_inputs[key] = easyInput;
-				this.text_word_wrap_view_group.appendChild(easyInput.view_element);
-			});
-
-			this.textShadowParameters.forEach((parameters: any) => {
-				let easyInput: Utils.EasyInput = this.createEasyInput(parameters);
-				let key = parameters.key;
-				if (Array.isArray(key)) key = key.join('.');
-				this.text_inputs[key] = easyInput;
-				this.text_shadow_view_group.appendChild(easyInput.view_element);
-			});
+			this.init_input_group(this.display_object_view, GameObject.displayObjectOptions, this.display_object_inputs);
+			this.init_input_group(this.sprite_view, GameObject.spriteOptions, this.sprite_inputs);
+			this.init_input_group(this.text_view, GameObject.textOptions, this.text_inputs);
 
 			this.updateAttributes();
 		}
@@ -132,11 +60,21 @@ module Editor {
 			this.content_view.insertBefore(group, this.content_view.lastChild)
 
 			inputs_parameter.forEach((parameters: any) => {
+				if (parameters.parent)
+					if (!this.sub_view[parameters.parent])
+						console.warn(`Parent group "${parameters.parent}" is undefined. Skipped.`, parameters);
+					else parameters.parent = this.sub_view[parameters.parent];
+				else parameters.parent = group;
+
 				let easyInput: Utils.EasyInput = this.createEasyInput(parameters);
 				let key = parameters.key;
 				if (Array.isArray(key)) key = key.join('.');
 				list[key] = easyInput;
-				group.appendChild(easyInput.view_element);
+
+				if (parameters.subgroup) {
+					this.sub_view[key] = this.create_group_element('sub-group');
+					group.appendChild(this.sub_view[key]);
+				}
 			});
 		}
 
@@ -145,16 +83,10 @@ module Editor {
 			let key = parameters.key;
 			if (Array.isArray(key)) key = key.join('.');
 
-			if (key == 'style.wordWrap') {
+			if (parameters.subgroup) {
 				updateObject = (game_object: any, value: any) => {
 					game_object.setOption(parameters.key, value);
-					this.change_visible_text_word_wrap_group(value);
-				};
-			} else
-			if (key == 'style.dropShadow') {
-				updateObject = (game_object: any, value: any) => {
-					game_object.setOption(parameters.key, value);
-					this.change_visible_text_shadow_group(value);
+					this.change_visible_sub_group(value, this.sub_view[key]);
 				};
 			} else {
 				let isPoint = parameters.type == 'point';
@@ -172,33 +104,30 @@ module Editor {
 			);
 		}
 
-		protected change_visible_text_word_wrap_group(value: boolean): void {
-			if (value) this.text_word_wrap_view_group.classList.remove('disable');
-			else this.text_word_wrap_view_group.classList.add('disable');
-		}
-
-		protected change_visible_text_shadow_group(value: boolean): void {
-			if (value) this.text_shadow_view_group.classList.remove('disable');
-			else this.text_shadow_view_group.classList.add('disable');
+		protected change_visible_sub_group(value: boolean, subgroup: HTMLElement): void {
+			if (value) subgroup.classList.remove('disable');
+			else subgroup.classList.add('disable');
 		}
 
 		public updateAttributes(): void {
 			if (this.selected_gameobjects.length == 0) {
-				this.common_view_group.classList.add('disable');
-				this.sprite_view_group.classList.add('disable');
-				this.text_view_group.classList.add('disable');
+				this.display_object_view.classList.add('disable');
+				this.sprite_view.classList.add('disable');
+				this.text_view.classList.add('disable');
 				this.content_view.classList.remove('enable');
-				this.clearInput();
+				for (let key in this.custom_view) {
+					this.custom_view[key].classList.add('disable');
+				}
+				this.clear_input();
 			} else {
 				this.content_view.classList.add('enable');
-				this.common_view_group.classList.remove('disable');
-				this.writeInput(this.selected_gameobjects[0]);
+				this.update_content(this.selected_gameobjects[0]);
 			}
 		}
 
-		protected clearInput(): void {
-			for(let key in this.common_inputs) {
-				this.common_inputs[key].clear();
+		protected clear_input(): void {
+			for(let key in this.display_object_inputs) {
+				this.display_object_inputs[key].clear();
 			}
 			for(let key in this.sprite_inputs) {
 				this.sprite_inputs[key].clear();
@@ -206,30 +135,49 @@ module Editor {
 			for(let key in this.text_inputs) {
 				this.text_inputs[key].clear();
 			}
+			for(let custom_key in this.custom_inputs) {
+				for(let key in this.custom_inputs[custom_key]) {
+					this.custom_inputs[custom_key][key].clear();
+				}
+			}
 		}
 
-		protected writeInput(game_object: GameObject.AbstractObject): void {
-			if (game_object instanceof GameObject.Sprite) {
-				this.sprite_view_group.classList.remove('disable');
-				this.text_view_group.classList.add('disable');
-
-				this.write_inputs_list(this.sprite_inputs, game_object);
-			} else
-			if (game_object instanceof GameObject.Container) {
-				this.sprite_view_group.classList.add('disable');
-				this.text_view_group.classList.add('disable');
-			} else
+		protected update_content(game_object: GameObject.AbstractObject): void {
 			if (game_object instanceof GameObject.Text) {
-				this.sprite_view_group.classList.remove('disable');
-				this.text_view_group.classList.remove('disable');
-				this.change_visible_text_word_wrap_group(game_object.getOption(['style','wordWrap']));
-				this.change_visible_text_shadow_group(game_object.getOption(['style','dropShadow']));
+				this.sprite_view.classList.remove('disable');
+				this.text_view.classList.remove('disable');
 
 				this.write_inputs_list(this.sprite_inputs, game_object);
 				this.write_inputs_list(this.text_inputs, game_object);
+			} else
+			if (game_object instanceof GameObject.Sprite) {
+				this.sprite_view.classList.remove('disable');
+				this.text_view.classList.add('disable');
+
+				this.write_inputs_list(this.sprite_inputs, game_object);
+			} else
+			// if (game_object instanceof GameObject.Container)
+			{
+				this.sprite_view.classList.add('disable');
+				this.text_view.classList.add('disable');
 			}
 
-			this.write_inputs_list(this.common_inputs, game_object);
+			if (game_object instanceof GameObject.DisplayObject) {
+				this.write_inputs_list(this.display_object_inputs, game_object);
+				this.display_object_view.classList.remove('disable');
+			} else {
+				this.display_object_view.classList.add('disable');
+			}
+
+			for (let key in this.custom_view) {
+				this.custom_view[key].classList.add('disable');
+			}
+
+			if (this.custom_view[game_object.customName]) {
+				this.custom_view[game_object.customName].classList.remove('disable');
+				this.write_inputs_list(this.custom_inputs[game_object.customName], game_object);
+			}
+
 		}
 
 		protected write_inputs_list(list: any, game_object: any): void {
@@ -242,6 +190,10 @@ module Editor {
 				} else {
 					input.value = game_object.getOption(_key);
 				}
+
+				if (this.sub_view[key]) {
+					this.change_visible_sub_group(input.value, this.sub_view[key]);
+				}
 			}
 		}
 
@@ -252,15 +204,15 @@ module Editor {
 					if (_path && _path[current] !== undefined) {
 						return _path[current];
 					} else return null;
-				}, this.common_inputs);
+				}, this.display_object_inputs);
 
 				if (!path) {
-					console.warn('Оption does not exist. Skipped.', attr, this.common_inputs);
+					console.warn('Оption does not exist. Skipped.', attr, this.display_object_inputs);
 					return null;
 				}
 			} else {
-				if (this.common_inputs[attr]) {
-					path = this.common_inputs[attr];
+				if (this.display_object_inputs[attr]) {
+					path = this.display_object_inputs[attr];
 				} else {
 					console.warn('Оption does not exist. Skipped.', attr, this);
 					return null;
@@ -271,8 +223,8 @@ module Editor {
 		}
 
 		public addNewFontFamily(font: string): void {
-			this.fontFamilyList.push(font);
-			this.text_inputs['style.fontFamily'].updateSelect(this.fontFamilyList);
+			GameObject.textStyle.fontFamily.push(font);
+			this.text_inputs['style.fontFamily'].updateSelect(GameObject.textStyle.fontFamily);
 
 			if (this.selected_gameobjects.length > 0) {
 				this.text_inputs['style.fontFamily'].value = this.selected_gameobjects[0].getOption(['style','fontFamily']);
@@ -303,6 +255,23 @@ module Editor {
 			if (index > -1) this.selected_gameobjects.splice(index, 1);
 			if (!game_object.destroyed) game_object.unselect();
 			if (update) this.updateAttributes();
+		}
+
+		public addCustomObject(name: string, parameters: any): void {
+			this.custom_view[name] = this.create_group_element('custom-group');
+			this.custom_inputs[name] = {};
+
+			this.init_input_group(this.custom_view[name], parameters, this.custom_inputs[name]);
+
+			let game_object = this.selected_gameobjects[0];
+			if (game_object) {
+				if (game_object.customName == name) {
+					this.custom_view[name].classList.remove('disable');
+					this.write_inputs_list(this.custom_inputs[name], game_object);
+				}
+			} else {
+				this.custom_view[name].classList.add('disable');
+			}
 		}
 	}
 }

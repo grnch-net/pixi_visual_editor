@@ -13,8 +13,9 @@ module GameObject {
 	export abstract class AbstractObject {
 		protected _name: string;
 
+		public customName: string = '';
 		public parent: AbstractObject;
-		public scene_view_element: PIXI.DisplayObject;
+		public scene_view_element: any;
 		public hierarchy_view_element: HTMLElement;
 
 		protected view_area_element: HTMLElement;
@@ -41,7 +42,7 @@ module GameObject {
 		}
 
 		protected create_scene_elememnt(attr?: any) {
-			this.scene_view_element = new PIXI.DisplayObject();
+			this.scene_view_element = null;
 		}
 
 		protected create_hierarchy_element(attr?: any) {
@@ -62,8 +63,11 @@ module GameObject {
 
 			this.visibleElement = Utils.easyHTML.createElement({
 				type: 'div', parent: this.view_area_element,
-				attr: { class: 'visible active' }
+				attr: { class: 'visible' }
 			});
+			if (this.scene_view_element) {
+				this.visibleElement.classList.add('active');
+			}
 
 			this.typeElement = Utils.easyHTML.createElement({
 				type: 'img', parent: this.view_area_element,
@@ -80,24 +84,24 @@ module GameObject {
 		public set name(value: string) {
 			this._name = value;
 			this.nameElement.innerHTML = value;
-			this.scene_view_element.name = value;
+			if (this.scene_view_element) {
+				this.scene_view_element.name = value;
+			}
 		}
 
 		public get visible(): boolean {
-			return this.scene_view_element.visible;
+			if (this.scene_view_element) {
+				return this.scene_view_element.visible;
+			}
+			return null;
 		}
 		public set visible(value: boolean) {
+			if (!this.scene_view_element) return;
+
 			if (value) this.visibleElement.classList.add('active');
 			else this.visibleElement.classList.remove('active');
 
 			this.scene_view_element.visible = value;
-		}
-
-		public get rotation(): number {
-			return this.scene_view_element.rotation * 180 / Math.PI;
-		}
-		public set rotation(value: number) {
-			this.scene_view_element.rotation = value * Math.PI / 180;
 		}
 
 		protected option_error(key: any): void {

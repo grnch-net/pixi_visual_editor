@@ -3,6 +3,7 @@
 /// <reference path="../GameObject/Text.ts" />
 /// <reference path="../GameObject/Sprite.ts" />
 /// <reference path="../GameObject/Container.ts" />
+/// <reference path="../GameObject/AbstractObject.ts" />
 /// <reference path="./Assets/AssetsModule.ts" />
 /// <reference path="./Hierarchy.ts" />
 /// <reference path="./Inspector.ts" />
@@ -11,6 +12,8 @@
 
 module Editor {
 	export class EditorModule {
+		public customGameObject: any = {};
+
 		protected scene: Scene;
 		protected inspector: Inspector;
 		protected hierarchy: Hierarchy;
@@ -115,6 +118,37 @@ module Editor {
 			})
 		}
 
+		public createCustomObject(sceneObject: PIXI.DisplayObject, parameters: object): any {
+			let parent: any = GameObject.AbstractObject;
+			if (sceneObject instanceof PIXI.Text) {
+				parent = GameObject.Text;
+			} else
+			if (sceneObject instanceof PIXI.Sprite) {
+				parent = GameObject.AbstractSprite;
+			} else
+			if (sceneObject instanceof PIXI.Container) {
+				parent = GameObject.Container;
+			} else
+			if (sceneObject instanceof PIXI.DisplayObject) {
+				parent = GameObject.DisplayObject;
+			} else {
+				parent = GameObject.AbstractObject;
+			}
+
+
+			let custom_object = class extends parent {
+				public customName: string = sceneObject.name;
+
+				protected create_scene_elememnt(attr?: any) {
+					this.scene_view_element = new (sceneObject as any)();
+				}
+			}
+
+			this.inspector.addCustomObject(sceneObject.name, parameters);
+
+			this.customGameObject[sceneObject.name] = custom_object;
+			return custom_object;
+		}
 
 	}
 }
