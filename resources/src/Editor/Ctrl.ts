@@ -3,21 +3,21 @@
 /// <reference path="../GameObject/Text.ts" />
 /// <reference path="../GameObject/Sprite.ts" />
 /// <reference path="../GameObject/Container.ts" />
-/// <reference path="../GameObject/AbstractObject.ts" />
-/// <reference path="./Assets/AssetsModule.ts" />
+/// <reference path="../GameObject/Abs.ts" />
+/// <reference path="./Assets/Ctrl.ts" />
 /// <reference path="./Hierarchy.ts" />
 /// <reference path="./Inspector.ts" />
 /// <reference path="./Scene.ts" />
 /// <reference path="./Window.ts" />
 
 module Editor {
-	export class EditorModule {
+	export class Ctrl {
 		public customGameObject: any = {};
 
 		protected scene: Scene;
 		protected inspector: Inspector;
 		protected hierarchy: Hierarchy;
-		protected assets: Assets.AssetsModule;
+		protected assets: Assets.Ctrl;
 
 		constructor() {
 			this.scene = new Scene();
@@ -96,7 +96,7 @@ module Editor {
 				labels[i].addEventListener('click', label_event.bind(null, labels[i]));
 			}
 
-			this.assets = new Assets.AssetsModule(this.hierarchy);
+			this.assets = new Assets.Ctrl(this.hierarchy);
 			this.init_sprite_sheets(block_element);
 			this.init_animator(block_element);
 		}
@@ -119,20 +119,20 @@ module Editor {
 		}
 
 		public createCustomObject(sceneObject: PIXI.DisplayObject, parameters: object): any {
-			let parent: any = GameObject.AbstractObject;
+			let parent: any = GameObject.Abs;
 			if (sceneObject instanceof PIXI.Text) {
 				parent = GameObject.Text;
 			} else
 			if (sceneObject instanceof PIXI.Sprite) {
-				parent = GameObject.AbstractSprite;
+				parent = GameObject.AbsSprite;
 			} else
 			if (sceneObject instanceof PIXI.Container) {
 				parent = GameObject.Container;
 			} else
 			if (sceneObject instanceof PIXI.DisplayObject) {
-				parent = GameObject.DisplayObject;
+				parent = GameObject.Display;
 			} else {
-				parent = GameObject.AbstractObject;
+				parent = GameObject.Abs;
 			}
 
 

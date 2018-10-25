@@ -1,15 +1,13 @@
-/// <reference path="../../lib.d.ts/pixi.d.ts" />
-/// <reference path="../../Utils/easy-html.ts" />
-/// <reference path="AbstractAssetObject.ts" />
+/// <reference path="Abs.ts" />
 
-module Editor.Assets {
+module Editor.AssetObject {
 
 	interface IConstructorInitParameters {
 		name: string;
 		link: string;
 	}
 
-	export class FontAssetObject extends AbstractAssetObject {
+	export class Font extends Abs {
 		protected fontFace: any;
 		protected image_text: HTMLElement;
 

@@ -1,5 +1,5 @@
-/// <reference path="./AbstractObject.ts" />
-/// <reference path="./DisplayObject.ts" />
+/// <reference path="./Abs.ts" />
+/// <reference path="./Display.ts" />
 
 module GameObject {
 	let SPRITE_TYPE_IMAGE = 'assets/imageTypeIco.png';
@@ -9,10 +9,10 @@ module GameObject {
 		{ key: 'blendMode', type: 'select', label: 'Blend', values: PIXI.BLEND_MODES},
 	];
 
-	export class AbstractSprite extends DisplayObject {
+	export abstract class AbsSprite extends Display {
 		public scene_view_element: PIXI.Sprite;
 
-		constructor(parameters: IAbstractInitParameters) {
+		constructor(parameters: IAbsInitParameters) {
 			super(parameters);
 		}
 

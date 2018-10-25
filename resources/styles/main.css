@@ -655,7 +655,7 @@ canvas {
 .editor-block.bottom-block .labels-area {
 	position: absolute;
 	width: 100%;
-	height: 19px;
+	height: 20px;
 	top: 0;
 	left: 0;
 }
@@ -711,8 +711,8 @@ canvas {
 .editor-block.bottom-block .main-area {
 	position: absolute;
 	width: 100%;
-	height: calc(100% - 19px);
-	top: 20px;
+	height: calc(100% - 20px);
+	top: 21px;
 	left: 0;
 	background: #1f2425;
 }
@@ -812,7 +812,12 @@ canvas {
 	position: relative;
 	width: 110px;
 	height: 120px;
-	margin: 5px 5px 4px 5px;
+	/* margin: 5px 5px 4px 5px; */
+	padding: 5px;
+}
+
+#assets .content .item.selected {
+
 }
 
 #assets .content .item img {
@@ -824,9 +829,13 @@ canvas {
 	background: #0f0f0f;
 }
 
+#assets .content .item.selected img {
+	border-color: #00b5ff;
+}
+
 #assets .content .item .name {
 	width: calc(100% - 4px);
-    margin-top: -2px;
+    /* margin-top: -2px; */
 	padding: 0 2px;
 	text-align: center;
 	text-overflow: ellipsis;
@@ -846,14 +855,20 @@ canvas {
 
 #assets .content .item .touch {
 	position: absolute;
-	width: 100%;
-	height: 103px;
+	width: calc(100% - 14px);
+	height: 100px;
 	top: 0;
 	left: 0;
+	margin: 7px;
 }
-
 #assets .content .item .touch:hover {
 	background: rgba(255, 255, 255, 0.2);
+}
+#assets .content .item.selected .touch {
+	background: rgba(50, 176, 255, 0.2);
+}
+#assets .content .item.selected .touch:hover {
+	background: rgba(50, 176, 255, 0.2);
 }
 
 

@@ -1,10 +1,10 @@
-/// <reference path="./DisplayObject.ts" />
+/// <reference path="./Display.ts" />
 
 module GameObject {
 
 	let GRAPHIC_TYPE_IMAGE = 'assets/figureTypeIco.png';
 
-	export class Graphics extends DisplayObject {
+	export class Graphics extends Display {
 		public scene_view_element: PIXI.Graphics;
 
 		constructor(name?: string) {

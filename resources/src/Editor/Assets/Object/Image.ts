@@ -1,8 +1,7 @@
-/// <reference path="../../lib.d.ts/pixi.d.ts" />
-/// <reference path="../../Utils/easy-html.ts" />
-/// <reference path="AbstractAssetObject.ts" />
+/// <reference path="../../../lib.d.ts/pixi.d.ts" />
+/// <reference path="Abs.ts" />
 
-module Editor.Assets {
+module Editor.AssetObject {
 
 	interface IConstructorInitParameters {
 		name: string;
@@ -10,7 +9,7 @@ module Editor.Assets {
 		texture?: PIXI.Texture;
 	}
 
-	export class ImageAssetObject extends AbstractAssetObject {
+	export class Image extends Abs {
 		public base: PIXI.BaseTexture;
 		public texture: PIXI.Texture;
 
@@ -30,7 +29,7 @@ module Editor.Assets {
 		}
 
 		protected create_view_image_element(image_link: string): void {
-			this.view_image = new Image();
+			this.view_image = document.createElement('img');
 			this.view_image.src = image_link;
 			this.view_element.appendChild(this.view_image);
 		}

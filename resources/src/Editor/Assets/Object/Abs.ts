@@ -1,14 +1,13 @@
-/// <reference path="../../lib.d.ts/pixi.d.ts" />
-/// <reference path="../../Utils/easy-html.ts" />
+/// <reference path="../../../Utils/easy-html.ts" />
 
-module Editor.Assets {
+module Editor.AssetObject {
 
 	interface IConstructorInitParameters {
 		name?: string;
 		viewElementAttr?: any[];
 	}
 
-	export abstract class AbstractAssetObject {
+	export abstract class Abs {
 		public name: string;
 
 		public view_element: HTMLElement;
@@ -18,6 +17,12 @@ module Editor.Assets {
 
 		protected isLoad: boolean = false;
 		protected onLoadCallback: Function;
+
+		protected _selected: boolean = false;
+		public get selected(): boolean { return this._selected };
+
+		protected _destroyed: boolean = false;
+		public get destroyed(): boolean { return this._destroyed };
 
 		constructor({
 			name = 'Asset object',
@@ -69,6 +74,28 @@ module Editor.Assets {
 		public onLoad(callback: Function): void {
 			this.onLoadCallback = callback;
 			if (this.isLoad) this.onLoadCallback();
+		}
+
+		public select(): void {
+			this.view_element.classList.add('selected');
+			this._selected = true;
+		}
+
+		public unselect(): void {
+			this.view_element.classList.remove('selected');
+			this._selected = false;
+		}
+
+		public selectEvent(callback: any): void {
+			this.view_touch.addEventListener('mouseup', (event: Event) => {
+				callback(event);
+				event.stopPropagation();
+			});
+		}
+
+		public destroy(): void {
+			// if (this.parent) (this.parent as any).remove(this);
+			this._destroyed = true;
 		}
 	}
 }

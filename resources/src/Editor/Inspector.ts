@@ -1,9 +1,9 @@
 /// <reference path="../lib.d.ts/pixi.d.ts" />
-/// <reference path="../GameObject/AbstractObject.ts" />
+/// <reference path="../GameObject/Abs.ts" />
 /// <reference path="../GameObject/Sprite.ts" />
 /// <reference path="../GameObject/Container.ts" />
 /// <reference path="../Utils/easy-html.ts" />
-/// <reference path="../Utils/easy_input/easy-input.ts" />
+/// <reference path="../Utils/easy_input/ctrl.ts" />
 
 module Editor {
 	interface IInspector {
@@ -14,7 +14,7 @@ module Editor {
 		protected window_view: HTMLElement;
 		protected content_view: HTMLElement;
 
-		protected selected_gameobjects: GameObject.AbstractObject[] = [];
+		protected selected_list: GameObject.Abs[] = [];
 
 		protected display_object_view: HTMLElement;
 		protected sprite_view: HTMLElement;
@@ -43,7 +43,7 @@ module Editor {
 			this.sprite_view = this.create_group_element('sprite-group');
 			this.text_view = this.create_group_element('text-group');
 
-			this.init_input_group(this.display_object_view, GameObject.displayObjectOptions, this.display_object_inputs);
+			this.init_input_group(this.display_object_view, GameObject.displayOptions, this.display_object_inputs);
 			this.init_input_group(this.sprite_view, GameObject.spriteOptions, this.sprite_inputs);
 			this.init_input_group(this.text_view, GameObject.textOptions, this.text_inputs);
 
@@ -98,7 +98,7 @@ module Editor {
 			return Utils.easyInput(
 				{ class: ['attr'], ...parameters },
 				(value: any) => {
-					this.selected_gameobjects
+					this.selected_list
 						.forEach((game_object) => updateObject(game_object, value) )
 				},
 			);
@@ -110,7 +110,7 @@ module Editor {
 		}
 
 		public updateAttributes(): void {
-			if (this.selected_gameobjects.length == 0) {
+			if (this.selected_list.length == 0) {
 				this.display_object_view.classList.add('disable');
 				this.sprite_view.classList.add('disable');
 				this.text_view.classList.add('disable');
@@ -121,7 +121,7 @@ module Editor {
 				this.clear_input();
 			} else {
 				this.content_view.classList.add('enable');
-				this.update_content(this.selected_gameobjects[0]);
+				this.update_content(this.selected_list[0]);
 			}
 		}
 
@@ -142,7 +142,7 @@ module Editor {
 			}
 		}
 
-		protected update_content(game_object: GameObject.AbstractObject): void {
+		protected update_content(game_object: GameObject.Abs): void {
 			if (game_object instanceof GameObject.Text) {
 				this.sprite_view.classList.remove('disable');
 				this.text_view.classList.remove('disable');
@@ -162,7 +162,7 @@ module Editor {
 				this.text_view.classList.add('disable');
 			}
 
-			if (game_object instanceof GameObject.DisplayObject) {
+			if (game_object instanceof GameObject.Display) {
 				this.write_inputs_list(this.display_object_inputs, game_object);
 				this.display_object_view.classList.remove('disable');
 			} else {
@@ -197,7 +197,7 @@ module Editor {
 			}
 		}
 
-		public update(game_object: GameObject.AbstractObject, attr: string|string[]): void {
+		public update(game_object: GameObject.Abs, attr: string|string[]): void {
 			let path;
 			if (Array.isArray(attr)) {
 				path = attr.reduce((_path: any, current: string) => {
@@ -226,33 +226,50 @@ module Editor {
 			GameObject.textStyle.fontFamily.push(font);
 			this.text_inputs['style.fontFamily'].updateSelect(GameObject.textStyle.fontFamily);
 
-			if (this.selected_gameobjects.length > 0) {
-				this.text_inputs['style.fontFamily'].value = this.selected_gameobjects[0].getOption(['style','fontFamily']);
+			if (this.selected_list.length > 0) {
+				this.text_inputs['style.fontFamily'].value = this.selected_list[0].getOption(['style','fontFamily']);
 			}
 		}
 
-		public select(game_object: GameObject.AbstractObject): void {
-			while(this.selected_gameobjects.length > 0) {
-				let currentObject = this.selected_gameobjects.pop();
-				currentObject.unselect();
+		public select(game_object: GameObject.Abs): void {
+			if (game_object.selected) {
+				if (this.selected_list.length == 1) { return; }
+				else { this.clearSelected(game_object); }
+			} else {
+				this.clearSelected();
+				this.add(game_object);
+				this.updateAttributes();
 			}
 
-			this.add(game_object);
-			this.updateAttributes();
 		}
 
-		public add(game_object: GameObject.AbstractObject): void {
-			this.selected_gameobjects.push(game_object);
+		public clearSelected(exception: GameObject.Abs = null): void {
+			if (exception) {
+				while(this.selected_list.length > 0) {
+					let currentObject = this.selected_list.pop();
+					if (currentObject != exception) currentObject.unselect();
+				}
+				this.selected_list.push(exception);
+			} else {
+				while(this.selected_list.length > 0) {
+					let currentObject = this.selected_list.pop();
+					currentObject.unselect();
+				}
+			}
+		}
+
+		public add(game_object: GameObject.Abs): void {
+			this.selected_list.push(game_object);
 			game_object.select();
 		}
 
-		public getSelected(): GameObject.AbstractObject[] {
-			return this.selected_gameobjects;
+		public getSelected(): GameObject.Abs[] {
+			return this.selected_list;
 		}
 
-		public unselect(game_object: GameObject.AbstractObject, update: boolean = true): void {
-			let index = this.selected_gameobjects.indexOf(game_object);
-			if (index > -1) this.selected_gameobjects.splice(index, 1);
+		public unselect(game_object: GameObject.Abs, update: boolean = true): void {
+			let index = this.selected_list.indexOf(game_object);
+			if (index > -1) this.selected_list.splice(index, 1);
 			if (!game_object.destroyed) game_object.unselect();
 			if (update) this.updateAttributes();
 		}
@@ -263,7 +280,7 @@ module Editor {
 
 			this.init_input_group(this.custom_view[name], parameters, this.custom_inputs[name]);
 
-			let game_object = this.selected_gameobjects[0];
+			let game_object = this.selected_list[0];
 			if (game_object) {
 				if (game_object.customName == name) {
 					this.custom_view[name].classList.remove('disable');

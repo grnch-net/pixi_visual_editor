@@ -1,8 +1,8 @@
-/// <reference path="./AbstractObject.ts" />
+/// <reference path="./Abs.ts" />
 
 module GameObject {
 
-	export let displayObjectOptions = [
+	export let displayOptions = [
 		{ key: 'name', label: false },
 		{ key: 'visible', type: 'checkbox' },
 		{ key: 'alpha', type: 'number', step: 0.1, min: 0, max: 1 },
@@ -12,10 +12,10 @@ module GameObject {
 		{ key: 'pivot', type: 'point' },
 	];
 
-	export class DisplayObject extends AbstractObject {
+	export class Display extends Abs {
 		public scene_view_element: PIXI.DisplayObject;
 
-		constructor(parameters: IAbstractInitParameters) {
+		constructor(parameters: IAbsInitParameters) {
 			if (!parameters.name) parameters.name = 'DisplayObject';
 			super(parameters);
 		}

@@ -1,6 +1,6 @@
 /// <reference path="../lib.d.ts/pixi.d.ts" />
-/// <reference path="../GameObject/AbstractObject.ts" />
-/// <reference path="../Utils/easy_input/easy-input.ts" />
+/// <reference path="../GameObject/Abs.ts" />
+/// <reference path="../Utils/easy_input/ctrl.ts" />
 module Editor {
 
 	interface INewSceneParameters {
@@ -148,7 +148,7 @@ module Editor {
 			this.area.addChild(this.content);
 		}
 
-		public add(game_object: GameObject.AbstractObject): void {
+		public add(game_object: GameObject.Abs): void {
 			this.content.addChild(game_object.scene_view_element);
 		}
 	}

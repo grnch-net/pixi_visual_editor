@@ -1,9 +1,9 @@
-/// <reference path="./AbstractSprite.ts" />
+/// <reference path="./AbsSprite.ts" />
 
 module GameObject {
 	let SPRITE_TYPE_IMAGE = 'assets/imageTypeIco.png';
 
-	export class Sprite extends AbstractSprite {
+	export class Sprite extends AbsSprite {
 		protected texture: PIXI.Texture;
 
 		constructor(texture: PIXI.Texture, name?: string) {

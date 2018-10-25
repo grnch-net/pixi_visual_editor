@@ -1,14 +1,14 @@
-/// <reference path="./AbstractObject.ts" />
-/// <reference path="./DisplayObject.ts" />
+/// <reference path="./Abs.ts" />
+/// <reference path="./Display.ts" />
 
 module GameObject {
 
 	let FOLDER_OPEN_IMAGE = 'assets/folderOpenIco.png';
 	let FOLDER_CLOSE_IMAGE = 'assets/folderIco.png';
 
-	export class Container extends DisplayObject {
+	export class Container extends Display {
 		public scene_view_element: PIXI.Container;
-		public children: AbstractObject[] = [];
+		public children: Abs[] = [];
 
 		protected isShow: boolean = true;
 		protected hierarchy_view_group_element: HTMLElement;
@@ -51,7 +51,7 @@ module GameObject {
 			});
 		}
 
-		public add(game_object: AbstractObject) {
+		public add(game_object: Abs) {
 			this.scene_view_element.addChild(game_object.scene_view_element);
 			this.hierarchy_view_group_element.insertBefore(
 				game_object.hierarchy_view_element,
@@ -62,7 +62,7 @@ module GameObject {
 			this.children.push(game_object);
 		}
 
-		public remove(game_object: AbstractObject): void {
+		public remove(game_object: Abs): void {
 			let index = this.children.indexOf(game_object);
 			if (index > -1) this.children.splice(index, 1);
 			game_object.parent = null;

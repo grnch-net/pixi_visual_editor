@@ -3,26 +3,26 @@
 /// <reference path="../../GameObject/Sprite.ts" />
 /// <reference path="../Inspector.ts" />
 /// <reference path="../Hierarchy.ts" />
-/// <reference path="ImageAssetObject.ts" />
-/// <reference path="FontAssetObject.ts" />
-/// <reference path="ScriptAssetObject.ts" />
+/// <reference path="Object/Image.ts" />
+/// <reference path="Object/Font.ts" />
+/// <reference path="Object/Script.ts" />
 
 module Editor.Assets {
 
 	interface IJSONList {
-		[propName: string]: ImageAssetObject;
+		[propName: string]: any;
 	}
 	interface IImageList {
-		[propName: string]: ImageAssetObject;
+		[propName: string]: AssetObject.Image;
 	}
 	interface IFontList {
-		[propName: string]: FontAssetObject;
+		[propName: string]: AssetObject.Font;
 	}
 	interface IScriptList {
-		[propName: string]: ScriptAssetObject;
+		[propName: string]: AssetObject.Script;
 	}
 
-	export class AssetsModule {
+	export class Ctrl {
 		protected view_element: HTMLElement;
 		protected view_list: HTMLElement;
 
@@ -30,6 +30,8 @@ module Editor.Assets {
 		protected image_list: IImageList = {};
 		protected font_list: IFontList = {};
 		protected script_list: IScriptList = {};
+
+		protected selected_list: AssetObject.Abs[] = [];
 
 		constructor(
 			protected hierarchy: Hierarchy
@@ -122,7 +124,7 @@ module Editor.Assets {
 						delete sort.img[image_name];
 
 						let imageLink = URL.createObjectURL(atlasIMG);
-						let atlasAsset = new ImageAssetObject({name, imageLink});
+						let atlasAsset = new AssetObject.Image({name, imageLink});
 						atlasAsset.onLoad(() => {
 							this.atlas_parse(atlasAsset.base, json_key, data);
 						});
@@ -194,7 +196,7 @@ module Editor.Assets {
 		}
 
 		protected create_font_asset(name: string, link: string): void {
-			let asset = new FontAssetObject({name, link});
+			let asset = new AssetObject.Font({name, link});
 			asset.onLoad(() => {
 				this.hierarchy.inspector.addNewFontFamily(name)
 			});
@@ -209,8 +211,11 @@ module Editor.Assets {
 				return;
 			}
 
-			let asset = new ImageAssetObject({name, imageLink, texture});
+			let asset = new AssetObject.Image({name, imageLink, texture});
 			asset.addEvent('dblclick', (event: Event) => this.new_sprite(asset.texture, asset.name));
+			asset.selectEvent(() => {
+				this.select(asset);
+			});
 
 			this.image_list[asset.name] = asset;
 			this.view_list.appendChild(asset.view_element);
@@ -230,16 +235,58 @@ module Editor.Assets {
 		}
 
 		protected create_script_asset(name: string, link: string): void {
-			let asset = new ScriptAssetObject({name, link});
+			let asset = new AssetObject.Script({name, link});
 			asset.onLoad(() => {});
 
 			this.script_list[asset.name] = asset;
 			this.view_list.appendChild(asset.view_element);
 		}
 
-		public remove(asset: ImageAssetObject): void {
+		public remove(asset: AssetObject.Image): void {
+			asset.destroy();
 			delete this.image_list[asset.name];
 			this.view_list.removeChild(asset.view_element);
+		}
+
+		public select(asset_object: AssetObject.Abs): void {
+			if (asset_object.selected) {
+				if (this.selected_list.length == 1) { return; }
+				else { this.clearSelected(asset_object); }
+			} else {
+				this.clearSelected();
+				this.add(asset_object);
+			}
+
+		}
+
+		public clearSelected(exception: AssetObject.Abs = null): void {
+			if (exception) {
+				while(this.selected_list.length > 0) {
+					let currentObject = this.selected_list.pop();
+					if (currentObject != exception) currentObject.unselect();
+				}
+				this.selected_list.push(exception);
+			} else {
+				while(this.selected_list.length > 0) {
+					let currentObject = this.selected_list.pop();
+					currentObject.unselect();
+				}
+			}
+		}
+
+		public add(asset_object: AssetObject.Abs): void {
+			this.selected_list.push(asset_object);
+			asset_object.select();
+		}
+
+		public getSelected(): AssetObject.Abs[] {
+			return this.selected_list;
+		}
+
+		public unselect(asset_object: AssetObject.Abs, update: boolean = true): void {
+			let index = this.selected_list.indexOf(asset_object);
+			if (index > -1) this.selected_list.splice(index, 1);
+			if (!asset_object.destroyed) asset_object.unselect();
 		}
 	}
 }

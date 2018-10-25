@@ -8,7 +8,7 @@ module Editor {
 	}
 
 	export class Hierarchy {
-		protected list: GameObject.AbstractObject[] = [];
+		protected list: GameObject.Abs[] = [];
 
 		protected view_element: HTMLElement;
 		protected view_list: HTMLElement;
@@ -41,7 +41,7 @@ module Editor {
 			this.add(container);
 		}
 
-		public add(game_object: GameObject.AbstractObject): void {
+		public add(game_object: GameObject.Abs): void {
 			if (!this.scene.content) {
 				console.warn('Hierarchy.Add: First need to initialize the scene.');
 				return;
@@ -56,12 +56,12 @@ module Editor {
 			});
 
 			game_object.visibleEvent(() => {
-				if (!game_object.isSelected) return;
+				if (!game_object.selected) return;
 				this.inspector.update(game_object, 'visible');
 			});
 
 			if (game_object instanceof GameObject.Container) {
-				this.inspector.getSelected().forEach((selected_object: GameObject.AbstractObject) => {
+				this.inspector.getSelected().forEach((selected_object: GameObject.Abs) => {
 					game_object.add(selected_object);
 				});
 			}

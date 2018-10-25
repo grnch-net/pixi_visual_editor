@@ -1,4 +1,4 @@
-/// <reference path="color-easy-input.ts" />
+/// <reference path="color.ts" />
 module Utils.EasyInputModule {
 
 	interface IInitParameters {

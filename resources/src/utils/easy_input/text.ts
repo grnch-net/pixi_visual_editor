@@ -1,5 +1,5 @@
 /// <reference path="../../Utils/easy-html.ts" />
-/// <reference path="abstract-easy-input.ts" />
+/// <reference path="abs.ts" />
 module Utils.EasyInputModule {
 
 	interface IInitParameters {

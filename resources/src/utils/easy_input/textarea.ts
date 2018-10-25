@@ -1,4 +1,4 @@
-/// <reference path="text-easy-input.ts" />
+/// <reference path="text.ts" />
 module Utils.EasyInputModule {
 
 	interface IInitParameters {

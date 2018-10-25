@@ -1,4 +1,4 @@
-/// <reference path="./AbstractSprite.ts" />
+/// <reference path="./AbsSprite.ts" />
 
 module GameObject {
 	let TEXT_TYPE_IMAGE = 'assets/textTypeIco.png';
@@ -41,7 +41,7 @@ module GameObject {
 		{ key: ['style', 'dropShadowDistance'], type: 'number', label: 'Distance:', parent: 'style.dropShadow' },
 	];
 
-	export class Text extends AbstractSprite {
+	export class Text extends AbsSprite {
 		public scene_view_element: PIXI.Text;
 
 		constructor(name?: string) {

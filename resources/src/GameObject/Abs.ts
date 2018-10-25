@@ -1,20 +1,19 @@
 /// <reference path="../lib.d.ts/pixi.d.ts" />
 /// <reference path="../Utils/easy-html.ts" />
-/// <reference path="./Point.ts" />
 
 module GameObject {
 
-	export interface IAbstractInitParameters {
+	export interface IAbsInitParameters {
 		name?: string;
 		sceneElementAttr?: any[];
 		hierarchyElementAttr?: any[];
 	}
 
-	export abstract class AbstractObject {
+	export abstract class Abs {
 		protected _name: string;
 
 		public customName: string = '';
-		public parent: AbstractObject;
+		public parent: Abs;
 		public scene_view_element: any;
 		public hierarchy_view_element: HTMLElement;
 
@@ -27,14 +26,14 @@ module GameObject {
 		protected _destroyed: boolean = false;
 		public get destroyed(): boolean { return this._destroyed };
 
-		protected _isSelected: boolean = false;
-		public get isSelected(): boolean { return this._isSelected };
+		protected _selected: boolean = false;
+		public get selected(): boolean { return this._selected };
 
 		constructor({
 			name = 'Object',
 			sceneElementAttr = [],
 			hierarchyElementAttr = []
-		}: IAbstractInitParameters) {
+		}: IAbsInitParameters) {
 			this.create_scene_elememnt(...sceneElementAttr);
 			this.create_hierarchy_element(...hierarchyElementAttr);
 
@@ -197,12 +196,12 @@ module GameObject {
 
 		public select(): void {
 			this.hierarchy_view_element.classList.add('selected');
-			this._isSelected = true;
+			this._selected = true;
 		}
 
 		public unselect(): void {
 			this.hierarchy_view_element.classList.remove('selected');
-			this._isSelected = false;
+			this._selected = false;
 		}
 
 		public selectEvent(callback: any): void {
