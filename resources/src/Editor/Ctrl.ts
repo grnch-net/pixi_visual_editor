@@ -6,21 +6,33 @@
 /// <reference path="../GameObject/Abs.ts" />
 /// <reference path="./Assets/Ctrl.ts" />
 /// <reference path="./Hierarchy.ts" />
-/// <reference path="./Inspector.ts" />
 /// <reference path="./Scene.ts" />
+/// <reference path="./Inspector.ts" />
+/// <reference path="./EventCtrl.ts" />
 /// <reference path="./Window.ts" />
 
 module Editor {
 	export class Ctrl {
 		public customGameObject: any = {};
 
+		protected eventCtrl: EventCtrl;
 		protected scene: Scene;
 		protected inspector: Inspector;
 		protected hierarchy: Hierarchy;
 		protected assets: Assets.Ctrl;
 
 		constructor() {
+			this.eventCtrl = new EventCtrl();
 			this.scene = new Scene();
+			this.inspector = new Inspector();
+			this.hierarchy = new Hierarchy({
+				scene: this.scene,
+				inspector: this.inspector
+			});
+			this.assets = new Assets.Ctrl({
+				eventCtrl: this.eventCtrl,
+				hierarchy: this.hierarchy
+			});
 
 			this.init_user_interface();
 		}
@@ -59,11 +71,8 @@ module Editor {
 		}
 
 		protected init_right_block(): void {
-			this.inspector = new Inspector();
-			this.hierarchy = new Hierarchy({
-				scene: this.scene,
-				inspector: this.inspector
-			});
+			// Inspector
+			// Hierarchy
 		}
 
 		protected init_bottom_block(): void {
@@ -96,17 +105,9 @@ module Editor {
 				labels[i].addEventListener('click', label_event.bind(null, labels[i]));
 			}
 
-			this.assets = new Assets.Ctrl(this.hierarchy);
-			this.init_sprite_sheets(block_element);
-			this.init_animator(block_element);
-		}
-
-		protected init_sprite_sheets(block_element: HTMLElement): void {
-
-		}
-
-		protected init_animator(block_element: HTMLElement): void {
-
+			// Assets
+			// Spritesheet
+			// Animator
 		}
 
 		protected init_left_block(): void {

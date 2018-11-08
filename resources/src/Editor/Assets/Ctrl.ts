@@ -1,7 +1,7 @@
 /// <reference path="../../lib.d.ts/pixi.d.ts" />
 /// <reference path="../../Utils/easy-html.ts" />
 /// <reference path="../../GameObject/Sprite.ts" />
-/// <reference path="../Inspector.ts" />
+/// <reference path="../EventCtrl.ts" />
 /// <reference path="../Hierarchy.ts" />
 /// <reference path="Object/Image.ts" />
 /// <reference path="Object/Font.ts" />
@@ -9,6 +9,10 @@
 
 module Editor.Assets {
 
+	interface IAssetCtrlInitParameters {
+		eventCtrl: EventCtrl;
+		hierarchy: Hierarchy;
+	}
 	interface IJSONList {
 		[propName: string]: any;
 	}
@@ -33,9 +37,16 @@ module Editor.Assets {
 
 		protected selected_list: AssetObject.Abs[] = [];
 
-		constructor(
-			protected hierarchy: Hierarchy
-		) {
+		protected eventCtrl: EventCtrl;
+		protected hierarchy: Hierarchy;
+
+		constructor({
+			eventCtrl,
+			hierarchy
+		}: IAssetCtrlInitParameters) {
+			this.eventCtrl = eventCtrl;
+			this.hierarchy = hierarchy;
+
 			this.view_element = document.querySelector('#assets');;
 			this.view_list = this.view_element.querySelector('.content');
 
@@ -213,7 +224,24 @@ module Editor.Assets {
 
 			let asset = new AssetObject.Image({name, imageLink, texture});
 			asset.addEvent('dblclick', (event: Event) => this.new_sprite(asset.texture, asset.name));
+
+			asset.takeEvent((event: MouseEvent) => {
+				this.eventCtrl.drag(event, {
+					type: EventTargetType.ASSETS,
+					take: () => {
+						if (!asset.selected) this.select(asset);
+					},
+					drop: (type: EventTargetType) => {
+						switch(type) {
+							case EventTargetType.SCENE:
+								this.new_sprite(asset.texture, asset.name);
+								break;
+						};
+					}
+				});
+			});
 			asset.selectEvent(() => {
+				if (this.eventCtrl.dragType !== null) return;
 				this.select(asset);
 			});
 

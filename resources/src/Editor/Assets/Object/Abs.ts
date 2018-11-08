@@ -18,6 +18,8 @@ module Editor.AssetObject {
 		protected isLoad: boolean = false;
 		protected onLoadCallback: Function;
 
+		protected take: boolean = false;
+
 		protected _selected: boolean = false;
 		public get selected(): boolean { return this._selected };
 
@@ -86,10 +88,28 @@ module Editor.AssetObject {
 			this._selected = false;
 		}
 
-		public selectEvent(callback: any): void {
-			this.view_touch.addEventListener('mouseup', (event: Event) => {
+		public takeEvent(callback: Function) {
+			this.view_touch.addEventListener('mousedown', (event: Event) => {
+				this.take = true;
+
+				let up_event = () => {
+					requestAnimationFrame(() => { this.take = false; });
+					document.removeEventListener('mouseup', up_event);
+				}
+				document.addEventListener('mouseup', up_event);
+
 				callback(event);
-				event.stopPropagation();
+				// event.stopPropagation();
+			});
+		}
+
+		public selectEvent(callback: Function): void {
+			this.view_touch.addEventListener('mouseup', (event: Event) => {
+				if (!this.take) return;
+				this.take = false;
+
+				callback(event);
+				// event.stopPropagation();
 			});
 		}
 
