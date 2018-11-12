@@ -23,9 +23,12 @@ module Editor {
 
 		constructor() {
 			this.eventCtrl = new EventCtrl();
-			this.scene = new Scene();
+			this.scene = new Scene({
+				eventCtrl: this.eventCtrl
+			});
 			this.inspector = new Inspector();
 			this.hierarchy = new Hierarchy({
+				eventCtrl: this.eventCtrl,
 				scene: this.scene,
 				inspector: this.inspector
 			});

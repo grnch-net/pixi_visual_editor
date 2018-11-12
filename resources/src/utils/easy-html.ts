@@ -17,6 +17,9 @@ module Utils {
 		attr?: {
 			[key: string]: string | number;
 		},
+		event?: {
+			[key: string]: EventListener;
+		}
 	}
 
 	export let easyHTML: Utils.IEasyHTML = {
@@ -77,6 +80,12 @@ module Utils {
 				}
 
 	        }
+
+			if (parameters.event) {
+				for (let type in parameters.event) {
+					htmlElement.addEventListener(type, parameters.event[type]);
+				}
+			}
 
 	        return htmlElement;
 	    },

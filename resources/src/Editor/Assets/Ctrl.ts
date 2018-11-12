@@ -28,7 +28,10 @@ module Editor.Assets {
 
 	export class Ctrl {
 		protected view_element: HTMLElement;
-		protected view_list: HTMLElement;
+		protected view_content: HTMLElement;
+		protected view_upload_button: HTMLInputElement;
+		protected view_category_button_list: HTMLElement;
+		protected view_categories: { [key: string]: HTMLElement } = {};
 
 		protected json_list: IJSONList = {};
 		protected image_list: IImageList = {};
@@ -48,10 +51,74 @@ module Editor.Assets {
 			this.hierarchy = hierarchy;
 
 			this.view_element = document.querySelector('#assets');;
-			this.view_list = this.view_element.querySelector('.content');
+			this.view_content = this.view_element.querySelector('.content');
+			this.view_category_button_list = this.view_element.querySelector('.category-button-list');
 
-			this.view_element.querySelector('#assets_upload').addEventListener('change', this.upload_new_assets.bind(this));
+			this.view_upload_button = this.view_element.querySelector('.item.upload');
+			this.view_upload_button.querySelector('input').addEventListener('change', this.upload_new_assets.bind(this));
+
+			this.init_category();
+			// this.init_category_button_view();
 		}
+
+		protected init_category() {
+			this.view_categories = {
+				image: this.new_category('Image', 'image/*, .json', true),
+				font: this.new_category('Font', '.ttf, .woff, .woff2'),
+				script: this.new_category('Script', '.js'),
+				sound: this.new_category('Sound', '.mp3, .wav')
+			}
+		}
+
+		protected new_category(name: string, uploadType: string, active: boolean = false): HTMLElement {
+			let view_category = Utils.easyHTML.createElement({
+				parent: this.view_content,
+                attr: { class: 'category' }
+            });
+
+			let click_event = () => this.change_category(uploadType, view_category, view_button);
+			let view_button = Utils.easyHTML.createElement({
+				parent: this.view_category_button_list,
+				innerHTML: name,
+                attr: { class: 'item' },
+				event: { click: click_event }
+            });
+
+			if (active) click_event();
+			return view_category;
+		}
+
+		protected change_category(uploadType: string, view_category: HTMLElement, view_button: HTMLElement) {
+			if (view_button.classList.contains('active')) return;
+
+			let active_button = this.view_category_button_list.querySelector('.item.active')
+			if (active_button) active_button.classList.remove('active');
+			view_button.classList.add('active');
+
+			let active_category = this.view_content.querySelector('.category.active');
+			if (active_category) active_category.classList.remove('active');
+			view_category.classList.add('active');
+
+			if (view_category.children.length) {
+				view_category.insertBefore(this.view_upload_button, view_category.firstChild);
+			} else {
+				view_category.appendChild(this.view_upload_button);
+			}
+
+			this.view_upload_button.querySelector('input').accept = uploadType;
+		}
+
+		// protected init_category_button_view(): void {
+		// 	let categoryNodeList: NodeList = this.view_category_button_list.querySelectorAll('.item');
+		// 	let categoryList: HTMLElement[] = Array.prototype.slice.call(categoryNodeList);;
+		// 	for(let item of categoryList) {
+		// 		item.addEventListener('click', () => {
+		// 			if (item.classList.contains('active')) return;
+		// 			this.view_category_button_list.querySelector('.item.active').classList.remove('active');
+		// 			item.classList.add('active');
+		// 		});
+		// 	}
+		// }
 
 		protected upload_new_assets(event: Event): void {
 			let input: any = event.target;
@@ -152,7 +219,7 @@ module Editor.Assets {
 						if (!asset.base) {
 							console.warn(`Load atlas: the uploaded image "${image_name}" is not atlas. Skipped json "${json_key}".`);
 						} else {
-							this.view_list.removeChild(asset.view_element);
+							this.view_categories.image.removeChild(asset.view_element);
 							this.atlas_parse(asset.base, json_key, data);
 						}
 					} else {
@@ -213,7 +280,7 @@ module Editor.Assets {
 			});
 
 			this.font_list[asset.name] = asset;
-			this.view_list.appendChild(asset.view_element);
+			this.view_categories.font.appendChild(asset.view_element);
 		}
 
 		protected create_image_asset(name: string, imageLink: string, texture?: PIXI.Texture): void {
@@ -234,6 +301,7 @@ module Editor.Assets {
 					drop: (type: EventTargetType) => {
 						switch(type) {
 							case EventTargetType.SCENE:
+							case EventTargetType.HIERARCHY:
 								this.new_sprite(asset.texture, asset.name);
 								break;
 						};
@@ -246,7 +314,7 @@ module Editor.Assets {
 			});
 
 			this.image_list[asset.name] = asset;
-			this.view_list.appendChild(asset.view_element);
+			this.view_categories.image.appendChild(asset.view_element);
 		}
 
 		protected new_sprite(texture: PIXI.Texture, name: string): void {
@@ -267,13 +335,13 @@ module Editor.Assets {
 			asset.onLoad(() => {});
 
 			this.script_list[asset.name] = asset;
-			this.view_list.appendChild(asset.view_element);
+			this.view_categories.script.appendChild(asset.view_element);
 		}
 
 		public remove(asset: AssetObject.Image): void {
 			asset.destroy();
 			delete this.image_list[asset.name];
-			this.view_list.removeChild(asset.view_element);
+			asset.view_element.parentNode.removeChild(asset.view_element);
 		}
 
 		public select(asset_object: AssetObject.Abs): void {

@@ -3,6 +3,7 @@
 
 module Editor {
 	interface IHierarchyInitParameters {
+		eventCtrl: EventCtrl;
 		scene: Scene;
 		inspector: Inspector;
 	}
@@ -13,13 +14,16 @@ module Editor {
 		protected view_element: HTMLElement;
 		protected view_list: HTMLElement;
 
+		protected eventCtrl: EventCtrl;
 		public scene: Scene;
-		public inspector: Inspector
+		public inspector: Inspector;
 
 		constructor({
+			eventCtrl,
 			scene,
 			inspector
 		}: IHierarchyInitParameters) {
+			this.eventCtrl = eventCtrl;
 			this.scene = scene;
 			this.inspector = inspector;
 
@@ -27,6 +31,13 @@ module Editor {
 			this.view_list = this.view_element.querySelector('.content');
 
 			this.initButtons();
+			this.addTouchEvent();
+		}
+
+		protected addTouchEvent(): void {
+			this.view_element.querySelector('.area').addEventListener('mouseup',
+				(e: MouseEvent) => this.eventCtrl.drop(e, EventTargetType.SCENE)
+			);
 		}
 
 		protected initButtons(): void {

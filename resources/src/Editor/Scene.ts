@@ -3,6 +3,10 @@
 /// <reference path="../Utils/easy_input/ctrl.ts" />
 module Editor {
 
+	interface ISceneInitParameters {
+		eventCtrl: EventCtrl;
+	}
+
 	interface INewSceneParameters {
 		width: number;
 		height: number;
@@ -10,6 +14,8 @@ module Editor {
 	}
 
 	export class Scene {
+		protected view_element: HTMLElement;
+
 		public width: number = 1536;
 		public height: number = 760;
 
@@ -24,12 +30,19 @@ module Editor {
 		protected _zoom: number = 50;
 		protected input_zoom: Utils.EasyInput;
 
-		constructor() {
+		protected eventCtrl: EventCtrl;
+
+		constructor({
+			eventCtrl
+		}: ISceneInitParameters) {
+			this.eventCtrl = eventCtrl;
+			this.view_element = document.getElementById('scene');
 			this.createApplication();
 			this.addLogo();
 			this.createArea();
 			this.initZoomPanel();
 			this.addOnResizeEvent();
+			this.addTouchEvent();
 		}
 
 		 public get zoom(): number { return this._zoom; }
@@ -45,7 +58,7 @@ module Editor {
 				height: 2000,
 				backgroundColor: 0x101010
 			});
-			document.getElementById('scene').appendChild(this.application.view);
+			this.view_element.appendChild(this.application.view);
 		}
 
 		 protected addLogo(): void {
@@ -103,6 +116,12 @@ module Editor {
 
 		protected addOnResizeEvent(): void {
 			window.addEventListener('resize', this.resizeScreen.bind(this));
+		}
+
+		protected addTouchEvent(): void {
+			this.view_element.addEventListener('mouseup',
+				(e: MouseEvent) => this.eventCtrl.drop(e, EventTargetType.SCENE)
+			);
 		}
 
 		public newScene({
