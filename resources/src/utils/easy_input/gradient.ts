@@ -10,6 +10,7 @@ module Utils.EasyInputModule {
 	}
 
 	export class GradientEasyInput extends ColorEasyInput {
+		protected COLOR_HEIGHT: number = 16;
 		protected color_group: HTMLElement;
 
 		protected init_children(view_input: any, parameters: IInitParameters): void {
@@ -74,6 +75,7 @@ module Utils.EasyInputModule {
 				attr: { class: 'move-area' },
 				innerHTML: '='
 			});
+			this.addMoveEvent(move_area, color_container);
 
 			// let stop_color = Utils.easyHTML.createElement({
 			// 	type: 'input',
@@ -96,6 +98,57 @@ module Utils.EasyInputModule {
 			if (update) this.update();
 		}
 
+		addMoveEvent(move_area: HTMLElement, color_container: HTMLElement) {
+			let children: HTMLElement[];
+			let index: number;
+			let start_position: number;
+
+			let move_callback = (move_event: MouseEvent) => {
+				if (move_event.y - start_position < -this.COLOR_HEIGHT
+					&& index > 0
+				) {
+					let input = this.view_inputs[index];
+					this.view_inputs[index] = this.view_inputs[index-1];
+					this.view_inputs[index-1] = input;
+
+					this.color_group.insertBefore(color_container, children[index-1]);
+
+					index--;
+					start_position = start_position - this.COLOR_HEIGHT;
+				} else
+				if (move_event.y - start_position > this.COLOR_HEIGHT
+					&& index < children.length-1
+				) {
+					let input = this.view_inputs[index];
+					this.view_inputs[index] = this.view_inputs[index+1];
+					this.view_inputs[index+1] = input;
+
+					this.color_group.insertBefore(color_container, children[index+2]);
+
+					index++;
+					start_position = start_position + this.COLOR_HEIGHT;
+				} else {
+					return;
+				}
+
+				children = Array.prototype.slice.call( this.color_group.children );
+				this.update();
+			}
+
+			let up_callback = (up_event: MouseEvent) => {
+				document.removeEventListener('mousemove', move_callback);
+				document.removeEventListener('mouseup', up_callback);
+			}
+
+			move_area.addEventListener('mousedown', (down_event: MouseEvent) => {
+				children = Array.prototype.slice.call( this.color_group.children );
+				index = children.indexOf(color_container);
+				start_position = down_event.y;
+				document.addEventListener('mousemove', move_callback);
+				document.addEventListener('mouseup', up_callback);
+			})
+		}
+
 		removeColor(update: boolean = true): void {
 			if (this.view_inputs.length == 1) return;
 
@@ -108,6 +161,7 @@ module Utils.EasyInputModule {
 		public get value(): any {
 			let colorList: string[] = [];
 
+			console.warn(this.view_inputs);
 			this.view_inputs.forEach((input: HTMLInputElement) => {
 				colorList.push('#' + input.value);
 			});
