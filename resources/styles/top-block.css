@@ -1,0 +1,29 @@
+.editor-block.top-block {
+	width: 100%;
+	left: 0;
+	top: 0;
+}
+
+.editor-block.top-block .options {
+	position: relative;
+	width: 100%;
+	height: 19px;
+	top: 0;
+	left: 0;
+}
+
+.editor-block.top-block .options .button {
+	position: relative;
+    float: left;
+    height: calc(100% - 3px);
+    border-right: 1px #101010 solid;
+}
+
+.editor-block.top-block .options .button input {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	opacity: 0;
+}

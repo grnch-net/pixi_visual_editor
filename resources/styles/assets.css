@@ -1,0 +1,181 @@
+#assets>.category-button-list {
+	float: left;
+	position: relative;
+	width: 99px;
+	height: 100%;
+	border-right: 1px #0f0f0f solid;
+	background: #1b1d1d;
+}
+
+#assets>.category-button-list>.item {
+	position: relative;
+	width: calc(100% - 18px);
+	padding: 9px;
+	border-bottom: 1px #0f0f0f solid;
+}
+#assets>.category-button-list>.item:hover {
+	background: #232728;
+}
+#assets>.category-button-list>.item.active {
+	padding-left: 10px;
+	background: #2d3435;
+}
+#assets>.category-button-list>.item.active::after {
+	content: ">";
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    transform: scale(0.7, 1.6);
+}
+
+
+#assets>.content {
+	float: left;
+	position: relative;
+	width: calc(100% - 100px);
+	height: 100%;
+	overflow-y: auto;
+}
+
+#assets>.content .asset-button {
+	float: left;
+	position: relative;
+	width: 70px;
+	height: 70px;
+	margin: 10px 15px 11px 15px;
+	border: 5px #adadad dashed;
+	border-radius: 4px;
+    overflow: hidden;
+}
+
+#assets>.content .asset-button.font-type {
+    /* border: 5px #cfcfcf solid; */
+    border: 5px #e0e471 solid;
+}
+
+#assets>.content .asset-button.font-type:hover {
+	background: none;
+}
+
+#assets>.content .asset-button div {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-size: 60px;
+    padding-bottom: 15px;
+	color: #adadad;
+}
+
+#assets>.content .asset-button.font-type div {
+	max-width: 70px;
+	max-height: 70px;
+	overflow: hidden;
+    padding-bottom: 0;
+	color: #e0e471;
+}
+
+#assets>.content .asset-button.script-type {
+    /* border: 5px #cfcfcf solid; */
+    border: 5px #71a3e4 solid;
+}
+
+#assets>.content .asset-button.script-type div {
+	max-width: 70px;
+	max-height: 70px;
+	overflow: hidden;
+    padding-bottom: 0;
+	color: #71a3e4;
+}
+
+#assets>.content>.category>.item .name {
+	color: #adadad;
+}
+
+#assets>.content .asset-button input {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	opacity: 0;
+}
+
+#assets>.content .asset-button:hover {
+	background: rgba(255, 255, 255, 0.1);
+}
+
+#assets>.content>.category {
+	display: none;
+}
+#assets>.content>.category.active {
+	display: block;
+}
+
+#assets>.content>.item {
+	display: none;
+}
+
+#assets>.content>.category>.item {
+	float: left;
+	position: relative;
+	width: 110px;
+	height: 120px;
+	/* margin: 5px 5px 4px 5px; */
+	padding: 5px;
+}
+
+#assets>.content>.category>.item.selected {
+
+}
+
+#assets>.content>.category>.item img {
+	width: 106px;
+	height: 100px;
+	margin: 1px;
+	border: 1px #5d5d5d solid;
+	object-fit: cover;
+	background: #0f0f0f;
+}
+
+#assets>.content>.category>.item.selected img {
+	border-color: #00b5ff;
+}
+
+#assets>.content>.category>.item .name {
+	width: calc(100% - 4px);
+    /* margin-top: -2px; */
+	padding: 0 2px;
+	text-align: center;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+    font-size: 14px;
+
+	-webkit-user-select: all;
+	-moz-user-select: all;
+	-ms-user-select: all;
+	user-select: all;
+}
+
+#assets>.content .asset-button + .name {
+	user-select: none;
+}
+
+#assets>.content>.category>.item .touch {
+	position: absolute;
+	width: calc(100% - 14px);
+	height: 100px;
+	top: 0;
+	left: 0;
+	margin: 7px;
+}
+#assets>.content>.category>.item .touch:hover {
+	background: rgba(255, 255, 255, 0.2);
+}
+#assets>.content>.category>.item.selected .touch {
+	background: rgba(50, 176, 255, 0.2);
+}
+#assets>.content>.category>.item.selected .touch:hover {
+	background: rgba(50, 176, 255, 0.2);
+}

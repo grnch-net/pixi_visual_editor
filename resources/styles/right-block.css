@@ -1,0 +1,16 @@
+.editor-block.right-block {
+	width: 199px;
+	height: calc(100% - 24px);
+	top: 22px;
+	right: 0;
+}
+
+.editor-block.right-block .window-title {
+	position: relative;
+	width: calc(100% - 32px);
+	height: 10px;
+	padding: 5px 16px;
+	border-top: 1px #0f0f0f solid;
+	border-bottom: 1px #0f0f0f solid;
+	font-size: 10px;
+}

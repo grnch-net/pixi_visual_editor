@@ -1,0 +1,39 @@
+.editor-block.left-block {
+	position: absolute;
+	width: 30px;
+	top: calc(10% + 22px);
+	left: 0;
+	background: none;
+    border-bottom: none;
+}
+
+.editor-block.left-block .tools {
+	width: 100%;
+	background: #1f2425;
+}
+
+.editor-block.left-block .tools.control-tools {
+
+}
+
+.editor-block.left-block .tools.elements-tools {
+
+}
+
+.editor-block.left-block .button {
+	position: relative;
+	height: 30px;
+	padding: 0;
+    border-bottom: 1px #0e0e0e solid;
+}
+
+.editor-block.left-block .button.active {
+	background: #2d3435;
+}
+
+.editor-block.left-block .button img {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+}

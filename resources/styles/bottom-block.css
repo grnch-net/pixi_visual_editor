@@ -1,0 +1,86 @@
+.editor-block.bottom-block {
+	width: calc(100% - 202px);
+	height: 150px;
+	left: 0;
+	bottom: 0;
+	border-bottom: 2px #0f0f0f solid;
+	background: #0f0f0f;
+}
+.editor-block.bottom-block.hide {
+	top: calc(100% - 21px);
+}
+
+.editor-block.bottom-block .labels-area {
+	position: absolute;
+	width: 100%;
+	height: 20px;
+	top: 0;
+	left: 0;
+}
+
+.editor-block.bottom-block .labels-area .button {
+	float: left;
+	height: calc(100% - 5px);
+    margin-right: 1px;
+}
+
+.editor-block.bottom-block .labels-area .visible-button {
+	margin: 0 5px;
+}
+
+.editor-block.bottom-block.hide .labels-area .visible-button,
+.editor-block.bottom-block .labels-area .button.show {
+	background: #1f2425;
+}
+.editor-block.bottom-block.hide .labels-area .visible-button:hover,
+.editor-block.bottom-block .labels-area .button.show:hover {
+	background: #1f2425;
+}
+
+#scene-zoom {
+	position: absolute;
+	top: 0;
+	right: 0;
+	height: 100%;
+}
+
+#scene-zoom .button {
+	margin: 0;
+	margin-left: 1px;
+}
+
+#scene-zoom .button.plus {
+    padding: 2px 5px 3px 6px;
+}
+
+#scene-zoom .button.minus {
+    padding: 2px 7px 3px 8px;
+}
+
+#scene-zoom input {
+	float: left;
+	margin-left: 1px;
+	background: #1f2425;
+	height: 100%;
+	width: 40px;
+	text-align: center;
+}
+
+.editor-block.bottom-block .main-area {
+	position: absolute;
+	width: 100%;
+	height: calc(100% - 20px);
+	top: 21px;
+	left: 0;
+	background: #1f2425;
+}
+
+.editor-block.bottom-block .main-area .container {
+	display: none;
+	position: relative;
+	width: 100%;
+	height: 100%;
+}
+.editor-block.bottom-block .main-area .container.show {
+	display: block;
+}
