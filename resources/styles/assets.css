@@ -1,4 +1,4 @@
-#assets>.category-button-list {
+#assets>.category-list {
 	float: left;
 	position: relative;
 	width: 99px;
@@ -7,20 +7,20 @@
 	background: #1b1d1d;
 }
 
-#assets>.category-button-list>.item {
+#assets>.category-list>.item {
 	position: relative;
 	width: calc(100% - 18px);
 	padding: 9px;
 	border-bottom: 1px #0f0f0f solid;
 }
-#assets>.category-button-list>.item:hover {
+#assets>.category-list>.item:hover {
 	background: #232728;
 }
-#assets>.category-button-list>.item.active {
+#assets>.category-list>.item.active {
 	padding-left: 10px;
 	background: #2d3435;
 }
-#assets>.category-button-list>.item.active::after {
+#assets>.category-list>.item.active::after {
 	content: ">";
     position: absolute;
     top: 7px;

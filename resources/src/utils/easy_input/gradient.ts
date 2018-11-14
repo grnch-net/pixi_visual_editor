@@ -161,7 +161,6 @@ module Utils.EasyInputModule {
 		public get value(): any {
 			let colorList: string[] = [];
 
-			console.warn(this.view_inputs);
 			this.view_inputs.forEach((input: HTMLInputElement) => {
 				colorList.push('#' + input.value);
 			});
@@ -186,6 +185,7 @@ module Utils.EasyInputModule {
 			} else {
 				// this.clear(false);
 				let colorHex = (window as any).tinycolor(value).toHex();
+				console.warn(this.view_inputs);
 				(this.view_inputs[0] as any).jscolor.fromString(colorHex);
 			}
 		}

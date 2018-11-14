@@ -89,7 +89,7 @@ module Editor.AssetObject {
 		}
 
 		public takeEvent(callback: Function) {
-			this.view_touch.addEventListener('mousedown', (event: Event) => {
+			this.addEvent('mousedown', (event: Event) => {
 				this.take = true;
 
 				let up_event = () => {

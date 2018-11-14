@@ -3,10 +3,6 @@
 /// <reference path="../Utils/easy_input/ctrl.ts" />
 module Editor {
 
-	interface ISceneInitParameters {
-		eventCtrl: EventCtrl;
-	}
-
 	interface INewSceneParameters {
 		width: number;
 		height: number;
@@ -30,12 +26,9 @@ module Editor {
 		protected _zoom: number = 50;
 		protected input_zoom: Utils.EasyInput;
 
-		protected eventCtrl: EventCtrl;
-
-		constructor({
-			eventCtrl
-		}: ISceneInitParameters) {
-			this.eventCtrl = eventCtrl;
+		constructor(
+			public editor: Editor.Ctrl
+		) {
 			this.view_element = document.getElementById('scene');
 			this.createApplication();
 			this.addLogo();
@@ -120,7 +113,7 @@ module Editor {
 
 		protected addTouchEvent(): void {
 			this.view_element.addEventListener('mouseup',
-				(e: MouseEvent) => this.eventCtrl.drop(e, EventTargetType.SCENE)
+				(e: MouseEvent) => this.editor.eventCtrl.drop(e, EventTargetType.SCENE)
 			);
 		}
 

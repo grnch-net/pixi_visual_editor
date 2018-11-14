@@ -27,7 +27,9 @@ module Editor {
 		protected text_inputs: any = {};
 		protected custom_inputs: any = {};
 
-		constructor() {
+		constructor(
+			public editor: Editor.Ctrl
+		) {
 			this.window_view = document.getElementById('inspector');
 			this.content_view = this.findViewElement('.content');
 
@@ -222,8 +224,11 @@ module Editor {
 			path.value = game_object.getOption(attr);
 		}
 
-		public addNewFontFamily(font: string): void {
-			GameObject.textStyle.fontFamily.push(font);
+		public addNewFontFamily(fonts: string[]): void {
+			for (let font of fonts) {
+				GameObject.textStyle.fontFamily.push(font);
+			}
+
 			this.text_inputs['style.fontFamily'].updateSelect(GameObject.textStyle.fontFamily);
 
 			if (this.selected_list.length > 0) {

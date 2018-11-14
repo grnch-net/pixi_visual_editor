@@ -15,27 +15,18 @@ module Editor {
 	export class Ctrl {
 		public customGameObject: any = {};
 
-		protected eventCtrl: EventCtrl;
-		protected scene: Scene;
-		protected inspector: Inspector;
-		protected hierarchy: Hierarchy;
-		protected assets: Assets.Ctrl;
+		public eventCtrl: EventCtrl;
+		public scene: Scene;
+		public inspector: Inspector;
+		public hierarchy: Hierarchy;
+		public assets: Assets.Ctrl;
 
 		constructor() {
 			this.eventCtrl = new EventCtrl();
-			this.scene = new Scene({
-				eventCtrl: this.eventCtrl
-			});
-			this.inspector = new Inspector();
-			this.hierarchy = new Hierarchy({
-				eventCtrl: this.eventCtrl,
-				scene: this.scene,
-				inspector: this.inspector
-			});
-			this.assets = new Assets.Ctrl({
-				eventCtrl: this.eventCtrl,
-				hierarchy: this.hierarchy
-			});
+			this.scene = new Scene(this);
+			this.inspector = new Inspector(this);
+			this.hierarchy = new Hierarchy(this);
+			this.assets = new Assets.Ctrl(this);
 
 			this.init_user_interface();
 		}

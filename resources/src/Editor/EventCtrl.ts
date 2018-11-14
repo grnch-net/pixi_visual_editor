@@ -6,6 +6,12 @@ module Editor {
 		HIERARCHY
 	}
 
+	interface ITake {
+	    type: EventTargetType;
+		take?: Function;
+		drop?: Function;
+	}
+
 	export class EventCtrl {
 		public dragType: EventTargetType = null;
 		protected dropCallback: Function = null;
@@ -22,21 +28,23 @@ module Editor {
 			this.view_element.classList.remove('active');
 		}
 
-		public take(down_event: MouseEvent, parameters: { type: EventTargetType, drop?: Function }): void {
+		public take(down_event: MouseEvent, parameters: ITake): void {
 			this.dragType = parameters.type;
 			this.dropCallback = parameters.drop;
 
-			switch(parameters.type) {
-				case EventTargetType.SCENE:
+			if (parameters.take) parameters.take();
 
-					break
-				case EventTargetType.ASSETS:
-
-					break
-				case EventTargetType.HIERARCHY:
-
-					break;
-			}
+			// switch(parameters.type) {
+			// 	case EventTargetType.SCENE:
+			//
+			// 		break
+			// 	case EventTargetType.ASSETS:
+			//
+			// 		break
+			// 	case EventTargetType.HIERARCHY:
+			//
+			// 		break;
+			// }
 
 			this.view_element.classList.add('active');
 			this.view_element.style.transform = `translate(${down_event.x-this.element_half_width}px,${down_event.y-this.element_half_height}px)`;
@@ -57,7 +65,7 @@ module Editor {
 			document.addEventListener('mouseup', up_callback);
 		}
 
-		public drag(down_event: MouseEvent, parameters: { type: EventTargetType, take?: Function, drop?: Function }): void {
+		public drag(down_event: MouseEvent, parameters: ITake): void {
 			let move_callback: any;
 			let up_callback: any;
 
@@ -66,7 +74,6 @@ module Editor {
 				let y: number = Math.abs(move_event.y - down_event.y);
 				if (x > 5 || y > 5) {
 					up_callback();
-					if (parameters.take) parameters.take();
 					this.take(down_event, parameters);
 				}
 			};
@@ -80,17 +87,17 @@ module Editor {
 		}
 
 		public drop(up_event: MouseEvent, endTargetType: EventTargetType = null): void {
-			switch(this.dragType) {
-				case EventTargetType.SCENE:
-
-					break
-				case EventTargetType.ASSETS:
-
-					break
-				case EventTargetType.HIERARCHY:
-
-					break;
-			}
+			// switch(this.dragType) {
+			// 	case EventTargetType.SCENE:
+			//
+			// 		break
+			// 	case EventTargetType.ASSETS:
+			//
+			// 		break
+			// 	case EventTargetType.HIERARCHY:
+			//
+			// 		break;
+			// }
 
 			if (this.dragType === null) {
 				this.dropCallback = null;
