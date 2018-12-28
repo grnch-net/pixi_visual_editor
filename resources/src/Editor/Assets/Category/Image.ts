@@ -165,21 +165,20 @@ module Editor.AssetCategory {
 
 		protected add_asset_event(asset: AssetObject.Image): void {
 			super.add_asset_event(asset);
-
-			asset.addEvent('dblclick', (event: Event) => this.new_sprite(asset.texture, asset.name));
+			asset.addEvent('dblclick', (event: Event) => this.new_sprite(asset));
 		}
 
 		protected asset_drop_event(asset: AssetObject.Image, type: EventTargetType): void {
 			switch(type) {
 				case EventTargetType.SCENE:
 				case EventTargetType.HIERARCHY:
-					this.new_sprite(asset.texture, asset.name);
+					this.new_sprite(asset);
 					break;
 			};
 		}
 
-		protected new_sprite(texture: PIXI.Texture, name: string): void {
-			let sprite = new GameObject.Sprite(texture, name);
+		protected new_sprite(asset: AssetObject.Image): void {
+			let sprite = new GameObject.Sprite(asset);
 			this.ctrl.editor.hierarchy.add(sprite);
 		}
 

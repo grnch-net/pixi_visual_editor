@@ -1,18 +1,24 @@
 /// <reference path="./AbsSprite.ts" />
 
 module GameObject {
+	import AssetImage = Editor.AssetObject.Image;
+
 	let SPRITE_TYPE_IMAGE = 'assets/imageTypeIco.png';
 
 	export class Sprite extends AbsSprite {
-		protected texture: PIXI.Texture;
+		// protected texture: PIXI.Texture;
 
-		constructor(texture: PIXI.Texture, name?: string) {
+		constructor(asset: AssetImage, name?: string) {
+			let parse_name = asset.name.split('.');
+			if (parse_name.length > 1) parse_name.pop();
+			let asset_name = parse_name.join('.');
 			super({
-				name: name || 'Sprite',
-				sceneElementAttr: [texture],
+				name: name || asset_name || 'Sprite',
+				sceneElementAttr: [asset.texture],
 				hierarchyElementAttr: []
 			});
 
+			this.asset_image = asset;
 		}
 
 		protected create_scene_elememnt(texture: PIXI.Texture) {

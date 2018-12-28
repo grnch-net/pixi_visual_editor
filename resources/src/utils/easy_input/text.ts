@@ -2,10 +2,11 @@
 /// <reference path="abs.ts" />
 module Utils.EasyInputModule {
 
-	interface IInitParameters {
+	export interface ITextInitParameters {
 		key?: string;
 		label?: boolean|string;
 		type?: string;
+		readonly?: string;
 		parent?: HTMLElement;
 		class?: string[];
 	}
@@ -18,12 +19,12 @@ module Utils.EasyInputModule {
 
 	export class TextEasyInput extends EasyInput {
 		protected type: string;
-		protected _readonly: boolean;
+		protected _readonly: boolean = false;
 		protected view_inputs: HTMLElement[] = [];
 		protected label_element: HTMLElement;
 
 		constructor(
-			parameters: IInitParameters,
+			parameters: ITextInitParameters,
 			protected change_callback: Function,
 			public view_element?: HTMLElement,
 		) {
@@ -48,16 +49,21 @@ module Utils.EasyInputModule {
 
 				this.view_element.dataset.key = parameters.key;
 
+				if (parameters.readonly) {
+					this.readonly = true;
+				}
+
 				if (parameters.parent) {
 					parameters.parent.appendChild(this.view_element);
 				}
+
 			}
 
 			this.add_change_event();
 		}
 
 		protected init_view_element(
-			parameters: IInitParameters,
+			parameters: ITextInitParameters,
 			viewInputAttr: IViewInputParameters = {}
 		): void {
 			let view_input = Utils.easyHTML.createElement({
@@ -89,12 +95,12 @@ module Utils.EasyInputModule {
 			}
 		}
 
-		protected init_children(view_input: any, parameters: IInitParameters): void {
+		protected init_children(view_input: any, parameters: ITextInitParameters): void {
 			this.view_inputs.push(view_input as HTMLInputElement);
 			this.view_element.appendChild(view_input);
 		}
 
-		protected create_label(parameters: IInitParameters, endText: string = ':', labelType = 'span'): HTMLElement {
+		protected create_label(parameters: ITextInitParameters, endText: string = ':', labelType = 'span'): HTMLElement {
 			let label_text: string;
 			if (parameters.label && typeof parameters.label == 'string') {
 				label_text = parameters.label;
@@ -113,7 +119,7 @@ module Utils.EasyInputModule {
 			return label_element;
 		}
 
-		protected create_view_element(parameters: IInitParameters, elemetnClass: string = 'input-area'): HTMLElement {
+		protected create_view_element(parameters: ITextInitParameters, elemetnClass: string = 'input-area'): HTMLElement {
 			let view_element = Utils.easyHTML.createElement({
 				attr: { class: elemetnClass}
 			});
