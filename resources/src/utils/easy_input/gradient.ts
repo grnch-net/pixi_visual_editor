@@ -58,8 +58,9 @@ module Utils.EasyInputModule {
 					type: 'input',
 					attr: { class: 'jscolor', type: '' },
 				});
+
 				let picker = new (window as any).jscolor(view_input, { value: color });
-				picker.fromString(color);
+				view_input.jscolor = picker;
 
 				this.view_inputs.push(view_input);
 				this.add_change_event('', this.view_inputs.length-1);
@@ -164,6 +165,7 @@ module Utils.EasyInputModule {
 			this.view_inputs.forEach((input: HTMLInputElement) => {
 				colorList.push('#' + input.value);
 			});
+
 			return colorList;
 		}
 
@@ -173,6 +175,7 @@ module Utils.EasyInputModule {
 				value.forEach((color: string, index: number) => {
 					let colorHex = (window as any).tinycolor(color).toHex();
 					let view_input = this.view_inputs[index] as any;
+
 					if (view_input) {
 						view_input.jscolor.fromString(colorHex);
 					} else {
@@ -183,10 +186,10 @@ module Utils.EasyInputModule {
 					this.removeColor(false);
 				}
 			} else {
-				// this.clear(false);
 				let colorHex = (window as any).tinycolor(value).toHex();
-				console.warn(this.view_inputs);
-				(this.view_inputs[0] as any).jscolor.fromString(colorHex);
+				let view_input = (this.view_inputs[0] as any);
+
+				view_input.jscolor.fromString(colorHex);
 			}
 		}
 
