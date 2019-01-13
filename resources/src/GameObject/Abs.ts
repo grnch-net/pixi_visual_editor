@@ -24,6 +24,8 @@ module GameObject {
 		protected typeElement: HTMLImageElement;
 		protected nameElement: HTMLElement;
 
+		protected visible_events: Function[] = [];
+
 		protected _destroyed: boolean = false;
 		public get destroyed(): boolean { return this._destroyed };
 
@@ -39,6 +41,7 @@ module GameObject {
 			this.name = name;
 
 			this.create_view_elements();
+			this.init_visible_event();
 		}
 
 		protected create_scene_elememnt(attr?: any) {
@@ -195,10 +198,16 @@ module GameObject {
 			else path[option] = value;
 		}
 
-		public visibleEvent(callback: any): void {
-			this.visibleElement.addEventListener('mouseup', (event: Event) => {
+		public visibleEvent(callback: Function) {
+			this.visible_events.push(callback);
+		}
+
+		protected init_visible_event(): void {
+			this.visibleElement.addEventListener('click', (event: Event) => {
 				this.visible = !this.visible;
-				callback(event);
+				this.visible_events.forEach((callback: Function) => callback(event));
+			});
+			this.visibleElement.addEventListener('mousedown', (event: Event) => {
 				event.stopPropagation();
 			});
 		}
