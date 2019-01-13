@@ -112,9 +112,20 @@ module Editor {
 		}
 
 		protected addTouchEvent(): void {
-			this.view_element.addEventListener('mouseup',
-				(e: MouseEvent) => this.editor.eventCtrl.drop(e, EventTargetType.SCENE)
-			);
+			this.view_element
+			.addEventListener('mouseup', (event: MouseEvent) => {
+				this.editor.eventCtrl.drop(
+					event,
+					EventTargetType.SCENE,
+					this.dropTouchEvent.bind(this)
+				);
+			});
+		}
+
+		protected dropTouchEvent(type: EventTargetType, args: any): void {
+			if (type == EventTargetType.ASSETS) {
+				if (args instanceof AssetObject.Image) this.editor.hierarchy.createSprite(args);
+			}
 		}
 
 		public newScene({
