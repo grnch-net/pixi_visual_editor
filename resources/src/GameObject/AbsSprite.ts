@@ -26,6 +26,10 @@ module GameObject {
 		}
 
 		set texture(value: AssetImage) {
+			if (!value.texture.trim) {
+				value.texture.trim = value.texture.orig;
+			}
+
 			this.asset_image = value;
 			this.scene_view_element.texture = value.texture;
 		}
