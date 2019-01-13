@@ -9,5 +9,8 @@ module Utils {
 
 		public get readonly(): boolean { return; }
 		public set readonly(value: boolean) {}
+
+		public select() {}
+		public unselect() {}
 	}
 }

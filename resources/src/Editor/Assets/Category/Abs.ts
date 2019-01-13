@@ -102,7 +102,8 @@ module Editor.AssetCategory {
 				this.ctrl.editor.eventCtrl.drag(event, {
 					type: EventTargetType.ASSETS,
 					take: () => this.asset_take_event(asset),
-					drop: (type: EventTargetType) => this.asset_drop_event(asset, type)
+					drop: this.asset_drop_event.bind(this),
+					args: asset
 				});
 			});
 
@@ -116,7 +117,10 @@ module Editor.AssetCategory {
 			if (!asset.selected) this.select(asset);
 		}
 
-		protected asset_drop_event(asset: AssetObject.Abs, type: EventTargetType): void {}
+		protected asset_drop_event(
+			type: EventTargetType,
+			asset: AssetObject.Abs
+		): void {}
 
 		public remove(asset: AssetObject.Image): void {
 			asset.destroy();

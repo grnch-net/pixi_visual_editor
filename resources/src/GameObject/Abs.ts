@@ -1,5 +1,6 @@
 /// <reference path="../lib.d.ts/pixi.d.ts" />
 /// <reference path="../Utils/easy-html.ts" />
+/// <reference path="../Editor/abs-list-object.ts" />
 
 module GameObject {
 
@@ -9,7 +10,7 @@ module GameObject {
 		hierarchyElementAttr?: any[];
 	}
 
-	export abstract class Abs {
+	export abstract class Abs extends Editor.AbsListObject {
 		protected _name: string;
 
 		public customName: string = '';
@@ -26,18 +27,18 @@ module GameObject {
 		protected _destroyed: boolean = false;
 		public get destroyed(): boolean { return this._destroyed };
 
-		protected _selected: boolean = false;
-		public get selected(): boolean { return this._selected };
-
 		constructor({
 			name = 'Object',
 			sceneElementAttr = [],
 			hierarchyElementAttr = []
 		}: IAbsInitParameters) {
+			super();
 			this.create_scene_elememnt(...sceneElementAttr);
 			this.create_hierarchy_element(...hierarchyElementAttr);
 
 			this.name = name;
+
+			this.create_view_elements();
 		}
 
 		protected create_scene_elememnt(attr?: any) {
@@ -194,23 +195,6 @@ module GameObject {
 			else path[option] = value;
 		}
 
-		public select(): void {
-			this.hierarchy_view_element.classList.add('selected');
-			this._selected = true;
-		}
-
-		public unselect(): void {
-			this.hierarchy_view_element.classList.remove('selected');
-			this._selected = false;
-		}
-
-		public selectEvent(callback: any): void {
-			this.view_area_element.addEventListener('mouseup', (event: Event) => {
-				callback(event);
-				event.stopPropagation();
-			});
-		}
-
 		public visibleEvent(callback: any): void {
 			this.visibleElement.addEventListener('mouseup', (event: Event) => {
 				this.visible = !this.visible;
@@ -224,6 +208,21 @@ module GameObject {
 			this.scene_view_element.destroy();
 			this.hierarchy_view_element.parentNode.removeChild(this.hierarchy_view_element);
 			this._destroyed = true;
+		}
+
+		public addEvent(event: string, callback: any): void {
+			this.view_area_element.addEventListener(event, callback);
+		}
+
+
+		public select(): void {
+			super.select();
+			this.hierarchy_view_element.classList.add('selected');
+		}
+
+		public unselect(): void {
+			super.unselect();
+			this.hierarchy_view_element.classList.remove('selected');
 		}
 	}
 }

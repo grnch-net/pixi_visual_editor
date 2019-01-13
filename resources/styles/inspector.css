@@ -23,6 +23,7 @@
 
 #inspector .point-area,
 #inspector .input-area {
+    position: relative;
 	border-top: 1px #0f0f0f solid;
 	padding: 7px 10px;
 }
@@ -154,6 +155,7 @@
 #inspector .attr[data-key='alpha'] {
 	min-width: 90px;
 }
+
 /* #inspector .attr[data-key='alpha'] input {
 	width: 35px;
 } */
@@ -178,4 +180,18 @@
 
 #inspector .content.enable .content-blocker {
 	display: none;
+}
+
+#inspector .input-area .attr-overlay {
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(50, 176, 255, 0.2);
+}
+
+#inspector .input-area .attr-overlay.select {
+	display: block;
 }

@@ -1,4 +1,5 @@
 /// <reference path="../../../Utils/easy-html.ts" />
+/// <reference path="../../abs-list-object.ts" />
 
 module Editor.AssetObject {
 
@@ -7,7 +8,7 @@ module Editor.AssetObject {
 		viewElementAttr?: any[];
 	}
 
-	export abstract class Abs {
+	export abstract class Abs extends AbsListObject {
 		public name: string;
 
 		public view_element: HTMLElement;
@@ -18,11 +19,6 @@ module Editor.AssetObject {
 		protected isLoad: boolean = false;
 		protected onLoadCallback: Function;
 
-		protected take: boolean = false;
-
-		protected _selected: boolean = false;
-		public get selected(): boolean { return this._selected };
-
 		protected _destroyed: boolean = false;
 		public get destroyed(): boolean { return this._destroyed };
 
@@ -30,6 +26,8 @@ module Editor.AssetObject {
 			name = 'Asset object',
 			viewElementAttr = [],
 		}: IConstructorInitParameters) {
+			super();
+
 			this.name = name;
 
 			this.create_view_elements(...viewElementAttr);
@@ -48,6 +46,9 @@ module Editor.AssetObject {
 				attr: { class: 'name' },
 				innerHTML: this.name
 			});
+
+			this.create_view_touch();
+			super.create_view_elements();
 		}
 
 		protected create_view_image_element(attr?: any): void {
@@ -62,15 +63,11 @@ module Editor.AssetObject {
 			});
 		}
 
-		public addEvent(event: string, callback: any): void {
-			if (!this.view_touch) {
-				this.view_touch = Utils.easyHTML.createElement({
-					type: 'div', parent: this.view_element,
-					attr: { class: 'touch' }
-				});
-			}
-
-			this.view_touch.addEventListener(event, callback);
+		protected create_view_touch() {
+			this.view_touch = Utils.easyHTML.createElement({
+				type: 'div', parent: this.view_element,
+				attr: { class: 'touch' }
+			});
 		}
 
 		public onLoad(callback: Function): void {
@@ -79,38 +76,18 @@ module Editor.AssetObject {
 		}
 
 		public select(): void {
+			super.select();
 			this.view_element.classList.add('selected');
-			this._selected = true;
 		}
 
 		public unselect(): void {
+			super.unselect();
 			this.view_element.classList.remove('selected');
-			this._selected = false;
 		}
 
-		public takeEvent(callback: Function) {
-			this.addEvent('mousedown', (event: Event) => {
-				this.take = true;
-
-				let up_event = () => {
-					requestAnimationFrame(() => { this.take = false; });
-					document.removeEventListener('mouseup', up_event);
-				}
-				document.addEventListener('mouseup', up_event);
-
-				callback(event);
-				// event.stopPropagation();
-			});
-		}
-
-		public selectEvent(callback: Function): void {
-			this.view_touch.addEventListener('mouseup', (event: Event) => {
-				if (!this.take) return;
-				this.take = false;
-
-				callback(event);
-				// event.stopPropagation();
-			});
+		public addEvent(event: string, callback: any): void {
+			// if (!this.view_touch) this.create_view_touch();
+			this.view_touch.addEventListener(event, callback);
 		}
 
 		public destroy(): void {

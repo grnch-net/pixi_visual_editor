@@ -97,14 +97,52 @@ module Editor {
 				};
 			}
 
-			return Utils.easyInput(
+			let easyInput = Utils.easyInput(
 				{ class: ['attr'], ...parameters },
 				(value: any) => {
 					this.selected_list
 						.forEach((game_object) => updateObject(game_object, value) )
 				},
 			);
+
+			if (parameters.type == 'texture') {
+				this.add_texture_event(easyInput);
+			}
+
+			return easyInput;
 		}
+
+		protected add_texture_event(easyInput: Utils.EasyInput) {
+			easyInput.view_element.addEventListener('mouseup', (event: MouseEvent) => {
+				this.editor.eventCtrl.drop(
+					event,
+					EventTargetType.HIERARCHY,
+					(type: EventTargetType, args: any) => {
+						// if (type == EventTargetType.ASSETS) {
+							if (args instanceof AssetObject.Image) {
+								easyInput.value = args;
+							}
+						// }
+					}
+				);
+			});
+
+			easyInput.view_element.addEventListener('mouseout', (event: MouseEvent) => {
+				easyInput.unselect();
+			});
+
+			easyInput.view_element.addEventListener('mouseover', (event: MouseEvent) => {
+				let args = this.editor.eventCtrl.dropArguments;
+				if (args instanceof AssetObject.Image) {
+					easyInput.select();
+				}
+			});
+		}
+
+		protected drop_texture_event(): void {
+
+		}
+
 
 		protected change_visible_sub_group(value: boolean, subgroup: HTMLElement): void {
 			if (value) subgroup.classList.remove('disable');

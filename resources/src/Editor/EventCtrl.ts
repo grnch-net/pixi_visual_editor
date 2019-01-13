@@ -10,10 +10,12 @@ module Editor {
 	    type: EventTargetType;
 		take?: Function;
 		drop?: Function;
+		args?: any;
 	}
 
 	export class EventCtrl {
 		public dragType: EventTargetType = null;
+		public dropArguments: any = null;
 		protected dropCallback: Function = null;
 
 		protected view_element: HTMLElement;
@@ -31,6 +33,7 @@ module Editor {
 		public take(down_event: MouseEvent, parameters: ITake): void {
 			this.dragType = parameters.type;
 			this.dropCallback = parameters.drop;
+			this.dropArguments = parameters.args;
 
 			if (parameters.take) parameters.take();
 
@@ -86,7 +89,11 @@ module Editor {
 			document.addEventListener('mouseup', up_callback);
 		}
 
-		public drop(up_event: MouseEvent, endTargetType: EventTargetType = null): void {
+		public drop(
+			up_event: MouseEvent,
+			endTargetType: EventTargetType = null,
+			callback: Function = null
+		): void {
 			// switch(this.dragType) {
 			// 	case EventTargetType.SCENE:
 			//
@@ -102,9 +109,13 @@ module Editor {
 			if (this.dragType === null) {
 				this.dropCallback = null;
 				return;
-			} else
-			if (this.dropCallback) {
-				this.dropCallback(endTargetType);
+			} else {
+				if (this.dropCallback) {
+					this.dropCallback(endTargetType, this.dropArguments);
+				}
+				if (callback) {
+					callback(this.dragType, this.dropArguments);
+				}
 			}
 
 			this.dropCallback = null;

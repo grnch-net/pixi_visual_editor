@@ -1,7 +1,9 @@
 /// <reference path="./Inspector.ts" />
 /// <reference path="./Scene.ts" />
+/// <reference path="../Editor/Assets/Object/Image.ts" />
 
 module Editor {
+	import AssetImage = Editor.AssetObject.Image;
 
 	export class Hierarchy {
 		protected list: GameObject.Abs[] = [];
@@ -20,9 +22,20 @@ module Editor {
 		}
 
 		protected addTouchEvent(): void {
-			this.view_element.querySelector('.area').addEventListener('mouseup',
-				(e: MouseEvent) => this.editor.eventCtrl.drop(e, EventTargetType.SCENE)
-			);
+			this.view_element.querySelector('.area')
+			.addEventListener('mouseup', (event: MouseEvent) => {
+				this.editor.eventCtrl.drop(
+					event,
+					EventTargetType.HIERARCHY,
+					this.dropTouchEvent.bind(this)
+				);
+			});
+		}
+
+		protected dropTouchEvent(type: EventTargetType, args: any): void {
+			if (type == EventTargetType.ASSETS) {
+				if (args instanceof AssetObject.Image) this.createSprite(args);
+			}
 		}
 
 		protected initButtons(): void {
@@ -32,9 +45,14 @@ module Editor {
 			panel.querySelector('#delete-hierarchy-element').addEventListener('click', this.deleteSelected.bind(this));
 		}
 
-		protected createContainer(): void {
+		public createContainer(): void {
 			let container = new GameObject.Container();
 			this.add(container);
+		}
+
+		public createSprite(asset: AssetImage, name: string = null) {
+			let sprite = new GameObject.Sprite(asset, name);
+			this.add(sprite);
 		}
 
 		public add(game_object: GameObject.Abs): void {
@@ -73,5 +91,32 @@ module Editor {
 
 			this.editor.inspector.updateAttributes();
 		}
+
+		protected add_touch_event(game_object: GameObject.Abs) {
+			game_object.takeEvent((event: MouseEvent) => {
+				this.editor.eventCtrl.drag(event, {
+					type: EventTargetType.ASSETS,
+					take: () => this.asset_take_event(game_object),
+					drop: this.asset_drop_event.bind(this),
+					args: game_object
+				});
+			});
+
+			game_object.selectEvent(() => {
+				if (this.editor.eventCtrl.dragType !== null) return;
+				// this.select(game_object);
+			});
+		}
+
+		protected asset_drop_event(
+			type: EventTargetType,
+			game_object: GameObject.Abs
+		): void {}
+
+		protected asset_take_event(asset: GameObject.Abs): void {
+			// if (!asset.selected) this.select(asset);
+		}
+
+
 	}
 }
