@@ -1,6 +1,8 @@
 /// <reference path="./AbsSprite.ts" />
 
 module GameObject {
+	import AssetImage = Editor.AssetObject.Image;
+
 	let TEXT_TYPE_IMAGE = 'assets/textTypeIco.png';
 
 	export let textStyle = {
@@ -50,6 +52,16 @@ module GameObject {
 			});
 
 			this.style.scene_view_element = this.scene_view_element;
+		}
+
+		set texture(value: AssetImage) {
+			// TODO: need to remove texture option for textObject
+			if (!value.texture.trim) {
+				value.texture.trim = value.texture.orig;
+			}
+
+			this.asset_image = value;
+			this.scene_view_element.texture = value.texture;
 		}
 
 		protected create_scene_elememnt() {
