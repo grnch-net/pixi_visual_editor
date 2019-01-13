@@ -1,5 +1,6 @@
 /// <reference path="../lib.d.ts/pixi.d.ts" />
 /// <reference path="../GameObject/Abs.ts" />
+/// <reference path="../GameObject/scene-content.ts" />
 /// <reference path="../Utils/easy_input/ctrl.ts" />
 module Editor {
 
@@ -18,7 +19,7 @@ module Editor {
 		public application: PIXI.Application;
 
 		protected area: PIXI.Container;
-		public content: PIXI.Container;
+		public content: GameObject.SceneContent;
 
 		protected background: PIXI.Graphics;
 		protected bg_color: number;
@@ -159,20 +160,20 @@ module Editor {
 		}
 
 		protected createContent(): void {
-			this.content = new PIXI.Container();
-			this.content.position.set(
+			this.content = new GameObject.SceneContent();
+			let content_view = this.content.scene_view_element;
+			content_view.position.set(
 				-this.width*0.5,
 				-this.height*0.5
 			);
 
 			let mask = this.createBackground('ContentMask');
-			this.content.mask = mask;
+			content_view.mask = mask;
 
-			this.area.addChild(this.content);
+			this.area.addChild(content_view);
+
+			this.content.updateHierarchyElement(this.editor.hierarchy.view_list);
 		}
 
-		public add(game_object: GameObject.Abs): void {
-			this.content.addChild(game_object.scene_view_element);
-		}
 	}
 }

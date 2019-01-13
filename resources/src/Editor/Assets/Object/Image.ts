@@ -45,7 +45,7 @@ module Editor.AssetObject {
 			}
 		}
 
-		protected on_load() {
+		protected on_load(): void {
 			this.isLoad = true;
 			this.base = new PIXI.BaseTexture(this.view_image);
 			this.texture = new PIXI.Texture(this.base);

@@ -9,7 +9,7 @@ module Editor {
 		protected list: GameObject.Abs[] = [];
 
 		protected view_element: HTMLElement;
-		protected view_list: HTMLElement;
+		public view_list: HTMLElement;
 
 		constructor(
 			public editor: Editor.Ctrl
@@ -19,6 +19,13 @@ module Editor {
 
 			this.initButtons();
 			this.addTouchEvent();
+		}
+
+		protected initButtons(): void {
+			let panel = this.view_element.querySelector('.bottom-bar');
+
+			panel.querySelector('#new-container').addEventListener('click', this.createContainer.bind(this));
+			panel.querySelector('#delete-hierarchy-element').addEventListener('click', this.deleteSelected.bind(this));
 		}
 
 		protected addTouchEvent(): void {
@@ -38,13 +45,6 @@ module Editor {
 			}
 		}
 
-		protected initButtons(): void {
-			let panel = this.view_element.querySelector('.bottom-bar');
-
-			panel.querySelector('#new-container').addEventListener('click', this.createContainer.bind(this));
-			panel.querySelector('#delete-hierarchy-element').addEventListener('click', this.deleteSelected.bind(this));
-		}
-
 		public createContainer(): void {
 			let container = new GameObject.Container();
 			this.add(container);
@@ -55,24 +55,54 @@ module Editor {
 			this.add(sprite);
 		}
 
-		public add(game_object: GameObject.Abs): void {
+		public add(gameObject: GameObject.Abs): void {
 			if (!this.editor.scene.content) {
 				console.warn('Hierarchy.Add: First need to initialize the scene.');
 				return;
 			}
 
-			// this.view_list.appendChild(game_object.hierarchy_view_element);
-			this.view_list.insertBefore(game_object.hierarchy_view_element, this.view_list.firstChild);
-			this.editor.scene.add(game_object);
+			this.appendChild(gameObject);
 
-			this.add_game_object_events(game_object);
+			this.add_game_object_events(gameObject);
 
-			if (game_object instanceof GameObject.Container) {
+			if (gameObject instanceof GameObject.Container) {
 				this.editor.inspector.getSelected().forEach((selected_object: GameObject.Abs) => {
-					game_object.add(selected_object);
+					gameObject.add(selected_object);
 				});
 			}
-			this.editor.inspector.select(game_object);
+			this.editor.inspector.select(gameObject);
+		}
+
+		public appendChild(
+			gameObject: GameObject.Abs,
+			parent: GameObject.Container = this.editor.scene.content
+		) {
+			parent.add(gameObject);
+		}
+
+		public insertBeforeChild(
+			insertObject: GameObject.Abs,
+			beforeObject: GameObject.Abs
+		): void {
+			let heirarchy_parent = beforeObject.hierarchy_view_element.parentNode;
+			let next_element = beforeObject.hierarchy_view_element.nextElementSibling;
+			heirarchy_parent.insertBefore(insertObject.hierarchy_view_element, next_element);
+
+			let scene_parent = beforeObject.scene_view_element.parent;
+			let scene_index = scene_parent.getChildIndex(beforeObject.scene_view_element)
+			scene_parent.addChildAt(insertObject, scene_index);
+		}
+
+		public insertAfterChild(
+			insertObject: GameObject.Abs,
+			afterObject: GameObject.Abs
+		): void {
+			let heirarchy_parent = afterObject.hierarchy_view_element.parentNode;
+			heirarchy_parent.insertBefore(insertObject.hierarchy_view_element, afterObject.hierarchy_view_element);
+
+			let scene_parent = afterObject.scene_view_element.parent;
+			let scene_index = scene_parent.getChildIndex(afterObject.scene_view_element)
+			scene_parent.addChildAt(insertObject, scene_index);
 		}
 
 		public deleteSelected(): void {

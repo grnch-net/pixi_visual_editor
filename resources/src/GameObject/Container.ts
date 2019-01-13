@@ -35,6 +35,7 @@ module GameObject {
 
 			this.add_group_visable_event();
 		}
+
 		protected add_group_visable_event(): void {
 			this.typeElement.addEventListener('mouseup', () => {
 				if (this.isShow) {

@@ -1,4 +1,3 @@
-/// <reference path="./Abs.ts" />
 /// <reference path="./Display.ts" />
 /// <reference path="../Editor/Assets/Object/Image.ts" />
 
