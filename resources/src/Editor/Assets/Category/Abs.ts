@@ -103,7 +103,8 @@ module Editor.AssetCategory {
 					type: EventTargetType.ASSETS,
 					take: () => this.asset_take_event(asset),
 					drop: this.asset_drop_event.bind(this),
-					args: asset
+					args: this.selected_list
+					// args: asset
 				});
 			});
 

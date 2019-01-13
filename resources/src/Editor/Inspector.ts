@@ -113,34 +113,38 @@ module Editor {
 		}
 
 		protected add_texture_event(easyInput: Utils.EasyInput) {
-			easyInput.view_element.addEventListener('mouseup', (event: MouseEvent) => {
-				this.editor.eventCtrl.drop(
-					event,
-					EventTargetType.HIERARCHY,
-					(type: EventTargetType, args: any) => {
-						// if (type == EventTargetType.ASSETS) {
-							if (args instanceof AssetObject.Image) {
-								easyInput.value = args;
-							}
-						// }
-					}
-				);
-			});
+			easyInput.view_element.addEventListener('mouseup', (event: MouseEvent) => this.drop_texture_event(event, easyInput));
 
 			easyInput.view_element.addEventListener('mouseout', (event: MouseEvent) => {
 				easyInput.unselect();
 			});
 
 			easyInput.view_element.addEventListener('mouseover', (event: MouseEvent) => {
-				let args = this.editor.eventCtrl.dropArguments;
-				if (args instanceof AssetObject.Image) {
+				let type = this.editor.eventCtrl.dragType;
+				if (type === EventTargetType.ASSETS) {
 					easyInput.select();
 				}
 			});
 		}
 
-		protected drop_texture_event(): void {
-
+		protected drop_texture_event(event: MouseEvent, easyInput: Utils.EasyInput): void {
+			this.editor.eventCtrl.drop(
+				event,
+				EventTargetType.HIERARCHY,
+				(type: EventTargetType, args: any) => {
+					if (type == EventTargetType.ASSETS) {
+						if (Array.isArray(args)
+							&& args.length == 1
+							&& args[0] instanceof AssetObject.Image
+						) {
+							easyInput.value = args[0];
+						} else {
+							console.warn('The incoming object must be an image(one). Skipped.', args);
+						}
+						easyInput.unselect();
+					}
+				}
+			);
 		}
 
 
