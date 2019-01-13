@@ -36,17 +36,21 @@ module Editor.AssetObject {
 
 		protected initTexture(texture: PIXI.Texture): void {
 			if (this.texture) {
-				this.texture = texture;
 				this.isLoad = true;
+				this.texture = texture;
+
 				if (this.onLoadCallback) this.onLoadCallback();
 			} else {
-				this.view_image.onload = () => {
-					this.base = new PIXI.BaseTexture(this.view_image);
-					this.texture = new PIXI.Texture(this.base);
-					this.isLoad = true;
-					if (this.onLoadCallback) this.onLoadCallback();
-				}
+				this.view_image.onload = () => this.on_load();
 			}
+		}
+
+		protected on_load() {
+			this.isLoad = true;
+			this.base = new PIXI.BaseTexture(this.view_image);
+			this.texture = new PIXI.Texture(this.base);
+
+			if (this.onLoadCallback) this.onLoadCallback();
 		}
 
 	}

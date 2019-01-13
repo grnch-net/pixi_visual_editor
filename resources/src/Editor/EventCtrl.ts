@@ -37,24 +37,18 @@ module Editor {
 
 			if (parameters.take) parameters.take();
 
-			// switch(parameters.type) {
-			// 	case EventTargetType.SCENE:
-			//
-			// 		break
-			// 	case EventTargetType.ASSETS:
-			//
-			// 		break
-			// 	case EventTargetType.HIERARCHY:
-			//
-			// 		break;
-			// }
-
 			this.view_element.classList.add('active');
-			this.view_element.style.transform = `translate(${down_event.x-this.element_half_width}px,${down_event.y-this.element_half_height}px)`;
+			this.view_element.style.transform = `translate3d(
+				${down_event.x-this.element_half_width}px,
+				${down_event.y-this.element_half_height}px,
+				0px
+			)`;
+
 			let move_callback = (move_event: MouseEvent) => {
-				this.view_element.style.transform = `translate(
+				this.view_element.style.transform = `translate3d(
 					${move_event.x - this.element_half_width}px,
-					${move_event.y - this.element_half_height}px
+					${move_event.y - this.element_half_height}px,
+					0px
 				)`;
 			};
 			document.addEventListener('mousemove', move_callback);
@@ -94,18 +88,6 @@ module Editor {
 			endTargetType: EventTargetType = null,
 			callback: Function = null
 		): void {
-			// switch(this.dragType) {
-			// 	case EventTargetType.SCENE:
-			//
-			// 		break
-			// 	case EventTargetType.ASSETS:
-			//
-			// 		break
-			// 	case EventTargetType.HIERARCHY:
-			//
-			// 		break;
-			// }
-
 			if (this.dragType === null) {
 				this.dropCallback = null;
 				return;

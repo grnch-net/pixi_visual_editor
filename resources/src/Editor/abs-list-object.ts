@@ -28,7 +28,6 @@ module Editor {
 				document.addEventListener('mouseup', up_event);
 
 				this.take_event_list.forEach((callback: Function) => callback(event));
-				// event.stopPropagation();
 			});
 		}
 
@@ -38,55 +37,29 @@ module Editor {
 				this.take = false;
 
 				this.select_event_list.forEach((callback: Function) => callback(event));
-				// event.stopPropagation();
 			});
 		}
 
 		public takeEvent(callback: Function) {
-			// this.view_area_element
-			// this.view_touch
 			this.take_event_list.push(callback);
 		}
 
 
 		public selectEvent(callback: Function): void {
-			// this.view_area_element
-			// this.view_touch
 			this.select_event_list.push(callback);
 		}
 
-		public addEvent(eventType: string, callback: Function) {
-			// this.view_element.addEventListener(event, callback);
-		}
+		public addEvent(eventType: string, callback: Function) {}
 
-		public removeEvent(eventType: string, callback: Function) {
-			// this.view_element.removeEventListener(event, callback);
-		}
+		public removeEvent(eventType: string, callback: Function) {}
 
 		public select(): void {
-			// this.hierarchy_view_element.classList.add('selected');
-			// this.view_element.classList.add('selected');
 			this._selected = true;
 		}
 
 		public unselect(): void {
-			// this.hierarchy_view_element.classList.remove('selected');
-			// this.view_element.classList.remove('selected');
 			this._selected = false;
 		}
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	}
 }
