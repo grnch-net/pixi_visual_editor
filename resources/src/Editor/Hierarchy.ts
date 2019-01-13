@@ -65,14 +65,7 @@ module Editor {
 			this.view_list.insertBefore(game_object.hierarchy_view_element, this.view_list.firstChild);
 			this.editor.scene.add(game_object);
 
-			game_object.selectEvent(() => {
-				this.editor.inspector.select(game_object);
-			});
-
-			game_object.visibleEvent(() => {
-				if (!game_object.selected) return;
-				this.editor.inspector.update(game_object, 'visible');
-			});
+			this.add_game_object_events(game_object);
 
 			if (game_object instanceof GameObject.Container) {
 				this.editor.inspector.getSelected().forEach((selected_object: GameObject.Abs) => {
@@ -92,29 +85,34 @@ module Editor {
 			this.editor.inspector.updateAttributes();
 		}
 
-		protected add_touch_event(game_object: GameObject.Abs) {
+		protected add_game_object_events(game_object: GameObject.Abs) {
 			game_object.takeEvent((event: MouseEvent) => {
 				this.editor.eventCtrl.drag(event, {
-					type: EventTargetType.ASSETS,
-					take: () => this.asset_take_event(game_object),
-					drop: this.asset_drop_event.bind(this),
+					type: EventTargetType.HIERARCHY,
+					take: () => this.game_object_take_event(game_object),
+					drop: this.game_object_drop_event.bind(this),
 					args: game_object
 				});
 			});
 
 			game_object.selectEvent(() => {
 				if (this.editor.eventCtrl.dragType !== null) return;
-				// this.select(game_object);
+				this.editor.inspector.select(game_object);
+			});
+
+			game_object.visibleEvent(() => {
+				if (!game_object.selected) return;
+				this.editor.inspector.update(game_object, 'visible');
 			});
 		}
 
-		protected asset_drop_event(
+		protected game_object_drop_event(
 			type: EventTargetType,
 			game_object: GameObject.Abs
 		): void {}
 
-		protected asset_take_event(asset: GameObject.Abs): void {
-			// if (!asset.selected) this.select(asset);
+		protected game_object_take_event(game_object: GameObject.Abs): void {
+			if (!game_object.selected) this.editor.inspector.select(game_object);
 		}
 
 
