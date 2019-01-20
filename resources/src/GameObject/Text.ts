@@ -54,14 +54,18 @@ module GameObject {
 			this.style.scene_view_element = this.scene_view_element;
 		}
 
-		set texture(value: AssetImage) {
-			// TODO: need to remove texture option for textObject
-			if (!value.texture.trim) {
-				value.texture.trim = value.texture.orig;
-			}
+		get texture(): any {
+			return null;
+		}
 
-			this.asset_image = value;
-			this.scene_view_element.texture = value.texture;
+		set texture(value: any) {
+			// TODO: need to remove texture option for textObject
+			// if (!value.texture.trim) {
+			// 	value.texture.trim = value.texture.orig;
+			// }
+			//
+			// this.asset_image = value;
+			// this.scene_view_element.texture = value.texture;
 		}
 
 		protected create_scene_elememnt() {

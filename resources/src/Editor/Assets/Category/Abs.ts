@@ -120,7 +120,7 @@ module Editor.AssetCategory {
 
 		protected asset_drop_event(
 			type: EventTargetType,
-			asset: AssetObject.Abs
+			args: AssetObject.Abs[]
 		): void {}
 
 		public remove(asset: AssetObject.Image): void {

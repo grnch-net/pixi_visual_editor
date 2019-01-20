@@ -170,7 +170,7 @@ module Editor.AssetCategory {
 			});
 		}
 
-		protected asset_drop_event(type: EventTargetType, asset: AssetObject.Image): void {}
+		protected asset_drop_event(type: EventTargetType, args: AssetObject.Image[]): void {}
 
 	}
 }

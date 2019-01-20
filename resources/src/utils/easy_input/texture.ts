@@ -21,20 +21,22 @@ module Utils.EasyInputModule {
 			return this.asset;
 		}
 
-		public set value(value: any) {
-			let _value: string;
+		public set value(
+			value: any
+		) {
+			let asset_name: string;
 
 			if (!value) {
 				this.asset = null;
-				_value = '';
+				asset_name = '';
 			} else {
 				this.asset = value;
-				_value = value.name;
+				asset_name = value.name;
 				this.update();
 			}
 
 			this.view_inputs.forEach((input: HTMLInputElement) => {
-				input.value = _value;
+				input.value = asset_name;
 			});
 		}
 

@@ -133,6 +133,8 @@ module Editor {
 				EventTargetType.HIERARCHY,
 				(type: EventTargetType, args: any) => {
 					if (type == EventTargetType.ASSETS) {
+						if (!this.check_selected_object()) return;
+
 						if (Array.isArray(args)
 							&& args.length == 1
 							&& args[0] instanceof AssetObject.Image
@@ -145,6 +147,14 @@ module Editor {
 					}
 				}
 			);
+		}
+
+		protected check_selected_object(): boolean {
+			return this.selected_list.some((game_object: any) => {
+				let is_abs_sprite_object: boolean = game_object instanceof GameObject.AbsSprite;
+				let is_text_object: boolean = game_object instanceof GameObject.Text;
+				return is_abs_sprite_object && !is_text_object;
+			});
 		}
 
 

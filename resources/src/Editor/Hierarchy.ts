@@ -116,12 +116,20 @@ module Editor {
 		}
 
 		protected add_game_object_events(game_object: GameObject.Abs) {
+			let args: any;
+
+			if (game_object.selected) {
+				args = this.editor.inspector.getSelected();
+			} else {
+				args = [game_object]
+			}
+
 			game_object.takeEvent((event: MouseEvent) => {
 				this.editor.eventCtrl.drag(event, {
 					type: EventTargetType.HIERARCHY,
-					take: () => this.game_object_take_event(game_object),
+					take: () => this.game_object_take_event(args),
 					drop: this.game_object_drop_event.bind(this),
-					args: game_object
+					args: args
 				});
 			});
 
@@ -138,12 +146,12 @@ module Editor {
 
 		protected game_object_drop_event(
 			type: EventTargetType,
-			game_object: GameObject.Abs
+			args: GameObject.Abs[]
 		): void {}
 
-		protected game_object_take_event(game_object: GameObject.Abs): void {
-			if (!game_object.selected) this.editor.inspector.select(game_object);
-		}
+		protected game_object_take_event(
+			args: GameObject.Abs[]
+		): void {}
 
 
 	}
