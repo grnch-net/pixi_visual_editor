@@ -8,22 +8,32 @@ module GameObject {
 
 	export class Container extends Display {
 		public scene_view_element: PIXI.Container;
-		public children: Abs[] = [];
+		public children: Abs[];
 
-		protected isShow: boolean = true;
+		protected isShow: boolean;
 		protected hierarchy_view_group_element: HTMLElement;
 
-		constructor(name?: string) {
+		constructor(
+			name?: string
+		) {
 			super({
 				name: name || 'Container'
 			});
 		}
 
-		protected create_scene_elememnt() {
+		protected init_class_options(): void {
+			super.init_class_options();
+			this.children = [];
+			this.isShow = true;
+		}
+
+		protected create_scene_elememnt(): void {
 			this.scene_view_element = new PIXI.Container();
 		}
 
-		protected create_hierarchy_element(attr?: any) {
+		protected create_hierarchy_element(
+			attr?: any
+		): void {
 			super.create_hierarchy_element(attr);
 			(this.typeElement as HTMLImageElement).src = FOLDER_OPEN_IMAGE;
 			this.typeElement.classList.add('container');
@@ -52,7 +62,9 @@ module GameObject {
 			});
 		}
 
-		public add(game_object: Abs) {
+		public add(
+			game_object: Abs
+		): void {
 			this.scene_view_element.addChild(game_object.scene_view_element);
 			this.hierarchy_view_group_element.insertBefore(
 				game_object.hierarchy_view_element,
@@ -63,7 +75,9 @@ module GameObject {
 			this.children.push(game_object);
 		}
 
-		public remove(game_object: Abs): void {
+		public remove(
+			game_object: Abs
+		): void {
 			let index = this.children.indexOf(game_object);
 			if (index > -1) this.children.splice(index, 1);
 			game_object.parent = null;

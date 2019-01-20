@@ -4,10 +4,12 @@ module Editor {
 		public view_element: HTMLElement;
 		protected callback: Function;
 
-		constructor(element: HTMLElement, callback: Function) {
+		constructor(
+			element: HTMLElement,
+			callback: Function
+		) {
 			this.view_element = element;
 			this.callback = callback;
-
 
 			let close_button = this.view_element.querySelector('.close-button');
 			close_button.addEventListener('click', () => {
@@ -27,8 +29,7 @@ module Editor {
 			this.view_element.classList.remove('show');
 		}
 
-		public onDone(callback: Function): void {
-		}
+		public onDone(callback: Function): void {}
 
 	}
 }

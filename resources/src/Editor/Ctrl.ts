@@ -13,7 +13,7 @@
 
 module Editor {
 	export class Ctrl {
-		public customGameObject: any = {};
+		public customGameObject: any;
 
 		public eventCtrl: EventCtrl;
 		public scene: Scene;
@@ -22,13 +22,17 @@ module Editor {
 		public assets: Assets.Ctrl;
 
 		constructor() {
+			this.init_class_options();
+			this.init_user_interface();
+		}
+
+		protected init_class_options(): void {
+			this.customGameObject = {};
 			this.eventCtrl = new EventCtrl();
 			this.scene = new Scene(this);
 			this.inspector = new Inspector(this);
 			this.hierarchy = new Hierarchy(this);
 			this.assets = new Assets.Ctrl(this);
-
-			this.init_user_interface();
 		}
 
 		protected init_user_interface(): void {
@@ -43,8 +47,10 @@ module Editor {
 		}
 
 		protected init_newScene_window(): void {
-			let callback = () => {
-				let view_element = newSceneWindow.view_element;
+			let newSceneWindow: EditorWindow;
+
+			let callback: Function = () => {
+				let view_element: HTMLElement = newSceneWindow.view_element;
 
 				let width: number = Number(this.getInputValue(view_element, '#new-scene-width'));
 				let height: number = Number(this.getInputValue(view_element, '#new-scene-height'));
@@ -55,12 +61,15 @@ module Editor {
 				this.scene.newScene({ width, height, color });
 			};
 
-			let newSceneWindow = new EditorWindow(document.querySelector('#window-new-scene'), callback);
+			newSceneWindow = new EditorWindow(document.querySelector('#window-new-scene'), callback);
 			document.querySelector('#option_new_scene').addEventListener('click', () => newSceneWindow.show());
 		}
 
-		protected getInputValue(searchIn: HTMLElement, path: string): any {
-			let input = searchIn.querySelector(path) as HTMLInputElement;
+		protected getInputValue(
+			searchIn: HTMLElement,
+			path: string
+		): any {
+			let input: HTMLInputElement = searchIn.querySelector(path);
 			return input.value;
 		}
 
@@ -81,16 +90,16 @@ module Editor {
 			});
 
 
-			let labels = block_element.querySelectorAll('.labels-area .label');
-			let label_event = (label: HTMLElement) => {
-				let current_show = block_element.querySelector('.labels-area .button.show');
+			let labels: NodeList = block_element.querySelectorAll('.labels-area .label');
+			let label_event: Function = (label: HTMLElement) => {
+				let current_show: HTMLElement = block_element.querySelector('.labels-area .button.show');
 				if (current_show) current_show.classList.remove('show');
 				label.classList.add('show');
 
 				block_element.classList.remove('hide');
 				block_visible = true;
 
-				let window = label.getAttribute('data-window');
+				let window: string = label.getAttribute('data-window');
 				block_element.querySelector('.main-area .container.show').classList.remove('show');
 				block_element.querySelector('#'+window).classList.add('show');
 			}
@@ -113,7 +122,10 @@ module Editor {
 			})
 		}
 
-		public createCustomObject(sceneObject: PIXI.DisplayObject, parameters: object): any {
+		public createCustomObject(
+			sceneObject: PIXI.DisplayObject,
+			parameters: object
+		): any {
 			let parent: any = GameObject.Abs;
 			if (sceneObject instanceof PIXI.Text) {
 				parent = GameObject.Text;
@@ -131,7 +143,7 @@ module Editor {
 			}
 
 
-			let custom_object = class extends parent {
+			let custom_object_class: any = class extends parent {
 				public customName: string = sceneObject.name;
 
 				protected create_scene_elememnt(attr?: any) {
@@ -141,8 +153,8 @@ module Editor {
 
 			this.inspector.addCustomObject(sceneObject.name, parameters);
 
-			this.customGameObject[sceneObject.name] = custom_object;
-			return custom_object;
+			this.customGameObject[sceneObject.name] = custom_object_class;
+			return custom_object_class;
 		}
 
 	}

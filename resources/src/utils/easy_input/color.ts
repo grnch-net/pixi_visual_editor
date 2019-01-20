@@ -11,7 +11,9 @@ module Utils.EasyInputModule {
 
 	export class ColorEasyInput extends TextEasyInput {
 
-		protected init_view_element(parameters: IInitParameters): void {
+		protected init_view_element(
+			parameters: IInitParameters
+		): void {
 			super.init_view_element(parameters, {
 				inputType: '',
 				class: 'jscolor'
@@ -27,7 +29,10 @@ module Utils.EasyInputModule {
 			(this.view_inputs[0] as any).jscolor.fromString(colorHex);
 		}
 
-		protected add_change_event(event: string, index: number = 0): void {
+		protected add_change_event(
+			event: string,
+			index: number = 0
+		): void {
 			this.view_inputs[index].addEventListener('input', this.update.bind(this));
 			this.view_inputs[index].addEventListener('change', this.update.bind(this));
 		}

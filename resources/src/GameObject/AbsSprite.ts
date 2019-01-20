@@ -14,10 +14,17 @@ module GameObject {
 
 	export abstract class AbsSprite extends Display {
 		public scene_view_element: PIXI.Sprite;
-		protected asset_image: AssetImage = null;
+		protected asset_image: AssetImage;
 
-		constructor(parameters: IAbsInitParameters) {
+		constructor(
+			parameters: IAbsInitParameters
+		) {
 			super(parameters);
+		}
+
+		protected init_class_options(): void {
+			super.init_class_options();
+			this.asset_image = null;
 		}
 
 		get texture() {

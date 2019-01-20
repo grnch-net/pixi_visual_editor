@@ -16,11 +16,13 @@ module Editor.AssetObject {
 		protected view_image: HTMLElement;
 		protected view_touch: HTMLElement;
 
-		protected isLoad: boolean = false;
+		protected isLoad: boolean;
 		protected onLoadCallback: Function;
 
-		protected _destroyed: boolean = false;
-		public get destroyed(): boolean { return this._destroyed };
+		protected _destroyed: boolean;
+		public get destroyed(): boolean {
+			return this._destroyed
+		};
 
 		constructor({
 			name = 'Asset object',
@@ -29,11 +31,18 @@ module Editor.AssetObject {
 			super();
 
 			this.name = name;
-
 			this.create_view_elements(...viewElementAttr);
 		}
 
-		protected create_view_elements(attr?: any): void {
+		protected init_class_options(): void {
+			super.init_class_options();
+			this.isLoad = false;
+			this._destroyed = false;
+		}
+
+		protected create_view_elements(
+			attr?: any
+		): void {
 			this.view_element = Utils.easyHTML.createElement({
 				type: 'div',
 				attr: { class: 'item', title: this.name }
@@ -51,26 +60,31 @@ module Editor.AssetObject {
 			super.create_view_elements();
 		}
 
-		protected create_view_image_element(attr?: any): void {
+		protected create_view_image_element(
+			attr?: any
+		): void {
 			this.view_image = Utils.easyHTML.createElement({
 				parent: this.view_element,
 				attr: { class: 'asset-button' },
 			});
 
-			let image_text = Utils.easyHTML.createElement({
+			let image_text: HTMLElement = Utils.easyHTML.createElement({
 				parent: this.view_image,
 				innerHTML: '?'
 			});
 		}
 
-		protected create_view_touch() {
+		protected create_view_touch(): void {
 			this.view_touch = Utils.easyHTML.createElement({
-				type: 'div', parent: this.view_element,
+				type: 'div',
+				parent: this.view_element,
 				attr: { class: 'touch' }
 			});
 		}
 
-		public onLoad(callback: Function): void {
+		public onLoad(
+			callback: Function
+		): void {
 			this.onLoadCallback = callback;
 			if (this.isLoad) this.onLoadCallback();
 		}
@@ -85,7 +99,10 @@ module Editor.AssetObject {
 			this.view_element.classList.remove('selected');
 		}
 
-		public addEvent(event: string, callback: any): void {
+		public addEvent(
+			event: string,
+			callback: any
+		): void {
 			// if (!this.view_touch) this.create_view_touch();
 			this.view_touch.addEventListener(event, callback);
 		}

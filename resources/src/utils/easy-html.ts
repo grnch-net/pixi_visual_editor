@@ -44,7 +44,9 @@ module Utils {
 			'foreignobject'
 		],
 
-	    createElement: function (parameters: Utils.IHTMLElementConfig = {}): HTMLElement {
+	    createElement: function (
+			parameters: Utils.IHTMLElementConfig = {}
+		): HTMLElement {
 	        let htmlElement: HTMLElement;
 
 	        if (!parameters.type) {
@@ -90,13 +92,19 @@ module Utils {
 	        return htmlElement;
 	    },
 
-		setAttribute: function (element: HTMLElement, attr: any): void {
+		setAttribute: function (
+			element: HTMLElement,
+			attr: any
+		): void {
 			for(let key in attr) {
 				element.setAttributeNS( null, key, <string>attr[key] );
 			}
 		},
 
-		insertAfter: function (elem: HTMLElement, refElem: HTMLElement): HTMLElement {
+		insertAfter: function (
+			elem: HTMLElement,
+			refElem: HTMLElement
+		): HTMLElement {
 		    return refElem.parentNode.insertBefore(elem, refElem.nextSibling);
 		}
 	};

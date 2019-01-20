@@ -14,29 +14,42 @@ module Editor {
 		protected window_view: HTMLElement;
 		protected content_view: HTMLElement;
 
-		protected selected_list: GameObject.Abs[] = [];
+		protected selected_list: GameObject.Abs[];
 
 		protected display_object_view: HTMLElement;
 		protected sprite_view: HTMLElement;
 		protected text_view: HTMLElement;
-		protected custom_view: any = {};
-		protected sub_view: any = {};
+		protected custom_view: any;
+		protected sub_view: any;
 
-		protected display_object_inputs: any = {};
-		protected sprite_inputs: any = {};
-		protected text_inputs: any = {};
-		protected custom_inputs: any = {};
+		protected display_object_inputs: any;
+		protected sprite_inputs: any;
+		protected text_inputs: any;
+		protected custom_inputs: any;
 
 		constructor(
 			public editor: Editor.Ctrl
 		) {
-			this.window_view = document.getElementById('inspector');
-			this.content_view = this.findViewElement('.content');
-
+			this.init_class_options();
 			this.initInputs();
 		}
 
-		protected findViewElement(path: string): HTMLElement {
+		protected init_class_options(): void {
+			this.selected_list = [];
+			this.custom_view = {};
+			this.sub_view = {};
+			this.display_object_inputs = {};
+			this.sprite_inputs = {};
+			this.text_inputs = {};
+			this.custom_inputs = {}
+
+			this.window_view = document.getElementById('inspector');
+			this.content_view = this.findViewElement('.content');
+		}
+
+		protected findViewElement(
+			path: string
+		): HTMLElement {
 			return this.window_view.querySelector(path)
 		}
 
@@ -52,14 +65,20 @@ module Editor {
 			this.updateAttributes();
 		}
 
-		protected create_group_element(name: string): HTMLElement {
+		protected create_group_element(
+			name: string
+		): HTMLElement {
 			return Utils.easyHTML.createElement({
 				attr: { class: name }
 			});
 		}
 
-		protected init_input_group(group: HTMLElement, inputs_parameter: any[], list: any): void {
-			this.content_view.insertBefore(group, this.content_view.lastChild)
+		protected init_input_group(
+			group: HTMLElement,
+			inputs_parameter: any[],
+			list: any
+		): void {
+			this.content_view.insertBefore(group, this.content_view.lastChild);
 
 			inputs_parameter.forEach((parameters: any) => {
 				if (parameters.parent)
@@ -80,7 +99,9 @@ module Editor {
 			});
 		}
 
-		protected createEasyInput(parameters: any): Utils.EasyInput {
+		protected createEasyInput(
+			parameters: any
+		): Utils.EasyInput {
 			let updateObject: Function;
 			let key = parameters.key;
 			if (Array.isArray(key)) key = key.join('.');
@@ -112,7 +133,9 @@ module Editor {
 			return easyInput;
 		}
 
-		protected add_texture_event(easyInput: Utils.EasyInput) {
+		protected add_texture_event(
+			easyInput: Utils.EasyInput
+		): void {
 			easyInput.view_element.addEventListener('mouseup', (event: MouseEvent) => this.drop_texture_event(event, easyInput));
 
 			easyInput.view_element.addEventListener('mouseout', (event: MouseEvent) => {
@@ -127,7 +150,10 @@ module Editor {
 			});
 		}
 
-		protected drop_texture_event(event: MouseEvent, easyInput: Utils.EasyInput): void {
+		protected drop_texture_event(
+			event: MouseEvent,
+			easyInput: Utils.EasyInput
+		): void {
 			this.editor.eventCtrl.drop(
 				event,
 				EventTargetType.HIERARCHY,
@@ -158,7 +184,10 @@ module Editor {
 		}
 
 
-		protected change_visible_sub_group(value: boolean, subgroup: HTMLElement): void {
+		protected change_visible_sub_group(
+			value: boolean,
+			subgroup: HTMLElement
+		): void {
 			if (value) subgroup.classList.remove('disable');
 			else subgroup.classList.add('disable');
 		}
@@ -196,7 +225,9 @@ module Editor {
 			}
 		}
 
-		protected update_content(game_object: GameObject.Abs): void {
+		protected update_content(
+			game_object: GameObject.Abs
+		): void {
 			if (game_object instanceof GameObject.Text) {
 				this.sprite_view.classList.remove('disable');
 				this.text_view.classList.remove('disable');
@@ -234,7 +265,10 @@ module Editor {
 
 		}
 
-		protected write_inputs_list(list: any, game_object: any): void {
+		protected write_inputs_list(
+			list: any,
+			game_object: any
+		): void {
 			for (let key in list) {
 				let input = list[key];
 				let _key = key.split('.');
@@ -251,7 +285,10 @@ module Editor {
 			}
 		}
 
-		public update(game_object: GameObject.Abs, attr: string|string[]): void {
+		public update(
+			game_object: GameObject.Abs,
+			attr: string|string[]
+		): void {
 			let path;
 			if (Array.isArray(attr)) {
 				path = attr.reduce((_path: any, current: string) => {
@@ -276,7 +313,9 @@ module Editor {
 			path.value = game_object.getOption(attr);
 		}
 
-		public addNewFontFamily(fonts: string[]): void {
+		public addNewFontFamily(
+			fonts: string[]
+		): void {
 			for (let font of fonts) {
 				GameObject.textStyle.fontFamily.push(font);
 			}
@@ -288,7 +327,9 @@ module Editor {
 			}
 		}
 
-		public select(game_object: GameObject.Abs): void {
+		public select(
+			game_object: GameObject.Abs
+		): void {
 			if (game_object.selected) {
 				if (this.selected_list.length == 1) { return; }
 				else { this.clearSelected(game_object); }
@@ -300,7 +341,9 @@ module Editor {
 
 		}
 
-		public clearSelected(exception: GameObject.Abs = null): void {
+		public clearSelected(
+			exception: GameObject.Abs = null
+		): void {
 			if (exception) {
 				while(this.selected_list.length > 0) {
 					let currentObject = this.selected_list.pop();
@@ -315,7 +358,9 @@ module Editor {
 			}
 		}
 
-		public add(game_object: GameObject.Abs): void {
+		public add(
+			game_object: GameObject.Abs
+		): void {
 			this.selected_list.push(game_object);
 			game_object.select();
 		}
@@ -324,14 +369,20 @@ module Editor {
 			return this.selected_list;
 		}
 
-		public unselect(game_object: GameObject.Abs, update: boolean = true): void {
+		public unselect(
+			game_object: GameObject.Abs,
+			update: boolean = true
+		): void {
 			let index = this.selected_list.indexOf(game_object);
 			if (index > -1) this.selected_list.splice(index, 1);
 			if (!game_object.destroyed) game_object.unselect();
 			if (update) this.updateAttributes();
 		}
 
-		public addCustomObject(name: string, parameters: any): void {
+		public addCustomObject(
+			name: string,
+			parameters: any
+		): void {
 			this.custom_view[name] = this.create_group_element('custom-group');
 			this.custom_inputs[name] = {};
 

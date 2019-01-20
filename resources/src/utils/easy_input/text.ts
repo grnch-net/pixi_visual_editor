@@ -95,12 +95,19 @@ module Utils.EasyInputModule {
 			}
 		}
 
-		protected init_children(view_input: any, parameters: ITextInitParameters): void {
+		protected init_children(
+			view_input: any,
+			parameters: ITextInitParameters
+		): void {
 			this.view_inputs.push(view_input as HTMLInputElement);
 			this.view_element.appendChild(view_input);
 		}
 
-		protected create_label(parameters: ITextInitParameters, endText: string = ':', labelType = 'span'): HTMLElement {
+		protected create_label(
+			parameters: ITextInitParameters,
+			endText: string = ':',
+			labelType = 'span'
+		): HTMLElement {
 			let label_text: string;
 			if (parameters.label && typeof parameters.label == 'string') {
 				label_text = parameters.label;
@@ -119,7 +126,10 @@ module Utils.EasyInputModule {
 			return label_element;
 		}
 
-		protected create_view_element(parameters: ITextInitParameters, elemetnClass: string = 'input-area'): HTMLElement {
+		protected create_view_element(
+			parameters: ITextInitParameters,
+			elemetnClass: string = 'input-area'
+		): HTMLElement {
 			let view_element = Utils.easyHTML.createElement({
 				attr: { class: elemetnClass}
 			});
@@ -162,7 +172,9 @@ module Utils.EasyInputModule {
 			});
 		}
 
-		protected add_change_event(event: string = 'input'): void {
+		protected add_change_event(
+			event: string = 'input'
+		): void {
 			this.view_inputs[0].addEventListener(event, this.update.bind(this));
 		}
 

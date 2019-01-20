@@ -15,13 +15,18 @@ module Utils.EasyInputModule {
 
 	export class PointEasyInput extends NumberEasyInput {
 
-		protected init_view_element(parameters: IInitParameters): void {
+		protected init_view_element(
+			parameters: IInitParameters
+		): void {
 			super.init_view_element(parameters, {
 				inputType: 'number'
 			});
 		}
 
-		protected init_children(view_input: any, parameters: IInitParameters): void {
+		protected init_children(
+			view_input: any,
+			parameters: IInitParameters
+		): void {
 			let x_label = Utils.easyHTML.createElement({
 				type: 'span',
 				innerHTML: 'x:', attr: { class: 'axis x' }
@@ -42,11 +47,15 @@ module Utils.EasyInputModule {
 			});
 		}
 
-		protected create_label(parameters: IInitParameters): HTMLElement {
+		protected create_label(
+			parameters: IInitParameters
+		): HTMLElement {
 			return super.create_label(parameters, '', 'div');
 		}
 
-		protected create_view_element(parameters: IInitParameters): HTMLElement {
+		protected create_view_element(
+			parameters: IInitParameters
+		): HTMLElement {
 			let view_element = super.create_view_element(parameters, 'point-area');
 			return view_element;
 		}

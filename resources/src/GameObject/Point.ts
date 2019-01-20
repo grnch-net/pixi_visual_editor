@@ -13,7 +13,10 @@ module GameObject {
 		get y(): number { return this._y; }
 		set y(value: number) { this._y = value; this.update(this._x, this._y); }
 
-		public set(x: number, y: number): void {
+		public set(
+			x: number,
+			y: number
+		): void {
 			this._x = x;
 			this._y = y;
 			this.update(this._x, this._y);

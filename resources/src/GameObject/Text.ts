@@ -46,7 +46,9 @@ module GameObject {
 	export class Text extends AbsSprite {
 		public scene_view_element: PIXI.Text;
 
-		constructor(name?: string) {
+		constructor(
+			name?: string
+		) {
 			super({
 				name: name || 'Text'
 			});
@@ -68,18 +70,20 @@ module GameObject {
 			// this.scene_view_element.texture = value.texture;
 		}
 
-		protected create_scene_elememnt() {
+		protected create_scene_elememnt(): void {
 			this.scene_view_element = new PIXI.Text();
 		}
 
-		protected create_hierarchy_element(attr?: any) {
+		protected create_hierarchy_element(
+			attr?: any
+		): void {
 			super.create_hierarchy_element(attr);
 			(this.typeElement as HTMLImageElement).src = TEXT_TYPE_IMAGE;
 		}
 
 		public style: any = {
 			get dropShadowAngle(): number {
-				let rad = this.scene_view_element.style.dropShadowAngle * 180 / Math.PI;
+				let rad: number = this.scene_view_element.style.dropShadowAngle * 180 / Math.PI;
 				return Math.round(rad * 1000) / 1000;
 			},
 			set dropShadowAngle(value: number) {

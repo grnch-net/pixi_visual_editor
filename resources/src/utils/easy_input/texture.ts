@@ -5,7 +5,9 @@ module Utils.EasyInputModule {
 		protected asset: any;
 		protected view_overlay: HTMLElement;
 
-		protected init_view_element(parameters: ITextInitParameters): void {
+		protected init_view_element(
+			parameters: ITextInitParameters
+		): void {
 			super.init_view_element(parameters, {
 				inputType: 'text'
 			});
@@ -40,7 +42,9 @@ module Utils.EasyInputModule {
 			});
 		}
 
-		protected add_change_event(event: string = 'input'): void {
+		protected add_change_event(
+			event: string = 'input'
+		): void {
 			// this.view_inputs[0].addEventListener(event, this.update.bind(this));
 		}
 
@@ -52,11 +56,11 @@ module Utils.EasyInputModule {
 			this.value = null;
 		}
 
-		public select() {
+		public select(): void {
 			this.view_overlay.classList.add('select');
 		}
 
-		public unselect() {
+		public unselect(): void {
 			this.view_overlay.classList.remove('select');
 		}
 	}

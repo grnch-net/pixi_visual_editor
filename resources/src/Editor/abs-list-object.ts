@@ -1,15 +1,24 @@
 module Editor {
 	export abstract class AbsListObject {
-		protected take: boolean = false;
+		protected take: boolean;
 
-		protected take_event_list: Function[] = [];
-		protected select_event_list: Function[] = [];
+		protected take_event_list: Function[];
+		protected select_event_list: Function[];
 
-		protected _selected: boolean = false;
-		public get selected(): boolean { return this._selected };
+		protected _selected: boolean;
+		public get selected(): boolean {
+			return this._selected
+		};
 
 		constructor() {
+			this.init_class_options();
+		}
 
+		protected init_class_options(): void {
+			this.take = false;
+			this.take_event_list = [];
+			this.select_event_list = [];
+			this._selected = false;
 		}
 
 		protected create_view_elements(): void {
@@ -17,7 +26,7 @@ module Editor {
 			this.init_select_event();
 		}
 
-		protected init_take_event() {
+		protected init_take_event(): void {
 			this.addEvent('mousedown', (event: Event) => {
 				this.take = true;
 
@@ -31,7 +40,7 @@ module Editor {
 			});
 		}
 
-		protected init_select_event() {
+		protected init_select_event(): void {
 			this.addEvent('mouseup', (event: Event) => {
 				if (!this.take) return;
 				this.take = false;
@@ -40,18 +49,28 @@ module Editor {
 			});
 		}
 
-		public takeEvent(callback: Function) {
+		public takeEvent(
+			callback: Function
+		): void {
 			this.take_event_list.push(callback);
 		}
 
 
-		public selectEvent(callback: Function): void {
+		public selectEvent(
+			callback: Function
+		): void {
 			this.select_event_list.push(callback);
 		}
 
-		public addEvent(eventType: string, callback: Function) {}
+		public addEvent(
+			eventType: string,
+			callback: Function
+		): void {}
 
-		public removeEvent(eventType: string, callback: Function) {}
+		public removeEvent(
+			eventType: string,
+			callback: Function
+		): void {}
 
 		public select(): void {
 			this._selected = true;

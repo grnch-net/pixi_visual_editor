@@ -4,28 +4,40 @@
 module Editor.AssetCategory {
 
 	export class Font extends Abs {
-		public uploadType: string = '.ttf, .woff, .woff2';
+		protected item_list: {
+			[key: string]: AssetObject.Font
+		};
 
-		constructor(ctrl: Assets.Ctrl) {
+		constructor(
+			ctrl: Assets.Ctrl
+		) {
 			super(ctrl, 'Font');
 		}
 
-		public upload(event: Event): null {
-			let files = super.upload(event);
+		protected init_class_options(): void {
+			super.init_class_options();
+			this.uploadType = '.ttf, .woff, .woff2';
+		}
+
+		public upload(
+			event: Event
+		): null {
+			let inspector = this.ctrl.editor.inspector;
+			let files: any = super.upload(event);
 
 			if (!files) return;
 			let new_assets: any[] = [];
 
-			let load_count = 0;
-			let onLoad = () => {
+			let load_count: number = 0;
+			let onLoad: Function = () => {
 				load_count++;
 				if (load_count == new_assets.length) {
-					this.ctrl.editor.inspector.addNewFontFamily(new_assets);
+					inspector.addNewFontFamily(new_assets);
 				}
 			}
 
 			for(let name in files) {
-				let link = URL.createObjectURL(files[name]);
+				let link: string = URL.createObjectURL(files[name]);
 
 				let asset = new AssetObject.Font({name, link});
 				asset.onLoad(onLoad);

@@ -6,7 +6,7 @@ module Editor {
 	import AssetImage = Editor.AssetObject.Image;
 
 	export class Hierarchy {
-		protected list: GameObject.Abs[] = [];
+		protected list: GameObject.Abs[];
 
 		protected view_element: HTMLElement;
 		public view_list: HTMLElement;
@@ -14,15 +14,20 @@ module Editor {
 		constructor(
 			public editor: Editor.Ctrl
 		) {
-			this.view_element = document.querySelector('#hierarchy');;
-			this.view_list = this.view_element.querySelector('.content');
-
+			this.init_class_options();
 			this.initButtons();
 			this.addTouchEvent();
 		}
 
+		protected init_class_options(): void {
+			this.list = [];
+			this.view_element = document.querySelector('#hierarchy');;
+			this.view_list = this.view_element.querySelector('.content');
+		}
+
+
 		protected initButtons(): void {
-			let panel = this.view_element.querySelector('.bottom-bar');
+			let panel: HTMLElement = this.view_element.querySelector('.bottom-bar');
 
 			panel.querySelector('#new-container').addEventListener('click', this.createContainer.bind(this));
 			panel.querySelector('#delete-hierarchy-element').addEventListener('click', this.deleteSelected.bind(this));
@@ -39,7 +44,10 @@ module Editor {
 			});
 		}
 
-		protected dropTouchEvent(type: EventTargetType, args: any): void {
+		protected dropTouchEvent(
+			type: EventTargetType,
+			args: any
+		): void {
 			if (type == EventTargetType.ASSETS) {
 				if (args instanceof AssetObject.Image) this.createSprite(args);
 			}
@@ -50,12 +58,17 @@ module Editor {
 			this.add(container);
 		}
 
-		public createSprite(asset: AssetImage, name: string = null) {
+		public createSprite(
+			asset: AssetImage,
+			name: string = null
+		): void {
 			let sprite = new GameObject.Sprite(asset, name);
 			this.add(sprite);
 		}
 
-		public add(gameObject: GameObject.Abs): void {
+		public add(
+			gameObject: GameObject.Abs
+		): void {
 			if (!this.editor.scene.content) {
 				console.warn('Hierarchy.Add: First need to initialize the scene.');
 				return;
@@ -76,7 +89,7 @@ module Editor {
 		public appendChild(
 			gameObject: GameObject.Abs,
 			parent: GameObject.Container = this.editor.scene.content
-		) {
+		): void {
 			parent.add(gameObject);
 		}
 
@@ -84,42 +97,47 @@ module Editor {
 			insertObject: GameObject.Abs,
 			beforeObject: GameObject.Abs
 		): void {
-			let heirarchy_parent = beforeObject.hierarchy_view_element.parentNode;
-			let next_element = beforeObject.hierarchy_view_element.nextElementSibling;
+			let heirarchy_parent: HTMLElement = beforeObject.hierarchy_view_element.parentElement;
+			let next_element: Element = beforeObject.hierarchy_view_element.nextElementSibling;
 			heirarchy_parent.insertBefore(insertObject.hierarchy_view_element, next_element);
 
-			let scene_parent = beforeObject.scene_view_element.parent;
-			let scene_index = scene_parent.getChildIndex(beforeObject.scene_view_element)
-			scene_parent.addChildAt(insertObject, scene_index);
+			let scene_parent: PIXI.Container = beforeObject.scene_view_element.parent;
+			let scene_index: number = scene_parent.getChildIndex(beforeObject.scene_view_element)
+			scene_parent.addChildAt(insertObject.scene_view_element, scene_index);
 		}
 
 		public insertAfterChild(
 			insertObject: GameObject.Abs,
 			afterObject: GameObject.Abs
 		): void {
-			let heirarchy_parent = afterObject.hierarchy_view_element.parentNode;
+			let heirarchy_parent: HTMLElement = afterObject.hierarchy_view_element.parentElement;
 			heirarchy_parent.insertBefore(insertObject.hierarchy_view_element, afterObject.hierarchy_view_element);
 
-			let scene_parent = afterObject.scene_view_element.parent;
-			let scene_index = scene_parent.getChildIndex(afterObject.scene_view_element)
-			scene_parent.addChildAt(insertObject, scene_index);
+			let scene_parent: PIXI.Container = afterObject.scene_view_element.parent;
+			let scene_index: number = scene_parent.getChildIndex(afterObject.scene_view_element)
+			scene_parent.addChildAt(insertObject.scene_view_element, scene_index);
 		}
 
 		public deleteSelected(): void {
-			this.editor.inspector.getSelected().forEach((selected_object: GameObject.Container) => {
-				this.editor.inspector.unselect(selected_object, false);
+			let inspector = this.editor.inspector;
+
+			inspector.getSelected().forEach((selected_object: GameObject.Container) => {
+				inspector.unselect(selected_object, false);
 				if (selected_object.destroyed) return;
 				selected_object.destroy();
 			});
 
-			this.editor.inspector.updateAttributes();
+			inspector.updateAttributes();
 		}
 
-		protected add_game_object_events(game_object: GameObject.Abs) {
-			let args: any;
+		protected add_game_object_events(
+			game_object: GameObject.Abs
+		): void {
+			let inspector = this.editor.inspector;
+			let args: GameObject.Abs[];
 
 			if (game_object.selected) {
-				args = this.editor.inspector.getSelected();
+				args = inspector.getSelected();
 			} else {
 				args = [game_object]
 			}
@@ -134,13 +152,14 @@ module Editor {
 			});
 
 			game_object.selectEvent(() => {
-				if (this.editor.eventCtrl.dragType !== null) return;
-				this.editor.inspector.select(game_object);
+				let dragType: EventTargetType = this.editor.eventCtrl.dragType;
+				if (dragType !== null) return;
+				inspector.select(game_object);
 			});
 
 			game_object.visibleEvent(() => {
 				if (!game_object.selected) return;
-				this.editor.inspector.update(game_object, 'visible');
+				inspector.update(game_object, 'visible');
 			});
 		}
 
@@ -152,7 +171,5 @@ module Editor {
 		protected game_object_take_event(
 			args: GameObject.Abs[]
 		): void {}
-
-
 	}
 }

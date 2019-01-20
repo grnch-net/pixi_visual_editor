@@ -4,16 +4,26 @@
 module Editor.AssetCategory {
 
 	export class Image extends Abs {
-		public uploadType: string = 'image/*, .json';
-		protected item_list: { [key: string]: AssetObject.Image } = {};
+		protected item_list: {
+			[key: string]: AssetObject.Image
+		};
+		protected json_list: any;
 
-		protected json_list: any = {};
-
-		constructor(ctrl: Assets.Ctrl) {
+		constructor(
+			ctrl: Assets.Ctrl
+		) {
 			super(ctrl, 'Image');
 		}
 
-		protected sort_files(files: FileList): any {
+		protected init_class_options(): void {
+			super.init_class_options();
+			this.uploadType = 'image/*, .json';
+			this.json_list = {};
+		}
+
+		protected sort_files(
+			files: FileList
+		): any {
 			let file_list: any = {
 				img: {},
 				json: {},
@@ -21,7 +31,7 @@ module Editor.AssetCategory {
 			};
 
 			for(let key in files) {
-				let file = files[key];
+				let file: any = files[key];
 				if (file instanceof File) {
 					let file_name_arr: string[] = file.name.split('.');
 					if (file_name_arr.length == 1) {
@@ -53,8 +63,10 @@ module Editor.AssetCategory {
 			return file_list;
 		}
 
-		public upload(event: Event): null {
-			let files = super.upload(event);
+		public upload(
+			event: Event
+		): null {
+			let files: any = super.upload(event);
 
 			if (!files) return;
 
@@ -63,19 +75,22 @@ module Editor.AssetCategory {
 			} else {
 				this.only_json(files);
 			}
-
 		}
 
-		protected only_img(files: any) {
+		protected only_img(
+			files: any
+		): void {
 			for(let name in files) {
-				let file = files[name];
-				let img_link = URL.createObjectURL(file);
+				let file: File = files[name];
+				let img_link: string = URL.createObjectURL(file);
 				this.create_image_asset(name, img_link);
 			}
 		}
 
-		protected only_json(sort: any) {
-			let change_json_total = () => {
+		protected only_json(
+			sort: any
+		): void {
+			let change_json_total: Function = () => {
 				--sort.json_total;
 				if (sort.json_total == 0) {
 					this.only_img(sort.img);
@@ -89,20 +104,20 @@ module Editor.AssetCategory {
 					continue;
 				}
 
-				let read_callback = (data: any) => {
+				let read_callback: Function = (data: any) => {
 					if (!data || !data.meta || !data.meta.image) {
 						console.warn(`Load atlas: the json "${json_key}" is wrong. Skipping.`);
 						change_json_total();
 						return;
 					}
 
-					let image_name = data.meta.image;
-					let atlasIMG = sort.img[image_name];
+					let image_name: string = data.meta.image;
+					let atlasIMG: File = sort.img[image_name];
 
 					if (atlasIMG) {
 						delete sort.img[image_name];
 
-						let imageLink = URL.createObjectURL(atlasIMG);
+						let imageLink: string = URL.createObjectURL(atlasIMG);
 						let atlasAsset = new AssetObject.Image({name, imageLink});
 						atlasAsset.onLoad(() => {
 							this.atlas_parse(atlasAsset.base, json_key, data);
@@ -111,7 +126,7 @@ module Editor.AssetCategory {
 						this.item_list[image_name] = atlasAsset;
 					} else
 					if (this.item_list[image_name]) {
-						let asset = this.item_list[image_name];
+						let asset: AssetObject.Image = this.item_list[image_name];
 
 						if (!asset.base) {
 							console.warn(`Load atlas: the uploaded image "${image_name}" is not atlas. Skipping json "${json_key}".`);
@@ -130,8 +145,11 @@ module Editor.AssetCategory {
 			}
 		}
 
-		protected read_json(file: any, callback: Function): void {
-			const reader = new FileReader();
+		protected read_json(
+			file: any,
+			callback: Function
+		): void {
+			let reader = new FileReader();
 			reader.onload = (event) => {
 				if (event.target.readyState === 2) {
 					let result = JSON.parse(reader.result);
@@ -141,21 +159,30 @@ module Editor.AssetCategory {
 			reader.readAsText(file);
 		}
 
-		protected atlas_parse(img: PIXI.BaseTexture, json_name: string, data: any) {
+		protected atlas_parse(
+			img: PIXI.BaseTexture,
+			json_name: string,
+			data: any
+		) {
 			this.json_list[json_name] = data;
 
-			const spritesheet = new PIXI.Spritesheet(img, data);
+			let spritesheet = new PIXI.Spritesheet(img, data);
 			spritesheet.parse((textures: any) => {
-			   for(let key in textures) {
-					let sprite = new PIXI.Sprite(textures[key]);
-					let scene = this.ctrl.editor.scene;
-					let img_link = scene.application.renderer.extract.canvas(sprite).toDataURL('image/png');
-					this.create_image_asset(key, img_link, textures[key] as PIXI.Texture);
-			   }
+			    for (let key in textures) {
+					let texture: PIXI.Texture = textures[key];
+			        let sprite = new PIXI.Sprite(texture);
+			        let scene = this.ctrl.editor.scene;
+			        let img_link: string = scene.application.renderer.extract.canvas(sprite).toDataURL('image/png');
+			        this.create_image_asset(key, img_link, texture);
+			    }
 			});
 		}
 
-		protected create_image_asset(name: string, imageLink: string, texture?: PIXI.Texture): void {
+		protected create_image_asset(
+			name: string,
+			imageLink: string,
+			texture?: PIXI.Texture
+		): void {
 			let asset = new AssetObject.Image({name, imageLink, texture});
 			this.add_asset_event(asset);
 
@@ -163,14 +190,18 @@ module Editor.AssetCategory {
 			this.view_element.appendChild(asset.view_element);
 		}
 
-		protected add_asset_event(asset: AssetObject.Image): void {
+		protected add_asset_event(
+			asset: AssetObject.Image
+		): void {
 			super.add_asset_event(asset);
 			asset.addEvent('dblclick', (event: Event) => {
 				this.ctrl.editor.hierarchy.createSprite(asset);
 			});
 		}
 
-		protected asset_drop_event(type: EventTargetType, args: AssetObject.Image[]): void {}
-
+		protected asset_drop_event(
+			type: EventTargetType,
+			args: AssetObject.Image[]
+		): void {}
 	}
 }

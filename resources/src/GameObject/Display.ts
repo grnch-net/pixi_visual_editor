@@ -15,12 +15,16 @@ module GameObject {
 	export class Display extends Abs {
 		public scene_view_element: PIXI.DisplayObject;
 
-		constructor(parameters: IAbsInitParameters) {
+		constructor(
+			parameters: IAbsInitParameters
+		) {
 			if (!parameters.name) parameters.name = 'DisplayObject';
 			super(parameters);
 		}
 
-		protected create_scene_elememnt(attr?: any) {
+		protected create_scene_elememnt(
+			attr?: any
+		): void {
 			this.scene_view_element = new PIXI.DisplayObject();
 		}
 

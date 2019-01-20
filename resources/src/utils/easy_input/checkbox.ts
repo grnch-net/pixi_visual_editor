@@ -10,7 +10,10 @@ module Utils.EasyInputModule {
 	}
 
 	export class CheckboxEasyInput extends TextEasyInput {
-		protected init_children(view_input: any, parameters: IInitParameters): void {
+		protected init_children(
+			view_input: any,
+			parameters: IInitParameters
+		): void {
 			this.view_inputs.push(view_input as HTMLInputElement);
 
 			let checkmark = Utils.easyHTML.createElement({
@@ -22,11 +25,15 @@ module Utils.EasyInputModule {
 			this.label_element.appendChild(checkmark);
 		}
 
-		protected create_label(parameters: IInitParameters): HTMLElement {
+		protected create_label(
+			parameters: IInitParameters
+		): HTMLElement {
 			return super.create_label(parameters, '');
 		}
 
-		protected create_view_element(parameters: IInitParameters): HTMLElement {
+		protected create_view_element(
+			parameters: IInitParameters
+		): HTMLElement {
 			let view_element = super.create_view_element(parameters);
 			view_element.classList.add('checkbox');
 

@@ -13,7 +13,10 @@ module Utils.EasyInputModule {
 		protected COLOR_HEIGHT: number = 16;
 		protected color_group: HTMLElement;
 
-		protected init_children(view_input: any, parameters: IInitParameters): void {
+		protected init_children(
+			view_input: any,
+			parameters: IInitParameters
+		): void {
 			this.view_inputs.push(view_input);
 
 			this.color_group = Utils.easyHTML.createElement({
@@ -44,14 +47,20 @@ module Utils.EasyInputModule {
 			});
 		}
 
-		protected create_view_element(parameters: IInitParameters): HTMLElement {
+		protected create_view_element(
+			parameters: IInitParameters
+		): HTMLElement {
 			let view_element = super.create_view_element(parameters);
 			view_element.classList.add('type-gradient');
 
 			return view_element;
 		}
 
-		public addColor(color: string = '000000', update: boolean = true, create: boolean = true): void {
+		public addColor(
+			color: string = '000000',
+			update: boolean = true,
+			create: boolean = true
+		): void {
 			let view_input: any;
 			if (create) {
 				view_input = Utils.easyHTML.createElement({
@@ -99,7 +108,10 @@ module Utils.EasyInputModule {
 			if (update) this.update();
 		}
 
-		addMoveEvent(move_area: HTMLElement, color_container: HTMLElement) {
+		addMoveEvent(
+			move_area: HTMLElement,
+			color_container: HTMLElement
+		): void {
 			let children: HTMLElement[];
 			let index: number;
 			let start_position: number;
@@ -150,7 +162,9 @@ module Utils.EasyInputModule {
 			})
 		}
 
-		removeColor(update: boolean = true): void {
+		removeColor(
+			update: boolean = true
+		): void {
 			if (this.view_inputs.length == 1) return;
 
 			this.view_inputs.pop();
@@ -193,7 +207,9 @@ module Utils.EasyInputModule {
 			}
 		}
 
-		public clear(firstTo: boolean = true): void {
+		public clear(
+			firstTo: boolean = true
+		): void {
 			if (firstTo) super.clear();
 			while(this.view_inputs.length > 1) {
 				this.removeColor(false);

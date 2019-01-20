@@ -1,7 +1,6 @@
 /// <reference path="Abs.ts" />
 
 module Editor.AssetObject {
-
 	interface IConstructorInitParameters {
 		name: string;
 		link: string;
@@ -19,7 +18,9 @@ module Editor.AssetObject {
 			this.initFontFamily(link);
 		}
 
-		protected create_view_image_element(attr?: any): void {
+		protected create_view_image_element(
+			attr?: any
+		): void {
 			this.view_image = Utils.easyHTML.createElement({
 				parent: this.view_element,
 				attr: { class: 'asset-button font-type' },
@@ -28,12 +29,15 @@ module Editor.AssetObject {
 			this.image_text = Utils.easyHTML.createElement({
 				parent: this.view_image,
 				attr: { class: '' },
-				innerHTML: 'A'
+				innerHTML: 'Aa'
 			});
 		}
 
-		protected initFontFamily(link: string): void {
-			this.fontFace = new (window as any).FontFace(this.name, `url(${link})`, {});
+		protected initFontFamily(
+			link: string
+		): void {
+			let FontFace = (window as any).FontFace;
+			this.fontFace = new FontFace(this.name, `url(${link})`, {});
 			this.fontFace.load().then((loadedFace: any) => {
 			    (document as any).fonts.add(loadedFace);
 

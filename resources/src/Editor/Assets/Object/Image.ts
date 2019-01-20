@@ -2,7 +2,6 @@
 /// <reference path="Abs.ts" />
 
 module Editor.AssetObject {
-
 	interface IConstructorInitParameters {
 		name: string;
 		imageLink: string;
@@ -28,20 +27,24 @@ module Editor.AssetObject {
 			this.initTexture(texture);
 		}
 
-		protected create_view_image_element(image_link: string): void {
+		protected create_view_image_element(
+			image_link: string
+		): void {
 			this.view_image = document.createElement('img');
 			this.view_image.src = image_link;
 			this.view_element.appendChild(this.view_image);
 		}
 
-		protected initTexture(texture: PIXI.Texture): void {
+		protected initTexture(
+			texture: PIXI.Texture
+		): void {
 			if (this.texture) {
 				this.isLoad = true;
 				this.texture = texture;
 
 				if (this.onLoadCallback) this.onLoadCallback();
 			} else {
-				this.view_image.onload = () => this.on_load();
+				this.view_image.onload = this.on_load.bind(this);
 			}
 		}
 

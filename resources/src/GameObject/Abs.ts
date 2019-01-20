@@ -13,7 +13,7 @@ module GameObject {
 	export abstract class Abs extends Editor.AbsListObject {
 		protected _name: string;
 
-		public customName: string = '';
+		public customName: string;
 		public parent: Abs;
 		public scene_view_element: any;
 		public hierarchy_view_element: HTMLElement;
@@ -24,10 +24,12 @@ module GameObject {
 		protected typeElement: HTMLImageElement;
 		protected nameElement: HTMLElement;
 
-		protected visible_events: Function[] = [];
+		protected visible_events: Function[];
 
-		protected _destroyed: boolean = false;
-		public get destroyed(): boolean { return this._destroyed };
+		protected _destroyed: boolean;
+		public get destroyed(): boolean {
+			return this._destroyed;
+		};
 
 		constructor({
 			name = 'Object',
@@ -44,11 +46,22 @@ module GameObject {
 			this.init_visible_event();
 		}
 
-		protected create_scene_elememnt(attr?: any) {
+		protected init_class_options(): void {
+			super.init_class_options();
+			this.customName = '';
+			this.visible_events = [];
+			this._destroyed = false;
+		}
+
+		protected create_scene_elememnt(
+			attr?: any
+		): void {
 			this.scene_view_element = null;
 		}
 
-		protected create_hierarchy_element(attr?: any) {
+		protected create_hierarchy_element(
+			attr?: any
+		): void {
 			this.hierarchy_view_element = Utils.easyHTML.createElement({
 				type: 'div',
 				attr: { class: 'object' }
@@ -83,7 +96,9 @@ module GameObject {
 			});
 		}
 
-		public get name(): string { return this._name; }
+		public get name(): string {
+			return this._name;
+		}
 		public set name(value: string) {
 			this._name = value;
 			this.nameElement.innerHTML = value;
@@ -107,11 +122,15 @@ module GameObject {
 			this.scene_view_element.visible = value;
 		}
 
-		protected option_error(key: any): void {
+		protected option_error(
+			key: any
+		): void {
 			console.warn('Оption does not exist. Skipped.', key, this);
 		}
 
-		public getOption(key: string|string[]): any {
+		public getOption(
+			key: string|string[]
+		): any {
 			let path, option;
 			if (Array.isArray(key)) {
 				if (key.length == 1) {
@@ -154,7 +173,11 @@ module GameObject {
 			return path[option];
 		}
 
-		public setOption(key: string|string[], value: any, isPoint: boolean = false): void {
+		public setOption(
+			key: string|string[],
+			value: any,
+			isPoint: boolean = false
+		): void {
 			let path, option;
 			if (Array.isArray(key)) {
 				if (key.length == 1) {
@@ -198,7 +221,9 @@ module GameObject {
 			else path[option] = value;
 		}
 
-		public visibleEvent(callback: Function) {
+		public visibleEvent(
+			callback: Function
+		) {
 			this.visible_events.push(callback);
 		}
 
@@ -219,7 +244,10 @@ module GameObject {
 			this._destroyed = true;
 		}
 
-		public addEvent(event: string, callback: any): void {
+		public addEvent(
+			event: string,
+			callback: any
+		): void {
 			this.view_area_element.addEventListener(event, callback);
 		}
 

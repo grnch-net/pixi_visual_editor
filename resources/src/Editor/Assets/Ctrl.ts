@@ -19,18 +19,26 @@ module Editor.Assets {
 		protected view_upload_button: HTMLInputElement;
 		protected view_category_list: HTMLElement;
 
-		protected view_categories: { [key: string]: AssetCategory.Abs } = {};
+		protected view_categories: {
+			[key: string]: AssetCategory.Abs
+		};
 		protected active_category: AssetCategory.Abs;
 
 
 		constructor(
 			public editor: Editor.Ctrl,
 		) {
+			this.init_class_options();
 			this.init_view();
 			this.init_category();
 		}
 
-		protected init_view() {
+		protected init_class_options(): void {
+			this.view_categories = {};
+		}
+
+
+		protected init_view(): void {
 			this.view_element = document.querySelector('#assets');;
 			this.view_content = this.view_element.querySelector('.content');
 			this.view_category_list = this.view_element.querySelector('.category-list');
@@ -39,7 +47,7 @@ module Editor.Assets {
 			this.view_upload_button.querySelector('input').addEventListener('change', this.upload_new_assets.bind(this));
 		}
 
-		protected init_category() {
+		protected init_category(): void {
 			this.view_categories = {
 				image	: this.new_category(AssetCategory.Image, true),
 				font	: this.new_category(AssetCategory.Font),
@@ -48,13 +56,16 @@ module Editor.Assets {
 			}
 		}
 
-		protected new_category(Category: any, active: boolean = false): AssetCategory.Abs {
-			let category = new Category(this);
+		protected new_category(
+			Category: any,
+			active: boolean = false
+		): AssetCategory.Abs {
+			let category: AssetCategory.Abs = new Category(this);
 
 			this.view_content.appendChild(category.view_element);
 			this.view_category_list.appendChild(category.view_show_button);
 
-			let show_event = () => this.change_category(category);
+			let show_event: Function = () => this.change_category(category);
 			category.showEvent(show_event);
 
 			if (active) category.show();
@@ -62,7 +73,9 @@ module Editor.Assets {
 			return category;
 		}
 
-		protected change_category(category: AssetCategory.Abs) {
+		protected change_category(
+			category: AssetCategory.Abs
+		): void {
 			if (this.active_category) {
 				this.active_category.hide();
 			}
@@ -78,7 +91,9 @@ module Editor.Assets {
 			this.view_upload_button.querySelector('input').accept = category.uploadType;
 		}
 
-		protected upload_new_assets(event: Event): void {
+		protected upload_new_assets(
+			event: Event
+		): void {
 			this.active_category.upload(event);
 		}
 

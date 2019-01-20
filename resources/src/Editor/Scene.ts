@@ -30,23 +30,32 @@ module Editor {
 		constructor(
 			public editor: Editor.Ctrl
 		) {
-			this.view_element = document.getElementById('scene');
-			this.createApplication();
-			this.addLogo();
-			this.createArea();
-			this.initZoomPanel();
-			this.addOnResizeEvent();
-			this.addTouchEvent();
+			this.init_class_options();
+			this.create_application();
+			this.add_logo();
+			this.create_area();
+			this.init_zoom_panel();
+			this.add_on_resize_event();
+			this.add_touch_event();
 		}
 
-		 public get zoom(): number { return this._zoom; }
-		 public set zoom(value: number) {
+		protected init_class_options(): void {
+			this.width = 1536;
+			this.height = 760;
+			this._zoom = 50;
+			this.view_element = document.getElementById('scene');
+		}
+
+		public get zoom(): number {
+			return this._zoom;
+		}
+		public set zoom(value: number) {
 			if (!this.content) return;
 			this._zoom = value;
 			this.area.scale.set(value/100);
 		}
 
-		protected createApplication(): void {
+		protected create_application(): void {
 			this.application = new PIXI.Application({
 				width: 2000,
 				height: 2000,
@@ -55,20 +64,20 @@ module Editor {
 			this.view_element.appendChild(this.application.view);
 		}
 
-		 protected addLogo(): void {
-			 let logo = document.querySelector('#logo') as HTMLImageElement;
- 			logo.src = 'assets/logo.png';
- 			logo.onload = () => {
- 				let base = new PIXI.BaseTexture(logo);
- 				let texture = new PIXI.Texture(base);
- 				let sprite = new PIXI.Sprite(texture);
- 				sprite.alpha = 0.2;
- 				sprite.position.set(10, 35);
- 				this.application.stage.addChildAt(sprite, 0);
- 			}
+		 protected add_logo(): void {
+			let logo = document.querySelector('#logo') as HTMLImageElement;
+			logo.src = 'assets/logo.png';
+			logo.onload = () => {
+				let base = new PIXI.BaseTexture(logo);
+				let texture = new PIXI.Texture(base);
+				let sprite = new PIXI.Sprite(texture);
+				sprite.alpha = 0.2;
+				sprite.position.set(10, 35);
+				this.application.stage.addChildAt(sprite, 0);
+			}
 		 }
 
-		protected createArea(): void {
+		protected create_area(): void {
 			this.area = new PIXI.Container();
 			this.area.name = 'Area';
 			this.area.scale.set(this._zoom/100);
@@ -89,7 +98,7 @@ module Editor {
 			);
 		}
 
-		protected initZoomPanel(): void {
+		protected init_zoom_panel(): void {
 			let view_zoom = document.querySelector('#scene-zoom');
 			this.input_zoom = Utils.easyInput(
 				{},
@@ -108,11 +117,11 @@ module Editor {
 			});
 		}
 
-		protected addOnResizeEvent(): void {
+		protected add_on_resize_event(): void {
 			window.addEventListener('resize', this.resizeScreen.bind(this));
 		}
 
-		protected addTouchEvent(): void {
+		protected add_touch_event(): void {
 			this.view_element
 			.addEventListener('mouseup', (event: MouseEvent) => {
 				this.editor.eventCtrl.drop(
@@ -123,7 +132,10 @@ module Editor {
 			});
 		}
 
-		protected dropTouchEvent(type: EventTargetType, args: any): void {
+		protected dropTouchEvent(
+			type: EventTargetType,
+			args: any
+		): void {
 			if (type == EventTargetType.ASSETS) {
 				if (args instanceof AssetObject.Image) this.editor.hierarchy.createSprite(args);
 			}
@@ -145,7 +157,9 @@ module Editor {
 			this.input_zoom.readonly = false;
 		}
 
-		protected createBackground(name: string = 'Background'): PIXI.Graphics {
+		protected createBackground(
+			name: string = 'Background'
+		): PIXI.Graphics {
 			let graphic = new PIXI.Graphics();
 			graphic.name = name;
 			graphic.beginFill(this.bg_color);

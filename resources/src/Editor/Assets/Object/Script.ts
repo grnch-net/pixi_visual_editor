@@ -1,7 +1,6 @@
 /// <reference path="Abs.ts" />
 
 module Editor.AssetObject {
-
 	interface IConstructorInitParameters {
 		name: string;
 		link: string;
@@ -19,7 +18,9 @@ module Editor.AssetObject {
 			this.initScript(link);
 		}
 
-		protected create_view_image_element(attr?: any): void {
+		protected create_view_image_element(
+			attr?: any
+		): void {
 			this.view_image = Utils.easyHTML.createElement({
 				parent: this.view_element,
 				attr: { class: 'asset-button script-type' },
@@ -32,19 +33,28 @@ module Editor.AssetObject {
 			});
 		}
 
-		protected initScript(link: string): void {
-			this.script = this.affixScriptToHead(link, () => {
+		protected initScript(
+			link: string
+		): void {
+			let callback: Function = () => {
 				this.isLoad = true;
 				if (this.onLoadCallback) this.onLoadCallback();
-			});
+			};
+
+			this.script = this.affixScriptToHead(link, callback);
 		}
 
-		protected loadError(oError: any) {
+		protected loadError(
+			oError: any
+		): void {
 			throw new URIError("The script " + oError.target.src + " didn't load correctly.");
 		}
 
-		protected affixScriptToHead(url: string, onloadFunction: any) {
-			let newScript = document.createElement("script");
+		protected affixScriptToHead(
+			url: string,
+			onloadFunction: any
+		): HTMLScriptElement {
+			let newScript: HTMLScriptElement = document.createElement("script");
 			newScript.onerror = this.loadError.bind(this);
 			if (onloadFunction) {
 				newScript.onload = onloadFunction;
@@ -54,6 +64,5 @@ module Editor.AssetObject {
 
 			return newScript;
 		}
-
 	}
 }

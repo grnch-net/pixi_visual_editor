@@ -13,20 +13,28 @@ module Utils.EasyInputModule {
 
 	export class SelectEasyInput extends TextEasyInput {
 
-		protected init_view_element(parameters: IInitParameters): void {
+		protected init_view_element(
+			parameters: IInitParameters
+		): void {
 			super.init_view_element(parameters, {
 				elementType: 'select'
 			});
 		}
 
-		protected init_children(view_input: any, parameters: IInitParameters): void {
+		protected init_children(
+			view_input: any,
+			parameters: IInitParameters
+		): void {
 			this.view_inputs.push(view_input);
 			this.updateSelect(parameters.values)
 
 			this.view_element.appendChild(view_input);
 		}
 
-		protected create_select_option(label: string, value: string): HTMLOptionElement {
+		protected create_select_option(
+			label: string,
+			value: string
+		): HTMLOptionElement {
 			let option = document.createElement("option");
 			option.text = label;
 			option.value = value;
@@ -47,7 +55,9 @@ module Utils.EasyInputModule {
 			(this.view_inputs[0] as HTMLSelectElement).selectedIndex = -1;
 		}
 
-		public updateSelect(values: any): void {
+		public updateSelect(
+			values: any
+		): void {
 			let view_input = this.view_inputs[0] as HTMLSelectElement;
 			while(view_input.lastChild) {
 				view_input.removeChild(this.view_inputs[0].lastChild);

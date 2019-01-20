@@ -1,17 +1,24 @@
 /// <reference path="../lib.d.ts/pixi.d.ts" />
 
 module Utils {
-	export function loadTexture(link: string) {
+	export function loadTexture(
+		link: string
+	): PIXI.Texture {
 		return PIXI.utils.TextureCache[link];
 	}
 
-	export function createSprite(link: string) {
+	export function createSprite(
+		link: string
+	): PIXI.Sprite {
 		let sprite = new PIXI.Sprite(loadTexture(link));
 		sprite.name = link;
 		return sprite;
 	}
 
-	export function createAnimatedSprite(link: string, startIndex: number = 1): PIXI.extras.AnimatedSprite {
+	export function createAnimatedSprite(
+		link: string,
+		startIndex: number = 1
+	): PIXI.extras.AnimatedSprite {
 		let frames: PIXI.Texture[] = [];
 		let frame: PIXI.Texture;
 		let frameIndex: number = startIndex;
@@ -33,7 +40,10 @@ module Utils {
 		return animatedSprite;
 	}
 
-	export function randomInt(min: number, max: number) {
+	export function randomInt(
+		min: number,
+		max: number
+	): number {
 		return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
 
