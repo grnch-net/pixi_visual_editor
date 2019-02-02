@@ -1,5 +1,5 @@
 module Editor {
-	export abstract class AbsListObject {
+	export abstract class AbsListItem {
 		protected take: boolean;
 
 		protected take_event_list: Function[];

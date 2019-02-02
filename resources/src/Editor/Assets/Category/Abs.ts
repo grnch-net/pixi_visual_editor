@@ -26,13 +26,14 @@ module Editor.AssetCategory {
 			protected ctrl: Assets.Ctrl,
 			public name: string
 		) {
-			super();
+			super(ctrl.editor.eventCtrl);
 			this.init_view_element();
 			this.init_view_show_button();
 		}
 
 		protected init_class_options(): void {
 			super.init_class_options();
+			this.event_target_type = EventTargetType.ASSETS;
 			this.item_list = {};
 			this.selected_list = [];
 			this._active = false;
@@ -114,37 +115,27 @@ module Editor.AssetCategory {
 			return file_list;
 		}
 
-		protected add_asset_event(
+		protected addItemEvent(
 			asset: AssetObject.Abs
 		): void {
-			let eventCtrl = this.ctrl.editor.eventCtrl;
-			asset.takeEvent((event: MouseEvent) => {
-				eventCtrl.drag(event, {
-					type: EventTargetType.ASSETS,
-					take: () => this.asset_take_event(asset),
-					drop: this.asset_drop_event.bind(this),
-					args: this.selected_list
-					// args: asset
-				});
-			});
-
-			asset.selectEvent(() => {
-				let dragType = eventCtrl.dragType;
-				if (dragType !== null) return;
-				this.select(asset);
-			});
+			super.addItemEvent(asset, this.selected_list);
 		}
 
-		protected asset_take_event(
-			asset: AssetObject.Abs
+		protected itemTakeEvent(
+			asset: AssetObject.Abs,
+			args: AssetObject.Abs[]
 		): void {
 			if (!asset.selected) this.select(asset);
 		}
 
-		protected asset_drop_event(
-			type: EventTargetType,
+		protected itemSelectEvent(
+			asset: AssetObject.Abs,
 			args: AssetObject.Abs[]
-		): void {}
+		): void {
+			if (!asset.selected || this.selected_list.length > 1) {
+				this.select(asset);
+			}
+		}
 
 		public remove(
 			asset: AssetObject.Image

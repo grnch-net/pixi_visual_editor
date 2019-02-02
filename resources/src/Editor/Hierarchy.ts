@@ -1,11 +1,12 @@
 /// <reference path="./Inspector.ts" />
 /// <reference path="./Scene.ts" />
-/// <reference path="../Editor/Assets/Object/Image.ts" />
+/// <reference path="./abs-list.ts" />
+/// <reference path="./Assets/Object/Image.ts" />
 
 module Editor {
 	import AssetImage = Editor.AssetObject.Image;
 
-	export class Hierarchy {
+	export class Hierarchy extends AbsList {
 		protected list: GameObject.Abs[];
 
 		protected view_element: HTMLElement;
@@ -14,12 +15,16 @@ module Editor {
 		constructor(
 			public editor: Editor.Ctrl
 		) {
-			this.init_class_options();
+			super(editor.eventCtrl);
 			this.initButtons();
-			this.addTouchEvent();
+
+			let target_element = this.view_element.querySelector('.area') as HTMLElement;
+			this.addDropEvent(target_element);
 		}
 
 		protected init_class_options(): void {
+			super.init_class_options();
+			this.event_target_type = EventTargetType.HIERARCHY;
 			this.list = [];
 			this.view_element = document.querySelector('#hierarchy');;
 			this.view_list = this.view_element.querySelector('.content');
@@ -33,18 +38,7 @@ module Editor {
 			panel.querySelector('#delete-hierarchy-element').addEventListener('click', this.deleteSelected.bind(this));
 		}
 
-		protected addTouchEvent(): void {
-			this.view_element.querySelector('.area')
-			.addEventListener('mouseup', (event: MouseEvent) => {
-				this.editor.eventCtrl.drop(
-					event,
-					EventTargetType.HIERARCHY,
-					this.dropTouchEvent.bind(this)
-				);
-			});
-		}
-
-		protected dropTouchEvent(
+		protected onDropEvent(
 			type: EventTargetType,
 			args: any
 		): void {
@@ -76,7 +70,7 @@ module Editor {
 
 			this.appendChild(gameObject);
 
-			this.add_game_object_events(gameObject);
+			this.addItemEvent(gameObject);
 
 			if (gameObject instanceof GameObject.Container) {
 				this.editor.inspector.getSelected().forEach((selected_object: GameObject.Abs) => {
@@ -130,7 +124,7 @@ module Editor {
 			inspector.updateAttributes();
 		}
 
-		protected add_game_object_events(
+		protected addItemEvent(
 			game_object: GameObject.Abs
 		): void {
 			let inspector = this.editor.inspector;
@@ -142,20 +136,7 @@ module Editor {
 				args = [game_object]
 			}
 
-			game_object.takeEvent((event: MouseEvent) => {
-				this.editor.eventCtrl.drag(event, {
-					type: EventTargetType.HIERARCHY,
-					take: () => this.game_object_take_event(args),
-					drop: this.game_object_drop_event.bind(this),
-					args: args
-				});
-			});
-
-			game_object.selectEvent(() => {
-				let dragType: EventTargetType = this.editor.eventCtrl.dragType;
-				if (dragType !== null) return;
-				inspector.select(game_object);
-			});
+			super.addItemEvent(game_object, args);
 
 			game_object.visibleEvent(() => {
 				if (!game_object.selected) return;
@@ -163,13 +144,24 @@ module Editor {
 			});
 		}
 
-		protected game_object_drop_event(
+		protected itemTakeEvent(
+			game_object: GameObject.Abs,
+			args: GameObject.Abs[]
+		): void {}
+
+		protected itemDropEvent(
 			type: EventTargetType,
 			args: GameObject.Abs[]
 		): void {}
 
-		protected game_object_take_event(
+		protected itemSelectEvent(
+			game_object: GameObject.Abs,
 			args: GameObject.Abs[]
-		): void {}
+		): void {
+			let inspector = this.editor.inspector;
+			if (!game_object.selected || inspector.getSelected().length > 1) {
+				inspector.select(game_object);
+			}
+		}
 	}
 }

@@ -184,24 +184,20 @@ module Editor.AssetCategory {
 			texture?: PIXI.Texture
 		): void {
 			let asset = new AssetObject.Image({name, imageLink, texture});
-			this.add_asset_event(asset);
+			this.addItemEvent(asset);
 
 			this.item_list[asset.name] = asset;
 			this.view_element.appendChild(asset.view_element);
 		}
 
-		protected add_asset_event(
+		protected addItemEvent(
 			asset: AssetObject.Image
 		): void {
-			super.add_asset_event(asset);
+			super.addItemEvent(asset);
 			asset.addEvent('dblclick', (event: Event) => {
 				this.ctrl.editor.hierarchy.createSprite(asset);
 			});
 		}
 
-		protected asset_drop_event(
-			type: EventTargetType,
-			args: AssetObject.Image[]
-		): void {}
 	}
 }

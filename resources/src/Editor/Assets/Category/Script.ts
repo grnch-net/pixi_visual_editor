@@ -31,7 +31,7 @@ module Editor.AssetCategory {
 				let asset = new AssetObject.Script({name, link});
 				// asset.onLoad(() => {});
 
-				this.add_asset_event(asset);
+				this.addItemEvent(asset);
 				this.item_list[asset.name] = asset;
 				this.view_element.appendChild(asset.view_element);
 			}

@@ -1,5 +1,5 @@
 /// <reference path="../../../Utils/easy-html.ts" />
-/// <reference path="../../abs-list-object.ts" />
+/// <reference path="../../abs-list-item.ts" />
 
 module Editor.AssetObject {
 
@@ -8,7 +8,7 @@ module Editor.AssetObject {
 		viewElementAttr?: any[];
 	}
 
-	export abstract class Abs extends AbsListObject {
+	export abstract class Abs extends AbsListItem {
 		public name: string;
 
 		public view_element: HTMLElement;

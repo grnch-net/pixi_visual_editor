@@ -1,6 +1,6 @@
 /// <reference path="../lib.d.ts/pixi.d.ts" />
 /// <reference path="../Utils/easy-html.ts" />
-/// <reference path="../Editor/abs-list-object.ts" />
+/// <reference path="../Editor/abs-list-item.ts" />
 
 module GameObject {
 
@@ -10,7 +10,7 @@ module GameObject {
 		hierarchyElementAttr?: any[];
 	}
 
-	export abstract class Abs extends Editor.AbsListObject {
+	export abstract class Abs extends Editor.AbsListItem {
 		protected _name: string;
 
 		public customName: string;

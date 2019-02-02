@@ -42,7 +42,7 @@ module Editor.AssetCategory {
 				let asset = new AssetObject.Font({name, link});
 				asset.onLoad(onLoad);
 
-				this.add_asset_event(asset);
+				this.addItemEvent(asset);
 				this.item_list[asset.name] = asset;
 				this.view_element.appendChild(asset.view_element);
 				new_assets.push(asset.name);
