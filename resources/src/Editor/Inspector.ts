@@ -128,6 +128,9 @@ module Editor {
 
 			if (parameters.type == 'texture') {
 				this.add_texture_event(easyInput);
+			} else
+			if (parameters.type == 'game_object') {
+				this.add_game_object_event(easyInput);
 			}
 
 			return easyInput;
@@ -156,7 +159,7 @@ module Editor {
 		): void {
 			this.editor.eventCtrl.drop(
 				event,
-				EventTargetType.HIERARCHY,
+				EventTargetType.INPUT,
 				(type: EventTargetType, args: any) => {
 					if (type == EventTargetType.ASSETS) {
 						if (!this.check_selected_object()) return;
@@ -164,6 +167,48 @@ module Editor {
 						if (Array.isArray(args)
 							&& args.length == 1
 							&& args[0] instanceof AssetObject.Image
+						) {
+							easyInput.value = args[0];
+						} else {
+							console.warn('The incoming object must be an image(one). Skipped.', args);
+						}
+						easyInput.unselect();
+					}
+				}
+			);
+		}
+
+		protected add_game_object_event(
+			easyInput: Utils.EasyInput
+		): void {
+			easyInput.view_element.addEventListener('mouseup', (event: MouseEvent) => this.drop_game_object_event(event, easyInput));
+
+			easyInput.view_element.addEventListener('mouseout', (event: MouseEvent) => {
+				easyInput.unselect();
+			});
+
+			easyInput.view_element.addEventListener('mouseover', (event: MouseEvent) => {
+				let type = this.editor.eventCtrl.dragType;
+				if (type === EventTargetType.HIERARCHY) {
+					easyInput.select();
+				}
+			});
+		}
+
+		protected drop_game_object_event(
+			event: MouseEvent,
+			easyInput: Utils.EasyInput
+		): void {
+			this.editor.eventCtrl.drop(
+				event,
+				EventTargetType.INPUT,
+				(type: EventTargetType, args: any) => {
+					if (type == EventTargetType.HIERARCHY) {
+						if (!this.check_selected_object()) return;
+
+						if (Array.isArray(args)
+							&& args.length == 1
+							&& args[0] instanceof GameObject.Abs
 						) {
 							easyInput.value = args[0];
 						} else {

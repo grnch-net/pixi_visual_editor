@@ -10,16 +10,23 @@ module GameObject {
 		{ key: 'position', type: 'point' },
 		{ key: 'scale', type: 'point', step: 0.1 },
 		{ key: 'pivot', type: 'point' },
+		{ key: 'mask', type: 'game_object', readonly: true },
 	];
 
 	export class Display extends Abs {
 		public scene_view_element: PIXI.DisplayObject;
+		protected _mask: Abs;
 
 		constructor(
 			parameters: IAbsInitParameters
 		) {
 			if (!parameters.name) parameters.name = 'DisplayObject';
 			super(parameters);
+		}
+
+		protected init_class_options(): void {
+			super.init_class_options();
+			this._mask = null;
 		}
 
 		protected create_scene_elememnt(
@@ -52,5 +59,13 @@ module GameObject {
 			this.scene_view_element.rotation = value * Math.PI / 180;
 		}
 
+		public get mask(): Abs {
+			return this._mask;
+		}
+
+		public set mask(value: Abs) {
+			this._mask = value;
+			this.scene_view_element.mask = value.scene_view_element;
+		}
 	}
 }

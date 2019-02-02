@@ -1,8 +1,8 @@
 /// <reference path="text.ts" />
 module Utils.EasyInputModule {
 
-	export class TextureEasyInput extends TextEasyInput {
-		protected asset: any;
+	export class ItemEasyInput extends TextEasyInput {
+		protected item: any;
 		protected view_overlay: HTMLElement;
 
 		protected init_view_element(
@@ -20,7 +20,7 @@ module Utils.EasyInputModule {
 		}
 
 		public get value(): any {
-			return this.asset;
+			return this.item;
 		}
 
 		public set value(
@@ -29,10 +29,10 @@ module Utils.EasyInputModule {
 			let asset_name: string;
 
 			if (!value) {
-				this.asset = null;
+				this.item = null;
 				asset_name = '';
 			} else {
-				this.asset = value;
+				this.item = value;
 				asset_name = value.name;
 				this.update();
 			}
@@ -49,7 +49,7 @@ module Utils.EasyInputModule {
 		}
 
 		public update(): void {
-			if (this.change_callback) this.change_callback(this.asset);
+			if (this.change_callback) this.change_callback(this.item);
 		}
 
 		public clear(): void {

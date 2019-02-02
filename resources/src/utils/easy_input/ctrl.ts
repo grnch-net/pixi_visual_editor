@@ -7,7 +7,7 @@
 /// <reference path="select.ts" />
 /// <reference path="color.ts" />
 /// <reference path="gradient.ts" />
-/// <reference path="texture.ts" />
+/// <reference path="item.ts" />
 module Utils {
 	import TextEasyInput = EasyInputModule.TextEasyInput;
 	import NumberEasyInput = EasyInputModule.NumberEasyInput;
@@ -17,7 +17,7 @@ module Utils {
 	import SelectEasyInput = EasyInputModule.SelectEasyInput;
 	import ColorEasyInput = EasyInputModule.ColorEasyInput;
 	import GradientEasyInput = EasyInputModule.GradientEasyInput;
-	import SpriteEasyInput = EasyInputModule.TextureEasyInput;
+	import ItemEasyInput = EasyInputModule.ItemEasyInput;
 
 	interface IInitParameters {
 		key?: string;
@@ -48,7 +48,8 @@ module Utils {
 		if (type == 'select') { return new SelectEasyInput(parameters, change_callback, view_element); } else
 		if (type == 'color') { return new ColorEasyInput(parameters, change_callback, view_element); } else
 		if (type == 'gradient') { return new GradientEasyInput(parameters, change_callback, view_element); } else
-		if (type == 'texture') { return new SpriteEasyInput(parameters, change_callback, view_element); }
+		if (type == 'texture') { return new ItemEasyInput(parameters, change_callback, view_element); }
+		if (type == 'game_object') { return new ItemEasyInput(parameters, change_callback, view_element); }
 		else { console.warn('Invalid type.', parameters); }
 	}
 }

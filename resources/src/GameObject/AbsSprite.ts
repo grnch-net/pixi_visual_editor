@@ -27,11 +27,11 @@ module GameObject {
 			this.asset_image = null;
 		}
 
-		get texture() {
+		public get texture(): AssetImage {
 			return this.asset_image;
 		}
 
-		set texture(value: AssetImage) {
+		public set texture(value: AssetImage) {
 			this.asset_image = value;
 			this.scene_view_element.texture = value.texture;
 		}
