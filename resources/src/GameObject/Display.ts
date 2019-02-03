@@ -64,6 +64,11 @@ module GameObject {
 		}
 
 		public set mask(value: Abs) {
+			if (value == this) {
+				console.warn('The object cannot be a property for itself.');
+				return;
+			}
+
 			this._mask = value;
 			this.scene_view_element.mask = value.scene_view_element;
 		}

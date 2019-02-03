@@ -210,9 +210,17 @@ module Editor {
 							&& args.length == 1
 							&& args[0] instanceof GameObject.Abs
 						) {
-							easyInput.value = args[0];
+							let isSame = this.selected_list.every((game_object) => {
+								return game_object != args[0]
+							});
+
+							if (!isSame) {
+								console.warn('The object cannot be a property for itself.');
+							} else {
+								easyInput.value = args[0];
+							}
 						} else {
-							console.warn('The incoming object must be an image(one). Skipped.', args);
+							console.warn('The incoming object must be an image(one).', args);
 						}
 						easyInput.unselect();
 					}
