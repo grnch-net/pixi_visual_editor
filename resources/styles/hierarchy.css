@@ -28,11 +28,22 @@
 	position: relative;
 	height: 24px;
 	background: #1b1c1d;
+	border-top: 1px #1b1c1d solid;
 	border-bottom: 1px #0f0f0f solid;
 	min-width: max-content;
 }
 #hierarchy .content .object.selected > .view-area {
 	background: #0f3238;
+}
+#hierarchy .content .object .view-area.insertBefore {
+	border-top: 1px #00ca5f solid;
+}
+#hierarchy .content .object .view-area.insertAfter {
+	border-bottom: 1px #00ca5f solid;
+}
+
+#hierarchy .content .object .view-area.dropTarget div {
+	pointer-events: none;
 }
 
 #hierarchy .content .object .child-icon {

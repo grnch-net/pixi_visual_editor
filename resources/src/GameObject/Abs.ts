@@ -4,6 +4,11 @@
 
 module GameObject {
 
+	export enum InsertType {
+		BEFORE,
+		AFTER
+	}
+
 	export interface IAbsInitParameters {
 		name?: string;
 		sceneElementAttr?: any[];
@@ -17,6 +22,7 @@ module GameObject {
 		public parent: Abs;
 		public scene_view_element: any;
 		public hierarchy_view_element: HTMLElement;
+		public insertType: InsertType;
 
 		protected view_area_element: HTMLElement;
 		protected childIconElement: HTMLElement;
@@ -25,6 +31,7 @@ module GameObject {
 		protected nameElement: HTMLElement;
 
 		protected visible_events: Function[];
+		protected insert_event: EventListener;
 
 		protected _destroyed: boolean;
 		public get destroyed(): boolean {
@@ -260,6 +267,38 @@ module GameObject {
 		public unselect(): void {
 			super.unselect();
 			this.hierarchy_view_element.classList.remove('selected');
+		}
+
+		public showInsertArea(): void {
+			this.insert_event = this.onInsertEvent.bind(this);
+			this.view_area_element.addEventListener('mousemove', this.insert_event);
+			this.view_area_element.classList.add('dropTarget');
+		}
+
+		public hideInsertArea(): void {
+			this.view_area_element.classList.remove('dropTarget', 'insertBefore', 'insertAfter');
+			this.view_area_element.removeEventListener('mousemove', this.insert_event);
+			this.insert_event = null;
+			this.insertType = null;
+		}
+
+		protected onInsertEvent(event: MouseEvent): void {
+			let target = event.target as HTMLElement;
+			let target_height = target.offsetHeight;
+
+			if (event.layerY < target_height/2) {
+				if (this.insertType == InsertType.BEFORE) return;
+
+				this.insertType = InsertType.BEFORE;
+				this.view_area_element.classList.remove('insertAfter');
+				this.view_area_element.classList.add('insertBefore');
+			} else {
+				if (this.insertType == InsertType.AFTER) return;
+
+				this.insertType = InsertType.AFTER;
+				this.view_area_element.classList.remove('insertBefore');
+				this.view_area_element.classList.add('insertAfter');
+			}
 		}
 	}
 }

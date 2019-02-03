@@ -4,6 +4,7 @@
 /// <reference path="./Assets/Object/Image.ts" />
 
 module Editor {
+	import InsertType = GameObject.InsertType;
 	import AssetImage = Editor.AssetObject.Image;
 
 	export class Hierarchy extends AbsList {
@@ -19,7 +20,7 @@ module Editor {
 			this.initButtons();
 
 			let target_element = this.view_element.querySelector('.area') as HTMLElement;
-			this.addDropEvent(target_element);
+			this.addTargetEvent(target_element);
 		}
 
 		protected init_class_options(): void {
@@ -42,8 +43,20 @@ module Editor {
 			type: EventTargetType,
 			args: any
 		): void {
+			if (!Array.isArray(args)) return;
+
 			if (type == EventTargetType.ASSETS) {
-				if (args instanceof AssetObject.Image) this.createSprite(args);
+				for(let texture of args) {
+					if (texture instanceof AssetObject.Image) {
+						this.createSprite(texture);
+					}
+				}
+			} else
+			if (type == EventTargetType.HIERARCHY) {
+				let content = this.editor.scene.content;
+				for(let game_object of args) {
+					content.addLastChild(game_object);
+				}
 			}
 		}
 
@@ -74,7 +87,7 @@ module Editor {
 
 			if (gameObject instanceof GameObject.Container) {
 				this.editor.inspector.getSelected().forEach((selected_object: GameObject.Abs) => {
-					gameObject.add(selected_object);
+					gameObject.addChild(selected_object);
 				});
 			}
 			this.editor.inspector.select(gameObject);
@@ -84,32 +97,7 @@ module Editor {
 			gameObject: GameObject.Abs,
 			parent: GameObject.Container = this.editor.scene.content
 		): void {
-			parent.add(gameObject);
-		}
-
-		public insertBeforeChild(
-			insertObject: GameObject.Abs,
-			beforeObject: GameObject.Abs
-		): void {
-			let heirarchy_parent: HTMLElement = beforeObject.hierarchy_view_element.parentElement;
-			let next_element: Element = beforeObject.hierarchy_view_element.nextElementSibling;
-			heirarchy_parent.insertBefore(insertObject.hierarchy_view_element, next_element);
-
-			let scene_parent: PIXI.Container = beforeObject.scene_view_element.parent;
-			let scene_index: number = scene_parent.getChildIndex(beforeObject.scene_view_element)
-			scene_parent.addChildAt(insertObject.scene_view_element, scene_index);
-		}
-
-		public insertAfterChild(
-			insertObject: GameObject.Abs,
-			afterObject: GameObject.Abs
-		): void {
-			let heirarchy_parent: HTMLElement = afterObject.hierarchy_view_element.parentElement;
-			heirarchy_parent.insertBefore(insertObject.hierarchy_view_element, afterObject.hierarchy_view_element);
-
-			let scene_parent: PIXI.Container = afterObject.scene_view_element.parent;
-			let scene_index: number = scene_parent.getChildIndex(afterObject.scene_view_element)
-			scene_parent.addChildAt(insertObject.scene_view_element, scene_index);
+			parent.addChild(gameObject);
 		}
 
 		public deleteSelected(): void {
@@ -142,6 +130,27 @@ module Editor {
 				if (!game_object.selected) return;
 				inspector.update(game_object, 'visible');
 			});
+
+			game_object.addEvent('mouseup', (event: MouseEvent) => {
+				this.eventCtrl.drop(
+					event,
+					this.event_target_type,
+					(type: EventTargetType, args: any) => {
+						this.onItemDropEvent(type, args, game_object);
+					}
+				);
+			})
+
+			game_object.addEvent('mouseout', (event: MouseEvent) => {
+				game_object.hideInsertArea();
+			});
+
+			game_object.addEvent('mouseover', (event: MouseEvent) => {
+				let type = this.editor.eventCtrl.dragType;
+				if (type === EventTargetType.HIERARCHY) {
+					game_object.showInsertArea();
+				}
+			});
 		}
 
 		protected itemTakeEvent(
@@ -162,6 +171,47 @@ module Editor {
 			if (!game_object.selected || inspector.getSelected().length > 1) {
 				inspector.select(game_object);
 			}
+		}
+
+		protected onItemDropEvent(
+			type: EventTargetType,
+			args: any[],
+			target: GameObject.Abs
+		): void {
+			if (type == EventTargetType.HIERARCHY) {
+				let parent = target.parent as GameObject.Container;
+
+				if (target instanceof GameObject.Container) {
+					if (target.insertType == InsertType.BEFORE) {
+						args.forEach((insert_object: GameObject.Abs) => {
+							parent.insertBeforeChild(insert_object, target);
+						});
+					} else
+					if (target.insertType == InsertType.AFTER){
+						args.reverse()
+						.forEach((insert_object: GameObject.Abs) => {
+							if (insert_object == target) return;
+							target.addChild(insert_object);
+						});
+					}
+				} else {
+					if (target.insertType == InsertType.BEFORE) {
+						args.forEach((insert_object: GameObject.Abs) => {
+							if (insert_object == target) return;
+							parent.insertBeforeChild(insert_object, target);
+						});
+					} else
+					if (target.insertType == InsertType.AFTER){
+						args.reverse().forEach((insert_object: GameObject.Abs) => {
+							if (insert_object == target) return;
+							parent.insertAfterChild(insert_object, target);
+						});
+					}
+				}
+
+				target.hideInsertArea();
+			}
+
 		}
 	}
 }

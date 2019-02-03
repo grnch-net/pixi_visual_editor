@@ -12,7 +12,9 @@ module Editor {
 
 		protected init_class_options(): void {}
 
-		protected addDropEvent(target_element: HTMLElement): void {
+		protected addTargetEvent(
+			target_element: HTMLElement
+		): void {
 			target_element
 			.addEventListener('mouseup', (event: MouseEvent) => {
 				this.eventCtrl.drop(

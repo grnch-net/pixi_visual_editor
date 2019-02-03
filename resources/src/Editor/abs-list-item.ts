@@ -5,6 +5,7 @@ module Editor {
 		protected take_event_list: Function[];
 		protected select_event_list: Function[];
 
+		protected deselect: boolean;
 		protected _selected: boolean;
 		public get selected(): boolean {
 			return this._selected
@@ -19,6 +20,7 @@ module Editor {
 			this.take_event_list = [];
 			this.select_event_list = [];
 			this._selected = false;
+			this.deselect = false;
 		}
 
 		protected create_view_elements(): void {
@@ -44,6 +46,11 @@ module Editor {
 			this.addEvent('mouseup', (event: Event) => {
 				if (!this.take) return;
 				this.take = false;
+
+				if (this.deselect) {
+					this.deselect = false;
+					return;
+				}
 
 				this.select_event_list.forEach((callback: Function) => callback(event));
 			});
