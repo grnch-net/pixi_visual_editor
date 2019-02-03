@@ -411,7 +411,35 @@ module Editor {
 		}
 
 		public getSelected(): GameObject.Abs[] {
-			return this.selected_list;
+			if (this.selected_list.length < 2) return this.selected_list;
+
+			let object_list: any = {};
+			let sort_list: GameObject.Abs[] = [];
+
+			this.selected_list.forEach((game_object) => {
+				let char_path: string = this.get_item_char_index(game_object);
+				object_list[char_path] = game_object;
+			});
+
+			Object.keys(object_list).sort().forEach((key) => {
+				sort_list.push(object_list[key]);
+			})
+			return sort_list;
+		}
+
+		protected get_item_char_index(
+			game_object: GameObject.Abs,
+			char_path: string = ''
+		): string {
+			let parent = game_object.parent as GameObject.Container;
+			if (!parent) return char_path;
+
+			let index = parent.children.indexOf(game_object);
+			let char_index = String.fromCharCode(index);
+
+			char_path = char_index + char_path;
+
+			return this.get_item_char_index(parent, char_path);
 		}
 
 		public unselect(
